@@ -28,13 +28,12 @@ namespace GraphAlgorithms
                 int p = rnd.Next(N);
                 int q = rnd.Next(N);
 
-                if(p != q && g.AdjMatrix[p, q] == 0)
-                {
-                    Node nodeP = g.GetNode(p);
-                    Node nodeQ = g.GetNode(q);
+                Node nodeP = g.GetNode(p);
+                Node nodeQ = g.GetNode(q);
 
-                    g.AdjMatrix[p, q] = 1;
-                    g.AdjMatrix[q, p] = 1;
+                if (p != q && g.GetNodesAdjacency(nodeP, nodeQ) == 0)
+                {
+                    g.SetNodesAdjacency(nodeP, nodeQ);
 
                     g.Adj[p].Add(new Edge(nodeP, nodeQ));
                     g.Adj[q].Add(new Edge(nodeQ, nodeP));
@@ -85,8 +84,7 @@ namespace GraphAlgorithms
                 Node firstNode = g.GetNode(firstNodeIndex);
                 Node secondNode = g.GetNode(secondNodeIndex);
 
-                g.AdjMatrix[firstNodeIndex, secondNodeIndex] = 1;
-                g.AdjMatrix[secondNodeIndex, firstNodeIndex] = 1;
+                g.SetNodesAdjacency(firstNode, secondNode);
 
                 g.Adj[firstNodeIndex].Add(new Edge(firstNode, secondNode));
                 g.Adj[secondNodeIndex].Add(new Edge(secondNode, firstNode));
@@ -157,8 +155,7 @@ namespace GraphAlgorithms
                         Node firstNode = g.GetNode(randomNodeIndex);
                         Node secondNode = g.GetNode(newNodeIndex);
 
-                        g.AdjMatrix[randomNodeIndex, newNodeIndex] = 1;
-                        g.AdjMatrix[newNodeIndex, randomNodeIndex] = 1;
+                        g.SetNodesAdjacency(firstNode, secondNode);
 
                         g.Adj[randomNodeIndex].Add(new Edge(firstNode, secondNode));
                         g.Adj[newNodeIndex].Add(new Edge(secondNode, firstNode));
@@ -189,11 +186,13 @@ namespace GraphAlgorithms
                 int fromIndex = edges[i].from;
                 int toIndex = edges[i].to;
 
+                Node fromNode = g.GetNode(fromIndex);
+                Node toNode = g.GetNode(toIndex);
+
                 g.Adj[fromIndex].Add(new Edge(g.Nodes[fromIndex], g.Nodes[toIndex]));
                 g.Adj[toIndex].Add(new Edge(g.Nodes[toIndex], g.Nodes[fromIndex]));
 
-                g.AdjMatrix[fromIndex, toIndex] = 1;
-                g.AdjMatrix[toIndex, fromIndex] = 1;
+                g.SetNodesAdjacency(fromNode, toNode);
             }
 
             return g;
@@ -205,7 +204,7 @@ namespace GraphAlgorithms
             int N = Int32.Parse(lines[0]);
             int M = lines.Length - 1;
 
-            Graph g = new Graph(N);
+            Graph g = new Graph(N, isUndirected: false);
             g.M = M;
 
             int currNodeIndex = 0;
@@ -239,7 +238,8 @@ namespace GraphAlgorithms
                 }
 
                 g.Adj[startNodeIndex].Add(new Edge(startNode, endNode));
-                g.AdjMatrix[startNodeIndex, endNodeIndex] = 1;
+
+                g.SetNodesAdjacency(startNode, endNode);
             }
 
             return g;

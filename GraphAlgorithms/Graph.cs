@@ -13,23 +13,36 @@ namespace GraphAlgorithms
         
         public List<Node> Nodes { get; set; }
         public Dictionary<int, List<Edge>> Adj { get; set; }
-        public int[,] AdjMatrix;
+        private AdjacencyMatrix AdjMatrix;
+        private bool IsUndirected;
 
-        public Graph(int n)
+        public Graph(int n, bool isUndirected = true)
         {
             N = n;
             M = 0;
             Nodes = new List<Node>();
             Adj = new Dictionary<int, List<Edge>>();
-            AdjMatrix = new int[N, N];
+            AdjMatrix = new AdjacencyMatrix(N);
 
             for (int i = 0; i < N; i++)
                 Adj.Add(i, new List<Edge>());
+
+            IsUndirected = isUndirected;
         }
 
         public Node GetNode(int v)
         {
             return Nodes[v];
+        }
+
+        public void SetNodesAdjacency(Node a, Node b)
+        {
+            AdjMatrix.SetNodesAdjacency(a, b, IsUndirected);
+        }
+
+        public int GetNodesAdjacency(Node a, Node b)
+        {
+            return AdjMatrix.GetNodesAdjacency(a, b);
         }
 
         public override string ToString()
@@ -43,21 +56,21 @@ namespace GraphAlgorithms
 
             for (int i = 0; i < N; i++)
             {
+                Node srcNode = Nodes[i];
                 List<Edge> edges = Adj[i];
 
                 for(int j = 0; j < edges.Count; j++)
                 {
-                    int q = edges[j].GetDestNodeIndex();
+                    Node destNode = edges[j].DestNode;
 
                     // If connectivity between i and q is simmetric, print this edge only once with <-> symbol, in case when i < q
-                    if (AdjMatrix[i, q] > 0 && AdjMatrix[q, i] > 0)
+                    if (AdjMatrix.GetNodesAdjacency(srcNode, destNode) > 0 && AdjMatrix.GetNodesAdjacency(destNode, srcNode) > 0)
                     {
-                        if(i < q)
-                            sb.AppendLine(string.Format("{0} <-> {1}", Nodes[i].Label, Nodes[q].Label));
+                        if(srcNode.Index < destNode.Index)
+                            sb.AppendLine(string.Format("{0} <-> {1}", srcNode.Label, destNode.Label));
                     }
                     else
-                        sb.AppendLine(string.Format("{0} -> {1}", Nodes[i].Label, Nodes[q].Label));
-
+                        sb.AppendLine(string.Format("{0} -> {1}", srcNode.Label, destNode.Label));
                 }
             }
 
