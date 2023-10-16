@@ -29,8 +29,9 @@ namespace GraphAlgorithms
         private void DFS(Node node)
         {
             Visited[node.Index] = 1;
-            
-            foreach (Edge edge in G.Adj[node.Index])
+
+            List<Edge> adjEdges = G.GetAdjacentEdges(node);
+            foreach (Edge edge in adjEdges)
             {
                 int childNodeIndex = edge.GetDestNodeIndex();
                 if (Visited[childNodeIndex] == 0)

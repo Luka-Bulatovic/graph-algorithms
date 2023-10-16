@@ -22,7 +22,7 @@ namespace GraphAlgorithms
         #endregion
 
         #region Methods
-        public void SetNodesAdjacency(Node a, Node b, bool isUndirectedEdge = true)
+        public void ConnectNodes(Node a, Node b, bool isUndirectedEdge = true)
         {
             Matrix[a.Index, b.Index] = 1;
 

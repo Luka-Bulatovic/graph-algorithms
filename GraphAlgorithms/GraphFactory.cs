@@ -33,10 +33,7 @@ namespace GraphAlgorithms
 
                 if (p != q && g.GetNodesAdjacency(nodeP, nodeQ) == 0)
                 {
-                    g.SetNodesAdjacency(nodeP, nodeQ);
-
-                    g.Adj[p].Add(new Edge(nodeP, nodeQ));
-                    g.Adj[q].Add(new Edge(nodeQ, nodeP));
+                    g.ConnectNodes(nodeP, nodeQ);
 
                     uf.Union(p, q);
 
@@ -84,10 +81,7 @@ namespace GraphAlgorithms
                 Node firstNode = g.GetNode(firstNodeIndex);
                 Node secondNode = g.GetNode(secondNodeIndex);
 
-                g.SetNodesAdjacency(firstNode, secondNode);
-
-                g.Adj[firstNodeIndex].Add(new Edge(firstNode, secondNode));
-                g.Adj[secondNodeIndex].Add(new Edge(secondNode, firstNode));
+                g.ConnectNodes(firstNode, secondNode);
 
                 g.M++;
             }
@@ -155,10 +149,7 @@ namespace GraphAlgorithms
                         Node firstNode = g.GetNode(randomNodeIndex);
                         Node secondNode = g.GetNode(newNodeIndex);
 
-                        g.SetNodesAdjacency(firstNode, secondNode);
-
-                        g.Adj[randomNodeIndex].Add(new Edge(firstNode, secondNode));
-                        g.Adj[newNodeIndex].Add(new Edge(secondNode, firstNode));
+                        g.ConnectNodes(firstNode, secondNode);
 
                         isNewNodeConnected = true;
                         g.M++;
@@ -189,10 +180,7 @@ namespace GraphAlgorithms
                 Node fromNode = g.GetNode(fromIndex);
                 Node toNode = g.GetNode(toIndex);
 
-                g.Adj[fromIndex].Add(new Edge(g.Nodes[fromIndex], g.Nodes[toIndex]));
-                g.Adj[toIndex].Add(new Edge(g.Nodes[toIndex], g.Nodes[fromIndex]));
-
-                g.SetNodesAdjacency(fromNode, toNode);
+                g.ConnectNodes(fromNode, toNode);
             }
 
             return g;
@@ -237,9 +225,7 @@ namespace GraphAlgorithms
                     g.Nodes.Add(endNode);
                 }
 
-                g.Adj[startNodeIndex].Add(new Edge(startNode, endNode));
-
-                g.SetNodesAdjacency(startNode, endNode);
+                g.ConnectNodes(startNode, endNode);
             }
 
             return g;

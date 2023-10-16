@@ -12,7 +12,7 @@ namespace GraphAlgorithms
         public int M { get; set; } // Number of Edges
         
         public List<Node> Nodes { get; set; }
-        public Dictionary<int, List<Edge>> Adj { get; set; }
+        private AdjacencyList AdjList;
         private AdjacencyMatrix AdjMatrix;
         private bool IsUndirected;
 
@@ -21,11 +21,9 @@ namespace GraphAlgorithms
             N = n;
             M = 0;
             Nodes = new List<Node>();
-            Adj = new Dictionary<int, List<Edge>>();
+            
             AdjMatrix = new AdjacencyMatrix(N);
-
-            for (int i = 0; i < N; i++)
-                Adj.Add(i, new List<Edge>());
+            AdjList = new AdjacencyList(N);
 
             IsUndirected = isUndirected;
         }
@@ -35,14 +33,20 @@ namespace GraphAlgorithms
             return Nodes[v];
         }
 
-        public void SetNodesAdjacency(Node a, Node b)
+        public void ConnectNodes(Node a, Node b)
         {
-            AdjMatrix.SetNodesAdjacency(a, b, IsUndirected);
+            AdjMatrix.ConnectNodes(a, b, IsUndirected);
+            AdjList.ConnectNodes(a, b, IsUndirected);
         }
 
         public int GetNodesAdjacency(Node a, Node b)
         {
             return AdjMatrix.GetNodesAdjacency(a, b);
+        }
+
+        public List<Edge> GetAdjacentEdges(Node v)
+        {
+            return AdjList.GetAdjacentEdges(v);
         }
 
         public override string ToString()
@@ -57,7 +61,7 @@ namespace GraphAlgorithms
             for (int i = 0; i < N; i++)
             {
                 Node srcNode = Nodes[i];
-                List<Edge> edges = Adj[i];
+                List<Edge> edges = AdjList.GetAdjacentEdges(srcNode);
 
                 for(int j = 0; j < edges.Count; j++)
                 {

@@ -37,9 +37,13 @@ namespace GraphAlgorithms
             Prev[v] = p;
             Component[v] = p == -1 ? v : Component[p];
 
-            for(int i = 0; i < G.Adj[v].Count; i++)
+            Node vNode = G.GetNode(v);
+
+            List<Edge> adjEdges = G.GetAdjacentEdges(vNode);
+
+            for(int i = 0; i < adjEdges.Count; i++)
             {
-                int dest = G.Adj[v][i].GetDestNodeIndex();
+                int dest = adjEdges[i].GetDestNodeIndex();
 
                 if (Visited[dest] == 0)
                     DFS(dest, v);

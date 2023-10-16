@@ -43,11 +43,14 @@ namespace GraphAlgorithms
             while(q.Count > 0)
             {
                 int currNodeIndex = q.Dequeue();
+                Node currNode = G.GetNode(currNodeIndex);
                 int currNodeDistance = Distance[currNodeIndex];
 
-                for(int i = 0; i < G.Adj[currNodeIndex].Count; i++)
+                List<Edge> adjEdges = G.GetAdjacentEdges(currNode);
+
+                for(int i = 0; i < adjEdges.Count; i++)
                 {
-                    int toIndex = G.Adj[currNodeIndex][i].GetDestNodeIndex();
+                    int toIndex = adjEdges[i].GetDestNodeIndex();
 
                     if (Visited[toIndex] == 0)
                     {

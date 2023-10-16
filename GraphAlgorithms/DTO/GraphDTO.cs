@@ -20,11 +20,13 @@ namespace GraphAlgorithms.DTO
             for (int i = 0; i < g.Nodes.Count; i++)
                 nodes.Add(new NodeDTO(g.Nodes[i]));
 
-            for (int i = 0; i < g.Adj.Count; i++)
+            for (int i = 0; i < g.N; i++)
             {
-                for (int j = 0; j < g.Adj[i].Count; j++)
+                Node currNode = g.GetNode(i);
+                List<Edge> adjEdges = g.GetAdjacentEdges(currNode);
+
+                foreach (Edge e in adjEdges)
                 {
-                    Edge e = g.Adj[i][j];
                     if (i < e.GetDestNodeIndex())
                         edges.Add(new EdgeDTO(e));
                 }
