@@ -8,14 +8,14 @@ namespace GraphAlgorithms
 {
     public class BreadthFirstSearchAlgorithm : GraphAlgorithm
     {
-        private int[] Visited;
+        NodeVisitedTracker Visited;
         private int[] Prev;
         private int[] Distance;
         private int StartNodeIndex;
 
         public BreadthFirstSearchAlgorithm(Graph g, int startNodeIndex = 0) : base(g)
         {
-            Visited = new int[g.N];
+            Visited = new NodeVisitedTracker(g.N);
             Prev = new int[g.N];
             Distance = new int[g.N];
             StartNodeIndex = startNodeIndex;
@@ -34,11 +34,12 @@ namespace GraphAlgorithms
 
         private void BFS(int v)
         {
+            Node startNode = G.GetNode(v);
             Queue<int> q = new Queue<int>();
 
             q.Enqueue(v);
             Distance[v] = 0;
-            Visited[v] = 1;
+            Visited[startNode] = true;
 
             while(q.Count > 0)
             {
@@ -51,13 +52,14 @@ namespace GraphAlgorithms
                 for(int i = 0; i < adjEdges.Count; i++)
                 {
                     int toIndex = adjEdges[i].GetDestNodeIndex();
+                    Node toNode = adjEdges[i].DestNode;
 
-                    if (Visited[toIndex] == 0)
+                    if (!Visited[toNode])
                     {
                         q.Enqueue(toIndex);
 
                         Distance[toIndex] = currNodeDistance + 1;
-                        Visited[toIndex] = 1;
+                        Visited[toNode] = true;
                         Prev[toIndex] = currNodeIndex;
                     }
                 }

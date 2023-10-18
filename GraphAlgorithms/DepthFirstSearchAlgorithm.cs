@@ -8,14 +8,14 @@ namespace GraphAlgorithms
 {
     public class DepthFirstSearchAlgorithm : GraphAlgorithm
     {
-        private int[] Visited;
+        private NodeVisitedTracker Visited;
         private int[] Prev;
         private int[] Component;
         private int StartNodeIndex;
 
         public DepthFirstSearchAlgorithm(Graph g, int startNodeIndex = 0) : base(g)
         {
-            Visited = new int[g.N];
+            Visited = new NodeVisitedTracker(g.N);
             Prev = new int[g.N];
             Component = new int[g.N];
             StartNodeIndex = startNodeIndex;
@@ -32,21 +32,21 @@ namespace GraphAlgorithms
         private void DFS(int v, int p)
         {
             this.OutputDescription.Append(v.ToString() + " ");
+            Node vNode = G.GetNode(v);
 
-            Visited[v] = 1;
+            Visited[vNode] = true;
             Prev[v] = p;
             Component[v] = p == -1 ? v : Component[p];
-
-            Node vNode = G.GetNode(v);
 
             List<Edge> adjEdges = G.GetAdjacentEdges(vNode);
 
             for(int i = 0; i < adjEdges.Count; i++)
             {
-                int dest = adjEdges[i].GetDestNodeIndex();
+                int destIndex = adjEdges[i].GetDestNodeIndex();
+                Node destNode = G.GetNode(destIndex);
 
-                if (Visited[dest] == 0)
-                    DFS(dest, v);
+                if (!Visited[destNode])
+                    DFS(destIndex, v);
             }
         }
 
@@ -59,9 +59,9 @@ namespace GraphAlgorithms
             DFS(StartNodeIndex, -1);
 
             // We check if any other node is unvisited, so we run DFS from them too (case for disconnected graph)
-            for(int i = 0; i < G.N; i++)
-                if (Visited[i] == 0)
-                    DFS(i, -1);
+            foreach(Node node in G.Nodes)
+                if (!Visited[node])
+                    DFS(node.Index, -1);
 
             this.OutputDescription.AppendLine();
 
@@ -69,7 +69,7 @@ namespace GraphAlgorithms
             {
                 this.OutputDescription.Append(string.Format("Component {0}: ", component));
 
-                for (int i = 0; i < Visited.Length; i++)
+                for (int i = 0; i < G.N; i++)
                     if (Component[i] == component)
                         this.OutputDescription.Append(i.ToString() + " ");
 

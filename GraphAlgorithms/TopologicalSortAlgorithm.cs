@@ -9,33 +9,29 @@ namespace GraphAlgorithms
 {
     public class TopologicalSortAlgorithm : GraphAlgorithm
     {
-        private int[] Visited;
+        NodeVisitedTracker Visited;
         List<Node> SortedList;
 
         public TopologicalSortAlgorithm(Graph g) : base(g)
         {
-            Visited = new int[G.N];
+            Visited = new NodeVisitedTracker(g.N);
             SortedList = new List<Node>();
         }
 
         public override void InitializeValues()
         {
-            for(int i = 0; i < G.N; i++)
-            {
-                Visited[i] = 0;
-            }
         }
 
         private void DFS(Node node)
         {
-            Visited[node.Index] = 1;
+            Visited[node] = true;
 
             List<Edge> adjEdges = G.GetAdjacentEdges(node);
             foreach (Edge edge in adjEdges)
             {
-                int childNodeIndex = edge.GetDestNodeIndex();
-                if (Visited[childNodeIndex] == 0)
-                    DFS(G.Nodes[childNodeIndex]);
+                Node childNode = edge.DestNode;
+                if (!Visited[childNode])
+                    DFS(childNode);
             }
 
             SortedList.Insert(0, node);
@@ -43,11 +39,9 @@ namespace GraphAlgorithms
 
         public override void Run()
         {
-            for (int nodeId = 0; nodeId < G.N; nodeId++)
+            foreach (Node node in G.Nodes)
             {
-                Node node = G.Nodes[nodeId];
-
-                if (Visited[node.Index] == 0)
+                if (!Visited[node])
                     DFS(node);
             }
 
