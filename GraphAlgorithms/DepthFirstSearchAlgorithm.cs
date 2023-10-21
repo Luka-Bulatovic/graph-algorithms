@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,45 +9,42 @@ namespace GraphAlgorithms
 {
     public class DepthFirstSearchAlgorithm : GraphAlgorithm
     {
-        private NodeVisitedTracker Visited;
-        private int[] Prev;
-        private int[] Component;
-        private int StartNodeIndex;
+        private NodeVisitedTracker _visited;
+        private NodePropertyArray<Node> _prev;
+        private NodePropertyArray<int> _component;
+        private Node _startNode;
 
-        public DepthFirstSearchAlgorithm(Graph g, int startNodeIndex = 0) : base(g)
+        public DepthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
         {
-            Visited = new NodeVisitedTracker(g.N);
-            Prev = new int[g.N];
-            Component = new int[g.N];
-            StartNodeIndex = startNodeIndex;
+            _visited = new NodeVisitedTracker(g.N);
+            _prev = new NodePropertyArray<Node>(g.N);
+            _component = new NodePropertyArray<int>(g.N);
+            _startNode = startNode;
 
             InitializeValues();
         }
 
         public override void InitializeValues()
         {
-            for (int i = 0; i < G.N; i++)
-                Prev[i] = -1;
+            _prev.InitializeValues(null);
         }
 
-        private void DFS(int v, int p)
+        private void DFS(Node currNode, Node parentNode)
         {
-            this.OutputDescription.Append(v.ToString() + " ");
-            Node vNode = G.GetNode(v);
+            this.OutputDescription.Append(currNode.Label + " ");
 
-            Visited[vNode] = true;
-            Prev[v] = p;
-            Component[v] = p == -1 ? v : Component[p];
+            _visited[currNode] = true;
+            _prev[currNode] = parentNode;
+            _component[currNode] = parentNode == null ? currNode.Index : _component[parentNode];
 
-            List<Edge> adjEdges = G.GetAdjacentEdges(vNode);
+            List<Edge> adjEdges = G.GetAdjacentEdges(currNode);
 
-            for(int i = 0; i < adjEdges.Count; i++)
+            foreach(Edge edge in adjEdges)
             {
-                int destIndex = adjEdges[i].GetDestNodeIndex();
-                Node destNode = G.GetNode(destIndex);
+                Node destNode = edge.DestNode;
 
-                if (!Visited[destNode])
-                    DFS(destIndex, v);
+                if (!_visited[destNode])
+                    DFS(destNode, currNode);
             }
         }
 
@@ -56,24 +54,45 @@ namespace GraphAlgorithms
             this.OutputDescription.Append("DFS order: ");
 
             // First, we DFS from StartNodeIndex node
-            DFS(StartNodeIndex, -1);
+            DFS(_startNode, null);
 
             // We check if any other node is unvisited, so we run DFS from them too (case for disconnected graph)
             foreach(Node node in G.Nodes)
-                if (!Visited[node])
-                    DFS(node.Index, -1);
+                if (!_visited[node])
+                    DFS(node, null);
 
             this.OutputDescription.AppendLine();
 
-            foreach(int component in Component.Distinct())
+            int currentComponent = 0;
+            while (true)
             {
-                this.OutputDescription.Append(string.Format("Component {0}: ", component));
+                bool isComponentEmpty = true;
 
-                for (int i = 0; i < G.N; i++)
-                    if (Component[i] == component)
-                        this.OutputDescription.Append(i.ToString() + " ");
+                foreach (Node node in G.Nodes)
+                {
+                    if (_component[node] == currentComponent)
+                    {
+                        isComponentEmpty = false;
+                        break;
+                    }
+                }
+
+                if (isComponentEmpty)
+                    break;
+
+                this.OutputDescription.Append(string.Format("Component {0}: ", currentComponent));
+
+                foreach (Node node in G.Nodes)
+                {
+                    if (_component[node] == currentComponent)
+                    {
+                        this.OutputDescription.Append(node.Index.ToString() + " ");
+                    }
+                }
 
                 this.OutputDescription.AppendLine();
+
+                currentComponent++;
             }
 
             this.OutputDescription.AppendLine("------- END Depth-first Search -------");

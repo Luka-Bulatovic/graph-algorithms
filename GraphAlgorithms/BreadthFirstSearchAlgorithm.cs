@@ -8,59 +8,53 @@ namespace GraphAlgorithms
 {
     public class BreadthFirstSearchAlgorithm : GraphAlgorithm
     {
-        NodeVisitedTracker Visited;
-        private int[] Prev;
-        private int[] Distance;
-        private int StartNodeIndex;
+        private NodeVisitedTracker _visited;
+        private NodePropertyArray<Node> _prev;
+        private NodePropertyArray<int> _distance;
+        private Node _startNode;
 
-        public BreadthFirstSearchAlgorithm(Graph g, int startNodeIndex = 0) : base(g)
+        public BreadthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
         {
-            Visited = new NodeVisitedTracker(g.N);
-            Prev = new int[g.N];
-            Distance = new int[g.N];
-            StartNodeIndex = startNodeIndex;
+            _visited = new NodeVisitedTracker(g.N);
+            _prev = new NodePropertyArray<Node>(g.N);
+            _distance = new NodePropertyArray<int>(g.N);
+            _startNode = startNode;
 
             InitializeValues();
         }
 
         public override void InitializeValues()
         {
-            for (int i = 0; i < G.N; i++)
-            {
-                Prev[i] = -1;
-                Distance[i] = INF_DISTANCE;
-            }
+            _prev.InitializeValues(null);
+            _distance.InitializeValues(INF_DISTANCE);
         }
 
-        private void BFS(int v)
+        private void BFS()
         {
-            Node startNode = G.GetNode(v);
-            Queue<int> q = new Queue<int>();
+            Queue<Node> q = new Queue<Node>();
 
-            q.Enqueue(v);
-            Distance[v] = 0;
-            Visited[startNode] = true;
+            q.Enqueue(_startNode);
+            _distance[_startNode] = 0;
+            _visited[_startNode] = true;
 
             while(q.Count > 0)
             {
-                int currNodeIndex = q.Dequeue();
-                Node currNode = G.GetNode(currNodeIndex);
-                int currNodeDistance = Distance[currNodeIndex];
+                Node currNode = q.Dequeue();
+                int currNodeDistance = _distance[currNode];
 
                 List<Edge> adjEdges = G.GetAdjacentEdges(currNode);
 
                 for(int i = 0; i < adjEdges.Count; i++)
                 {
-                    int toIndex = adjEdges[i].GetDestNodeIndex();
                     Node toNode = adjEdges[i].DestNode;
 
-                    if (!Visited[toNode])
+                    if (!_visited[toNode])
                     {
-                        q.Enqueue(toIndex);
+                        q.Enqueue(toNode);
 
-                        Distance[toIndex] = currNodeDistance + 1;
-                        Visited[toNode] = true;
-                        Prev[toIndex] = currNodeIndex;
+                        _distance[toNode] = currNodeDistance + 1;
+                        _visited[toNode] = true;
+                        _prev[toNode] = currNode;
                     }
                 }
             }
@@ -69,25 +63,26 @@ namespace GraphAlgorithms
         public override void Run()
         {
             this.OutputDescription.AppendLine("------- Breadth-first Search -------");
-            this.OutputDescription.AppendLine(string.Format("Running from node {0}...", StartNodeIndex));
+            this.OutputDescription.AppendLine(string.Format("Running from node {0}...", _startNode.Label));
 
-            BFS(StartNodeIndex);
+            BFS();
 
-            this.OutputDescription.AppendLine(string.Format("Distances from node {0}:", StartNodeIndex));
-            for(int i = 0; i < G.N; i++)
+            this.OutputDescription.AppendLine(string.Format("Distances from node {0}:", _startNode.Label));
+            
+            foreach(Node node in G.Nodes)
             {
-                if (i == StartNodeIndex)
+                if (node.Index == _startNode.Index)
                     continue;
 
-                this.OutputDescription.AppendLine(string.Format("Node {0}: {1}", i, Distance[i]));
+                this.OutputDescription.AppendLine(string.Format("Node {0}: {1}", node.Label, _distance[node]));
             }
 
             this.OutputDescription.AppendLine("------- END Breadth-first Search -------");
         }
 
-        public int GetDistanceToNode(int nodeIndex)
+        public int GetDistanceToNode(Node node)
         {
-            return Distance[nodeIndex];
+            return _distance[node];
         }
     }
 }

@@ -23,13 +23,13 @@ namespace GraphAlgorithms
         public override void Run()
         {
             this.OutputDescription.AppendLine("------- Wiener Index Algorithm -------");
-            for(int i = 0; i < G.N; i++)
+            foreach (Node fromNode in G.Nodes)
             {
-                BreadthFirstSearchAlgorithm currNodeBFS = new BreadthFirstSearchAlgorithm(G, i);
+                BreadthFirstSearchAlgorithm currNodeBFS = new BreadthFirstSearchAlgorithm(G, fromNode);
                 currNodeBFS.Run();
 
-                for(int j = 0; j < G.N; j++)
-                    Distances[i, j] = currNodeBFS.GetDistanceToNode(j);
+                foreach(Node toNode in G.Nodes)
+                    Distances[fromNode.Index, toNode.Index] = currNodeBFS.GetDistanceToNode(toNode);
             }
             
             WienerIndexValue = 0;

@@ -1,5 +1,5 @@
 ﻿using GraphAlgorithms;
-/*
+
 List<WienerIndexAlgorithm> graphs = new List<WienerIndexAlgorithm>();
 
 for (int i = 0; i < 30000; i++)
@@ -18,11 +18,14 @@ for (int i = 0; i < 5; i++)
     Console.WriteLine();
     Console.WriteLine();
 }
-*/
 
-Graph g = GraphFactory.GetGraphFromFileWithNodeNames("foreignkeys.txt");
+BreadthFirstSearchAlgorithm bfs = new BreadthFirstSearchAlgorithm(graphs[0].G, graphs[0].G.Nodes[0]);
+bfs.Run();
+Console.WriteLine(bfs);
 
-TopologicalSortAlgorithm topsort = new TopologicalSortAlgorithm(g);
-topsort.Run();
+//Graph g = GraphFactory.GetGraphFromFileWithNodeNames("foreignkeys.txt");
 
-File.WriteAllText("output.txt", topsort.ToString());
+//TopologicalSortAlgorithm topsort = new TopologicalSortAlgorithm(g);
+//topsort.Run();
+
+//File.WriteAllText("output.txt", topsort.ToString());

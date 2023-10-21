@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 
 namespace GraphAlgorithms
 {
-    public class NodePropertyArray
+    public class NodePropertyArray<T>
     {
-        private int[] _values;
+        private T[] _values;
 
         public NodePropertyArray(int n)
         {
-            _values = new int[n];
+            _values = new T[n];
         }
 
-        public int this[Node node]
+        public T this[Node node]
         {
             get
             {
@@ -27,7 +27,7 @@ namespace GraphAlgorithms
             }
         }
 
-        public void Reset(int value = 0)
+        public void InitializeValues(T? value)
         {
             for (int i = 0; i < _values.Length; i++)
                 _values[i] = value;
