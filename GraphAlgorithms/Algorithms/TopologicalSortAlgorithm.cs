@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms
+namespace GraphAlgorithms.Algorithms
 {
     public class TopologicalSortAlgorithm : GraphAlgorithm
     {
@@ -45,12 +45,12 @@ namespace GraphAlgorithms
                     DFS(node);
             }
 
-            this.OutputDescription.AppendLine("------- Topological Sort --------");
+            OutputDescription.AppendLine("------- Topological Sort --------");
 
             foreach (Node node in SortedList)
-                this.OutputDescription.AppendLine(string.Format("{0}", node.Label));
-            
-            this.OutputDescription.AppendLine("------- END Topological Sort --------");
+                OutputDescription.AppendLine(string.Format("{0}", node.Label));
+
+            OutputDescription.AppendLine("------- END Topological Sort --------");
         }
     }
 }

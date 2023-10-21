@@ -1,4 +1,5 @@
-﻿using GraphAlgorithms.DTO;
+﻿using GraphAlgorithms.Algorithms;
+using GraphAlgorithms.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;

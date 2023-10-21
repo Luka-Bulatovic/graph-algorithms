@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms;
+using GraphAlgorithms.Algorithms;
 using GraphAlgorithms.DTO;
 using GraphAlgorithmsWeb.Models;
 using Microsoft.AspNetCore.Mvc;

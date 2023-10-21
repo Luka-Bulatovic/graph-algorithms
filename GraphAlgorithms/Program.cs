@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms;
+using GraphAlgorithms.Algorithms;
 
 List<WienerIndexAlgorithm> graphs = new List<WienerIndexAlgorithm>();
 

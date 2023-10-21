@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms
+namespace GraphAlgorithms.Algorithms
 {
     public class UnionFind
     {
@@ -27,7 +27,7 @@ namespace GraphAlgorithms
 
         public int Find(int p)
         {
-            if(p != Parent[p])
+            if (p != Parent[p])
                 Parent[p] = Find(Parent[p]); // Path compression
 
             return Parent[p];
