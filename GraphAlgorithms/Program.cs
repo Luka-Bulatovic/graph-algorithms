@@ -1,11 +1,14 @@
 ﻿using GraphAlgorithms;
 using GraphAlgorithms.Algorithms;
+using GraphAlgorithms.Factories;
+using GraphAlgorithms.Interfaces;
 
 List<WienerIndexAlgorithm> graphs = new List<WienerIndexAlgorithm>();
 
+IGraphFactory graphFactory = new RandomUnicyclicBipartiteGraphFactory(7, 7, 10);
 for (int i = 0; i < 30000; i++)
 {
-    Graph g = GraphFactory.GetRandomUnicyclicBipartiteGraph(7, 7, 10);
+    Graph g = graphFactory.CreateGraph();
     graphs.Add(new WienerIndexAlgorithm(g));
     graphs[i].Run();
 }

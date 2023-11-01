@@ -17,17 +17,16 @@ namespace GraphAlgorithms.DTO
             nodes = new List<NodeDTO>();
             edges = new List<EdgeDTO>();
 
-            for (int i = 0; i < g.Nodes.Count; i++)
-                nodes.Add(new NodeDTO(g.Nodes[i]));
+            foreach (Node node in g.Nodes)
+                nodes.Add(new NodeDTO(node));
 
-            for (int i = 0; i < g.N; i++)
+            foreach (Node node in g.Nodes)
             {
-                Node currNode = g.GetNode(i);
-                List<Edge> adjEdges = g.GetAdjacentEdges(currNode);
+                List<Edge> adjEdges = g.GetAdjacentEdges(node);
 
                 foreach (Edge e in adjEdges)
                 {
-                    if (i < e.GetDestNodeIndex())
+                    if (node.Index < e.GetDestNodeIndex())
                         edges.Add(new EdgeDTO(e));
                 }
             }

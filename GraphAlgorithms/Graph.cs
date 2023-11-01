@@ -10,8 +10,11 @@ namespace GraphAlgorithms
     {
         public int N { get; set; } // Number of Nodes
         public int M { get; set; } // Number of Edges
-        
-        public List<Node> Nodes { get; set; }
+
+
+        private List<Node> nodes;
+        public List<Node> Nodes => nodes;
+
         private AdjacencyList AdjList;
         private AdjacencyMatrix AdjMatrix;
         private bool IsUndirected;
@@ -20,7 +23,7 @@ namespace GraphAlgorithms
         {
             N = n;
             M = 0;
-            Nodes = new List<Node>();
+            nodes = new List<Node>();
             
             AdjMatrix = new AdjacencyMatrix(N);
             AdjList = new AdjacencyList(N);
@@ -28,9 +31,14 @@ namespace GraphAlgorithms
             IsUndirected = isUndirected;
         }
 
+        public void AddNode(Node node)
+        {
+            this.nodes.Add(node);
+        }
+
         public Node GetNode(int v)
         {
-            return Nodes[v];
+            return nodes[v];
         }
 
         public void ConnectNodes(Node a, Node b)
@@ -42,6 +50,11 @@ namespace GraphAlgorithms
         public int GetNodesAdjacency(Node a, Node b)
         {
             return AdjMatrix.GetNodesAdjacency(a, b);
+        }
+
+        public bool AreNodesAdjacent(Node a, Node b)
+        {
+            return AdjMatrix.GetNodesAdjacency(a, b) > 0;
         }
 
         public List<Edge> GetAdjacentEdges(Node v)
@@ -58,17 +71,16 @@ namespace GraphAlgorithms
             sb.AppendLine();
             sb.AppendLine("List of Edges:");
 
-            for (int i = 0; i < N; i++)
+            foreach (Node srcNode in nodes)
             {
-                Node srcNode = Nodes[i];
-                List<Edge> edges = AdjList.GetAdjacentEdges(srcNode);
+                List<Edge> adjEdges = GetAdjacentEdges(srcNode);
 
-                for(int j = 0; j < edges.Count; j++)
+                foreach (Edge edge in adjEdges)
                 {
-                    Node destNode = edges[j].DestNode;
+                    Node destNode = edge.DestNode;
 
                     // If connectivity between i and q is simmetric, print this edge only once with <-> symbol, in case when i < q
-                    if (AdjMatrix.GetNodesAdjacency(srcNode, destNode) > 0 && AdjMatrix.GetNodesAdjacency(destNode, srcNode) > 0)
+                    if (AreNodesAdjacent(srcNode, destNode) && AreNodesAdjacent(destNode, srcNode))
                     {
                         if(srcNode.Index < destNode.Index)
                             sb.AppendLine(string.Format("{0} <-> {1}", srcNode.Label, destNode.Label));
