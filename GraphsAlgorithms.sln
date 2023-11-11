@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Web", "GraphAlgorithmsWeb\GraphAlgorithms.Web.csproj", "{B385A40C-8A57-4541-87F6-1ADC5D31DDFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Web", "GraphAlgorithms.Web\GraphAlgorithms.Web.csproj", "{B385A40C-8A57-4541-87F6-1ADC5D31DDFE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Core", "GraphAlgorithms\GraphAlgorithms.Core.csproj", "{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Core", "GraphAlgorithms.Core\GraphAlgorithms.Core.csproj", "{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.Repository", "GraphAlgorithms.Repository\GraphAlgorithms.Repository.csproj", "{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}"
 EndProject
