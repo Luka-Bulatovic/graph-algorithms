@@ -3,9 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithmsWeb", "GraphAlgorithmsWeb\GraphAlgorithmsWeb.csproj", "{B385A40C-8A57-4541-87F6-1ADC5D31DDFE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Web", "GraphAlgorithmsWeb\GraphAlgorithms.Web.csproj", "{B385A40C-8A57-4541-87F6-1ADC5D31DDFE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms", "GraphAlgorithms\GraphAlgorithms.csproj", "{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Core", "GraphAlgorithms\GraphAlgorithms.Core.csproj", "{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.Repository", "GraphAlgorithms.Repository\GraphAlgorithms.Repository.csproj", "{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.Service", "GraphAlgorithms.Service\GraphAlgorithms.Service.csproj", "{C04995DE-A876-4C37-828F-E374CAA0BA5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C04995DE-A876-4C37-828F-E374CAA0BA5F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C04995DE-A876-4C37-828F-E374CAA0BA5F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C04995DE-A876-4C37-828F-E374CAA0BA5F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C04995DE-A876-4C37-828F-E374CAA0BA5F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

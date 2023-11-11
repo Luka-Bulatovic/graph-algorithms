@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GraphAlgorithms\GraphAlgorithms.csproj" />
+    <ProjectReference Include="..\GraphAlgorithms\GraphAlgorithms.Core.csproj" />
   </ItemGroup>
 
 </Project>

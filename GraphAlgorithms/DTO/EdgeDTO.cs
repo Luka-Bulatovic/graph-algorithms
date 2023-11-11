@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.DTO
+namespace GraphAlgorithms.Core.DTO
 {
     public class EdgeDTO
     {

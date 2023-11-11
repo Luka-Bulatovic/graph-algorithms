@@ -1,5 +1,5 @@
-﻿using GraphAlgorithms.DTO;
-using GraphAlgorithms.Interfaces;
+﻿using GraphAlgorithms.Core.DTO;
+using GraphAlgorithms.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace GraphAlgorithms.Factories
+namespace GraphAlgorithms.Core.Factories
 {
     public class GraphFromDTONodesAndEdgesFactory : IGraphFactory
     {

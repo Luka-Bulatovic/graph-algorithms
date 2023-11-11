@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Algorithms
+namespace GraphAlgorithms.Core.Algorithms
 {
     public class TopologicalSortAlgorithm : GraphAlgorithm
     {

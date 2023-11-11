@@ -9,7 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithmsWeb
+namespace GraphAlgorithms.Web
 {
     public class Startup
     {

@@ -1,6 +1,6 @@
 using System;
 
-namespace GraphAlgorithmsWeb.Models
+namespace GraphAlgorithms.Web.Models
 {
     public class ErrorViewModel
     {

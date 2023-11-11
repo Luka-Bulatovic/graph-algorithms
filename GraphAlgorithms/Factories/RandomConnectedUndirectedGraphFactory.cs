@@ -1,12 +1,12 @@
-﻿using GraphAlgorithms.Algorithms;
-using GraphAlgorithms.Interfaces;
+﻿using GraphAlgorithms.Core.Algorithms;
+using GraphAlgorithms.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Factories
+namespace GraphAlgorithms.Core.Factories
 {
     public class RandomConnectedUndirectedGraphFactory : IGraphFactory
     {

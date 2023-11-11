@@ -1,7 +1,8 @@
-﻿using GraphAlgorithms;
-using GraphAlgorithms.Algorithms;
-using GraphAlgorithms.DTO;
-using GraphAlgorithmsWeb.Models;
+﻿using GraphAlgorithms.Core;
+using GraphAlgorithms.Core.Algorithms;
+using GraphAlgorithms.Core.DTO;
+using GraphAlgorithms.Core.Factories;
+using GraphAlgorithms.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -11,7 +12,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithmsWeb.Controllers
+namespace GraphAlgorithms.Web.Controllers
 {
     public class HomeController : Controller
     {
@@ -47,7 +48,8 @@ namespace GraphAlgorithmsWeb.Controllers
             ConcurrentBag<WienerIndexAlgorithm> graphs = new ConcurrentBag<WienerIndexAlgorithm>();
             Parallel.For(0, numberOfRandomGraphs, i =>
             {
-                Graph g = GraphFactory.GetRandomUnicyclicBipartiteGraph(p, q, k);
+                var factory = new RandomUnicyclicBipartiteGraphFactory(p, q, k);
+                Graph g = factory.CreateGraph();
                 WienerIndexAlgorithm wie = new WienerIndexAlgorithm(g);
                 wie.Run();
                 graphs.Add(wie);
@@ -65,7 +67,8 @@ namespace GraphAlgorithmsWeb.Controllers
 
         public IActionResult GetWienerIndexValueForGraph(List<NodeDTO> nodes, List<EdgeDTO> edges)
         {
-            Graph g = GraphFactory.GetGraphFromDTONodesAndEdges(nodes, edges);
+            var factory = new GraphFromDTONodesAndEdgesFactory(nodes, edges);
+            Graph g = factory.CreateGraph();
             WienerIndexAlgorithm wie = new WienerIndexAlgorithm(g);
             wie.Run();
 
