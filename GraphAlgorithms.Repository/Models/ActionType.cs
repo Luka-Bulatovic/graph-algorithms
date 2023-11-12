@@ -11,4 +11,6 @@ namespace GraphAlgorithms.Repository.Models
         public int ID { get; set; }
         public string Name { get; set; }
     }
+
+    public enum ActionTypeEnum { Draw = 1, Import = 2, GenerateRandom = 3 }
 }

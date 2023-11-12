@@ -13,4 +13,6 @@ namespace GraphAlgorithms.Repository.Models
 
         public ICollection<Graph> Graphs { get; set; }
     }
+
+    public enum GraphClassEnum { Tree = 1, UnicyclicGraph = 2 };
 }
