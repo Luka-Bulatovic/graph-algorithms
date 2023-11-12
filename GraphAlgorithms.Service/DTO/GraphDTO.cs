@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GraphAlgorithms.Core;
 
-namespace GraphAlgorithms.Core.DTO
+namespace GraphAlgorithms.Service.DTO
 {
     public class GraphDTO
     {

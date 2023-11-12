@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GraphAlgorithms.Core\GraphAlgorithms.Core.csproj" />
+    <ProjectReference Include="..\GraphAlgorithms.Repository\GraphAlgorithms.Repository.csproj" />
+  </ItemGroup>
+
 </Project>
