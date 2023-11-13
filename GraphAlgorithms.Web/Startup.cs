@@ -1,4 +1,6 @@
+using GraphAlgorithms.Repository;
 using GraphAlgorithms.Repository.Data;
+using GraphAlgorithms.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -26,6 +28,10 @@ namespace GraphAlgorithms.Web
             string connectionString = Configuration.GetConnectionString("WebAppDB");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            // Inject Service and Repository services
+            services.AddServiceProjectServices();
+            services.AddRepositoryServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

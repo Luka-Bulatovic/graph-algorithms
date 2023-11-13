@@ -8,11 +8,15 @@ namespace GraphAlgorithms.Service.DTO
         public List<EdgeDTO> edges { get; set; }
         public int score { get; set; }
 
-        public GraphDTO(Graph g, int score)
+        public GraphDTO()
         {
             nodes = new List<NodeDTO>();
             edges = new List<EdgeDTO>();
+            score = 0;
+        }
 
+        public GraphDTO(Graph g, int score) : this()
+        {
             foreach (Node node in g.Nodes)
                 nodes.Add(new NodeDTO(node));
 

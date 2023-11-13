@@ -11,10 +11,12 @@ namespace GraphAlgorithms.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IMainService mainService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IMainService mainService)
         {
             _logger = logger;
+            this.mainService = mainService;
         }
 
         public IActionResult Index()
@@ -35,14 +37,14 @@ namespace GraphAlgorithms.Web.Controllers
 
         public IActionResult GetBestUnicyclicBipartiteGraphs(int p, int q, int k)
         {
-            var bestGraphs = InitialMainClass.GetBestUnicyclicBipartiteGraphs(p, q, k);
+            var bestGraphs = mainService.GetBestUnicyclicBipartiteGraphs(p, q, k);
 
             return Json(bestGraphs);
         }
 
         public IActionResult GetWienerIndexValueForGraph(List<NodeDTO> nodes, List<EdgeDTO> edges)
         {
-            int ret = InitialMainClass.GetWienerIndexValueForGraphFromDTO(nodes, edges);
+            int ret = mainService.GetWienerIndexValueForGraphFromDTO(nodes, edges);
             return Json(new { Value = ret });
         }
     }

@@ -1,0 +1,101 @@
+﻿@model GraphCanvasModel
+
+@{
+    string ViewContainerID = string.Format("graph-canvas-container-{0}", Model.ID);
+
+    string ViewID = string.Format("GraphCanvasContainer_{0}", Model.ID);
+    string ViewDataObj = string.Format("{0}_ViewData", ViewID);
+}
+
+<div id="@ViewContainerID" class="graph-canvas-container">
+    <div class="context-menu">
+        <div class="item context-item-delete-edge">Delete Edge</div>
+        <div class="item context-item-start-adding-edge">Start Adding Edge</div>
+        <div class="item context-item-finish-adding-edge">Finish Adding Edge</div>
+    </div>
+
+    <div class="graph-container"></div>
+</div>
+
+<script type="text/javascript">
+    var @(ViewDataObj) = {
+        contextMenu: null,
+        currentNetwork: null,
+        currentNodes: JSON.parse(@(Model.NodesJSON)),
+        currentEdges: JSON.parse(@(Model.EdgesJSON)),
+        graphEdit: {
+            network: null,
+            // wrapper: null,
+            // container: null,
+            // label: null,
+            // btnCalculate: null,
+            newEdgeStartNode: null,
+            newEdgeEndNode: null,
+        }
+    };
+
+    function initializeGlobalObjectsAndEvents() {
+        var viewData = @(ViewDataObj);
+        viewData.contextMenu = $("#context-menu");
+
+        $('body').on('click', function () {
+            viewData.contextMenu.removeClass('visible');
+        });
+
+        viewData.contextMenu.find('.item').on('click', function (e) {
+            var itemID = $(e.target).attr('id');
+
+            if ($(e.target).hasClass('context-item-delete-edge')) {
+                if (viewData.graphEdit.network == null)
+                    return;
+
+                let selectedEdges = viewData.graphEdit.network.getSelectedEdges();
+                if (selectedEdges != null && selectedEdges.length > 0)
+                    viewData.graphEdit.network.body.data.edges.remove(selectedEdges);
+            }
+            else if ($(e.target).hasClass('context-item-start-adding-edge')) {
+                if (viewData.graphEdit.network == null)
+                    return;
+
+                let selectedStartNodes = viewData.graphEdit.network.getSelectedNodes();
+                if (selectedStartNodes != null && selectedStartNodes.length > 0) {
+                    viewData.graphEdit.newEdgeStartNode = selectedStartNodes[0];
+                }
+            }
+            else if ($(e.target).hasClass('context-item-finish-adding-edge')) {
+                if (viewData.graphEdit.network == null)
+                    return;
+
+                let selectedEndNodes = viewData.graphEdit.network.getSelectedNodes();
+                if (selectedEndNodes != null && selectedEndNodes.length > 0) {
+                    viewData.graphEdit.newEdgeEndNode = selectedEndNodes[0];
+
+                    if (viewData.graphEdit.newEdgeStartNode != null) {
+                        viewData.graphEdit.network.body.data.edges.add({ from: viewData.graphEdit.newEdgeStartNode, to: viewData.graphEdit.newEdgeEndNode });
+                    }
+
+                    viewData.graphEdit.newEdgeStartNode = null;
+                    viewData.graphEdit.newEdgeEndNode = null;
+                }
+            }
+
+            viewData.contextMenu.removeClass('visible');
+        });
+    }
+
+    $(document).ready(() => {
+        var viewData = @(ViewDataObj);
+
+        initializeGlobalObjectsAndEvents();
+        // initializeEditGraphContainerObjectsAndEvents();
+
+        viewData.currentNetwork = new vis.Network(
+            $("#@(ViewContainerID) graph-container")[0],
+            { 
+                nodes: new vis.DataSet(g.nodes), 
+                edges: new vis.DataSet(g.edges) 
+            },
+            {}
+        );
+    });
+</script>

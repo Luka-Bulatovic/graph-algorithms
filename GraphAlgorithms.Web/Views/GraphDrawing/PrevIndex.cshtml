@@ -1,0 +1,243 @@
+﻿<div id="context-menu">
+    <div class="item" id="context-item-1">Delete Edge</div>
+    <div class="item" id="context-item-2">Start Adding Edge</div>
+    <div class="item" id="context-item-3">Finish Adding Edge</div>
+</div>
+
+<div class="text-center">
+    <h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+
+<div>
+    <label for="input-p">P:</label>
+    <input type="number" id="input-p" name="input-p" value="7" />
+    <br />
+    <label for="input-q">Q:</label>
+    <input type="number" id="input-q" name="input-q" value="7" />
+    <br />
+    <label for="input-k">K:</label>
+    <input type="number" id="input-k" name="input-k" value="4" />
+    <br />
+    <button class="btn btn-primary" onclick="getBestGraphs()">Generate</button>
+</div>
+
+<div id="wrapper">
+    <div id="all-graphs-container"></div>
+    <div id="edit-graph-wrapper">
+        <span id="edit-graph-label">Score: </span>&nbsp;<button id="edit-graph-btnCalc" class="btn btn-primary">Calculate</button>
+        <div id="edit-graph-container" class="graph-container"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var ViewData = {
+        contextMenu: null,
+        currentNetwork: null,
+        graphEdit: {
+            network: null,
+            wrapper: null,
+            container: null,
+            label: null,
+            btnCalculate: null,
+            newEdgeStartNode: null,
+            newEdgeEndNode: null,
+        }
+    };
+
+    function getBestGraphs() {
+        var p = $("#input-p").val();
+        var q = $("#input-q").val();
+        var k = $("#input-k").val();
+
+        $.get(`/Home/GetBestUnicyclicBipartiteGraphs?p=${p}&q=${q}&k=${k}`, function (data) {
+            drawBestGraphs(data);
+        })
+            .fail(function () {
+                alert("error");
+            });
+    }
+
+    function drawBestGraphs(data) {
+        var container = $("#all-graphs-container");
+        container.empty();
+
+        data.forEach((g, i) => {
+            var graphContainerID = `graph-container-${i}`;
+            var graphContainer = $('<div>', { id: graphContainerID, class: 'graph-container' });
+            var graphContainerLabel = $('<div>', { id: `${graphContainerID}-label` });
+            var graphContainerEditBtn = $('<button>', { class: 'btn btn-warning', id: `${graphContainerID}-editBtn` });
+
+            container.append(graphContainerEditBtn);
+            container.append(graphContainerLabel);
+            container.append(graphContainer);
+            graphContainerLabel.html(`Score = ${g.score}`);
+            graphContainerEditBtn.html(`Edit`);
+
+            var network = new vis.Network(document.getElementById(graphContainerID), { nodes: new vis.DataSet(g.nodes), edges: new vis.DataSet(g.edges) }, {});
+
+            graphContainerEditBtn.click({ network: network }, function (e) {
+                onEditGraph(e.data.network);
+            });
+        });
+    }
+
+    function onEditGraph(network) {
+        // 1. We create a deep copy of graph
+
+        // Get the nodes and edges of the original network
+        var originalNodes = network.body.data.nodes.get();
+        var originalEdges = network.body.data.edges.get();
+
+        // Create new copies of the nodes and edges
+        var clonedNodes = originalNodes.map(function (node) {
+            return Object.assign({}, node);
+        });
+        var clonedEdges = originalEdges.map(function (edge) {
+            return Object.assign({}, edge);
+        });
+
+        // Create the cloned network
+        var clonedNetwork = new vis.Network(document.getElementById(ViewData.graphEdit.container.attr('id')), {
+            nodes: clonedNodes,
+            edges: clonedEdges
+        }, {});
+
+        // 2. We assign this copy of graph to graphEdit object
+        ViewData.graphEdit.network = clonedNetwork;
+    }
+
+    function initializeEditGraphContainerObjectsAndEvents() {
+        ViewData.graphEdit.wrapper = $("#edit-graph-wrapper");
+        ViewData.graphEdit.container = $("#edit-graph-container");
+        ViewData.graphEdit.label = $("#edit-graph-label");
+        ViewData.graphEdit.btnCalculate = $("#edit-graph-btnCalc");
+
+        ViewData.graphEdit.container.contextmenu(function (event) {
+            event.preventDefault();
+
+            if (event.which == 3) {
+                ViewData.contextMenu.removeClass("visible");
+                ViewData.contextMenu.css({ top: event.clientY, left: event.clientX });
+
+                setTimeout(() => {
+                    ViewData.contextMenu.addClass("visible");
+                });
+            }
+
+            return false;
+        });
+
+        ViewData.graphEdit.btnCalculate.click(function (e) {
+            onCalculateScoreForEditedGraph();
+        });
+    }
+
+    function onCalculateScoreForEditedGraph() {
+        var network = ViewData.graphEdit.network;
+        var nodes = network.body.data.nodes.get();
+        var edges = network.body.data.edges.get();
+
+        $.ajax({
+            url: `/Home/GetWienerIndexValueForGraph`,
+            method: 'POST',
+            data: {
+                nodes: nodes,
+                edges: edges
+            }
+        })
+            .done(function (data) {
+                ViewData.graphEdit.label.html(`Score = ${data.value}`);
+            })
+            .fail(function () {
+                alert("error");
+            });
+    }
+
+    function initializeGlobalObjectsAndEvents() {
+        ViewData.contextMenu = $("#context-menu");
+
+        $('body').on('click', function () {
+            ViewData.contextMenu.removeClass('visible');
+        });
+
+        ViewData.contextMenu.find('.item').on('click', function (e) {
+            var itemID = $(e.target).attr('id');
+
+            switch (itemID) {
+                case 'context-item-1': // deleting edge
+                    if (ViewData.graphEdit.network == null)
+                        break;
+
+                    let selectedEdges = ViewData.graphEdit.network.getSelectedEdges();
+                    if (selectedEdges != null && selectedEdges.length > 0)
+                        ViewData.graphEdit.network.body.data.edges.remove(selectedEdges);
+                    break;
+                case 'context-item-2': // start adding edge
+                    if (ViewData.graphEdit.network == null)
+                        break;
+
+                    let selectedStartNodes = ViewData.graphEdit.network.getSelectedNodes();
+                    if (selectedStartNodes != null && selectedStartNodes.length > 0) {
+                        ViewData.graphEdit.newEdgeStartNode = selectedStartNodes[0];
+                    }
+                    break;
+                case 'context-item-3': // finish adding edge
+                    if (ViewData.graphEdit.network == null)
+                        break;
+
+                    let selectedEndNodes = ViewData.graphEdit.network.getSelectedNodes();
+                    if (selectedEndNodes != null && selectedEndNodes.length > 0) {
+                        ViewData.graphEdit.newEdgeEndNode = selectedEndNodes[0];
+
+                        if (ViewData.graphEdit.newEdgeStartNode != null) {
+                            ViewData.graphEdit.network.body.data.edges.add({ from: ViewData.graphEdit.newEdgeStartNode, to: ViewData.graphEdit.newEdgeEndNode });
+                        }
+
+                        ViewData.graphEdit.newEdgeStartNode = null;
+                        ViewData.graphEdit.newEdgeEndNode = null;
+                    }
+                    break;
+                default:
+                    break;
+            }
+
+            ViewData.contextMenu.removeClass('visible');
+        });
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        initializeGlobalObjectsAndEvents();
+        initializeEditGraphContainerObjectsAndEvents();
+
+
+
+        // getBestGraphs(7, 7, 4);
+
+        //// create an array with nodes
+        //nodes = new vis.DataSet([
+        //    { id: 1, label: "Node 1" },
+        //    { id: 2, label: "Node 2" },
+        //    { id: 3, label: "Node 3" },
+        //    { id: 4, label: "Node 4" },
+        //    { id: 5, label: "Node 5" },
+        //]);
+
+        //// create an array with edges
+        //edges = new vis.DataSet([
+        //    { from: 1, to: 3 },
+        //    { from: 1, to: 2 },
+        //    { from: 2, to: 4 },
+        //    { from: 2, to: 5 },
+        //    { from: 3, to: 3 },
+        //]);
+
+        //// create a network
+        //data = {
+        //    nodes: nodes,
+        //    edges: edges,
+        //};
+        //network = new vis.Network(container, data, {});
+    });
+
+</script>

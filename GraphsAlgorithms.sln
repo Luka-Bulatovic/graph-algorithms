@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Web", "Grap
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Core", "GraphAlgorithms.Core\GraphAlgorithms.Core.csproj", "{C1D5B91F-9D67-43CB-8909-82FAEE8C60FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.Repository", "GraphAlgorithms.Repository\GraphAlgorithms.Repository.csproj", "{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Repository", "GraphAlgorithms.Repository\GraphAlgorithms.Repository.csproj", "{BD4B1E29-A9E9-48A1-A1A1-56A75DCD9E81}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.Service", "GraphAlgorithms.Service\GraphAlgorithms.Service.csproj", "{C04995DE-A876-4C37-828F-E374CAA0BA5F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Service", "GraphAlgorithms.Service\GraphAlgorithms.Service.csproj", "{C04995DE-A876-4C37-828F-E374CAA0BA5F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
