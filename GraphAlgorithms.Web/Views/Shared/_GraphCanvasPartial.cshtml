@@ -13,6 +13,7 @@
     </div>
 
     <div class="graph-container"></div>
+    <div class="status-bar"></div>
 </div>
 
 <script type="text/javascript">
@@ -20,6 +21,7 @@
         viewID: "@ViewID",
         contextMenu: $("#@ViewID .context-menu"),
         container: $("#@ViewID .graph-container"),
+        statusBar: $("#@ViewID .status-bar"),
         network: null,
         nodes: @Html.Raw(Model.NodesJSON),
         edges: @Html.Raw(Model.EdgesJSON),

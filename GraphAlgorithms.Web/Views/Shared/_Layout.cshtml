@@ -19,13 +19,21 @@
         }
 
         .graph-canvas-container {
+            display: flex;
+            flex-direction: column;
             width: 500px;
             height: 500px;
             border: 1px solid lightgray;
         }
 
         .graph-canvas-container .graph-container {
-            height: 100%;
+            flex-grow: 1;
+        }
+
+        .graph-canvas-container .status-bar {
+            height: 50px;
+            width: 100%;
+            background: lightgray;
         }
 
         .context-menu {
