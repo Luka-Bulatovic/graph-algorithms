@@ -6,6 +6,7 @@
     <title>@ViewData["Title"] - GraphAlgorithmsWeb</title>
     <link rel="stylesheet" href="~/css/tailwind-output.css" />
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="~/lib/jquery/dist/jquery.js"></script>
     <style type="text/css">
         #wrapper {
             display: flex;
@@ -18,9 +19,13 @@
         }
 
         .graph-canvas-container {
-            width: 700px;
-            height: 700px;
+            width: 500px;
+            height: 500px;
             border: 1px solid lightgray;
+        }
+
+        .graph-canvas-container .graph-container {
+            height: 100%;
         }
 
         .context-menu {
@@ -72,7 +77,6 @@
             &copy; 2022 - GraphAlgorithmsWeb - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script type="text/javascript" src="https://unpkg.com/vis-network/standalone/umd/vis-network.min.js"></script>
     @RenderSection("Scripts", required: false)
