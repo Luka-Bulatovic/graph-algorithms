@@ -23,7 +23,6 @@ namespace GraphAlgorithms.Core.Factories
             int m = lines.Length - 1;
 
             Graph g = new Graph(n, isUndirected: false);
-            g.M = m;
 
             int currNodeIndex = 0;
 

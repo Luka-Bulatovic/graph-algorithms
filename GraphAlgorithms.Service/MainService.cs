@@ -20,7 +20,7 @@ namespace GraphAlgorithms.Service
         public List<GraphDTO> GetBestUnicyclicBipartiteGraphs(int p, int q, int k)
         {
             List<GraphDTO> bestGraphs = new List<GraphDTO>();
-            int numberOfRandomGraphs = 30000;
+            int numberOfRandomGraphs = 3000;
             int numberOfBestGraphs = 10;
 
             ConcurrentBag<WienerIndexAlgorithm> graphs = new ConcurrentBag<WienerIndexAlgorithm>();
@@ -39,6 +39,9 @@ namespace GraphAlgorithms.Service
 
             for (int i = 0; i < numberOfBestGraphs; i++)
                 bestGraphs.Add(new GraphDTO(graphsList[i].G, graphsList[i].WienerIndexValue));
+
+            //string graphml = GraphMLConverter.GetGraphMLForGraph(graphsList[0].G);
+            //Graph reconstructedGraph = GraphMLConverter.GetGraphFromGraphML(graphml);
 
             return bestGraphs;
         }
@@ -68,7 +71,6 @@ namespace GraphAlgorithms.Service
         private Graph GetGraphFromNodesAndEdgesDTO(List<NodeDTO> nodes, List<EdgeDTO> edges)
         {
             Graph g = new Graph(nodes.Count);
-            g.M = edges.Count;
 
             for (int i = 0; i < nodes.Count; i++)
                 g.AddNode(new Node(nodes[i].id, nodes[i].label));

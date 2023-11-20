@@ -20,12 +20,16 @@ namespace GraphAlgorithms.Core
                 AdjList.Add(i, new List<Edge>());
         }
 
-        public void ConnectNodes(Node a, Node b, bool isUndirectedEdge = true)
+        public Edge ConnectNodes(Node a, Node b, bool isUndirectedEdge = true)
         {
-            AdjList[a.Index].Add(new Edge(a, b));
+            Edge e = new Edge(a, b);
+
+            AdjList[a.Index].Add(e);
 
             if (isUndirectedEdge)
                 AdjList[b.Index].Add(new Edge(b, a));
+
+            return e;
         }
 
         public List<Edge> GetAdjacentEdges(Node v)
