@@ -41,9 +41,6 @@ namespace GraphAlgorithms.Core.Factories
                 m += isEdgeCreated ? 1 : 0;
             }
 
-            // set the final number of edges in graph
-            g.M = m;
-
             return g;
         }
 

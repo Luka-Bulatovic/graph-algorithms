@@ -9,26 +9,33 @@ namespace GraphAlgorithms.Core
     public class Graph
     {
         public int N { get; set; } // Number of Nodes
-        public int M { get; set; } // Number of Edges
-
+        public int M // Number of Edges
+        {
+            get { return edges.Count; } 
+        }
 
         private List<Node> nodes;
         public List<Node> Nodes => nodes;
 
+        private List<Edge> edges;
+        public List<Edge> Edges => edges;
+
         private AdjacencyList AdjList;
         private AdjacencyMatrix AdjMatrix;
-        private bool IsUndirected;
+
+        private bool isUndirected;
+        public bool IsUndirected => isUndirected;
 
         public Graph(int n, bool isUndirected = true)
         {
             N = n;
-            M = 0;
             nodes = new List<Node>();
+            edges = new List<Edge>();
             
             AdjMatrix = new AdjacencyMatrix(N);
             AdjList = new AdjacencyList(N);
 
-            IsUndirected = isUndirected;
+            this.isUndirected = isUndirected;
         }
 
         public void AddNode(Node node)
@@ -43,8 +50,10 @@ namespace GraphAlgorithms.Core
 
         public void ConnectNodes(Node a, Node b)
         {
-            AdjMatrix.ConnectNodes(a, b, IsUndirected);
-            AdjList.ConnectNodes(a, b, IsUndirected);
+            AdjMatrix.ConnectNodes(a, b, isUndirected);
+
+            Edge e = AdjList.ConnectNodes(a, b, isUndirected);
+            edges.Add(e);
         }
 
         public int GetNodesAdjacency(Node a, Node b)

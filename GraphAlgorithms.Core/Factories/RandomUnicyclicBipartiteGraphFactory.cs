@@ -90,7 +90,6 @@ namespace GraphAlgorithms.Core.Factories
                     g.ConnectNodes(randomNode, newNode);
 
                     isNewNodeConnected = true;
-                    g.M++;
                 }
             }
         }
@@ -115,7 +114,6 @@ namespace GraphAlgorithms.Core.Factories
 
             // Generate cycle
             GenerateCycle(g);
-            g.M = cycleLength;
 
             /*
              *  The rest of the graph has to have the following shape (should be easy to prove):

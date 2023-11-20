@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/css/tailwind-output.css" />
     <link rel="stylesheet" href="~/css/site.css" />
     <script src="~/lib/jquery/dist/jquery.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
     <style type="text/css">
         #wrapper {
             display: flex;
@@ -34,6 +35,14 @@
             height: 50px;
             width: 100%;
             background: lightgray;
+            position: relative;
+        }
+
+        .graph-canvas-container .status-bar .status-bar-fullscreen {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            cursor: pointer;
         }
 
         .context-menu {
