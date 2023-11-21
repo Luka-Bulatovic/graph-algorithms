@@ -17,6 +17,9 @@ var GraphCanvasPartial = new function () {
             return false;
         });
 
+        // Save Button click
+        viewDataObj.btnSave.on('click', function (e) { GraphCanvasPartial.onBtnSaveClick(viewDataObj); });
+
         // Initial network
         GraphCanvasPartial.createInitialNetwork(viewDataObj);
     }
@@ -86,5 +89,15 @@ var GraphCanvasPartial = new function () {
             },
             {}
         );
+    }
+
+    this.onBtnSaveClick = function (viewDataObj) {
+        $.post("/GraphDrawing/Store", {
+            nodes: viewDataObj.nodes,
+            edges: viewDataObj.edges,
+            score: 0
+        }).done(function (data) {
+            alert("Saved");
+        });
     }
 };

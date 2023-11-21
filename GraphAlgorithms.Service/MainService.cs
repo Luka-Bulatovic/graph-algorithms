@@ -2,6 +2,7 @@
 using GraphAlgorithms.Core.Algorithms;
 using GraphAlgorithms.Core.Factories;
 using GraphAlgorithms.Repository.Data;
+using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using System.Collections.Concurrent;
@@ -12,6 +13,7 @@ namespace GraphAlgorithms.Service
     {
         private readonly IGraphRepository graphRepository;
 
+        // So far, this is for testing only, so we put all in MainService
         public MainService(IGraphRepository graphRepository)
         {
             this.graphRepository = graphRepository;
@@ -38,7 +40,16 @@ namespace GraphAlgorithms.Service
             graphsList.Sort((x, y) => { return y.WienerIndexValue - x.WienerIndexValue; });
 
             for (int i = 0; i < numberOfBestGraphs; i++)
-                bestGraphs.Add(new GraphDTO(graphsList[i].G, graphsList[i].WienerIndexValue));
+            {
+                GraphDTO graphDTO = GraphDTOConverter.GetGraphDTOFromGraph(graphsList[i].G);
+                /*
+                 * TODO: Make GraphProperties class that contains properties such as Wiener Index. 
+                 * Add its instance to Graph Core class, so that we can convert it alltogether in GraphDTOConverter and 
+                 * not do the below line manually.
+                */ 
+                graphDTO.score = graphsList[i].WienerIndexValue;
+                bestGraphs.Add(graphDTO);
+            }
 
             //string graphml = GraphMLConverter.GetGraphMLForGraph(graphsList[0].G);
             //Graph reconstructedGraph = GraphMLConverter.GetGraphFromGraphML(graphml);
@@ -57,15 +68,22 @@ namespace GraphAlgorithms.Service
 
         public async Task<GraphDTO> GetGraphDTOByIDAsync(int id)
         {
-            Repository.Models.Graph repoGraph = await graphRepository.GetByIdAsync(id);
+            GraphEntity graphEntity = await graphRepository.GetByIdAsync(id);
 
             // Transform Graph Repository model into actual Graph object
-            Core.Graph graph = null; // ...
+            Graph graph = GraphMLConverter.GetGraphFromGraphML(graphEntity.DataXML);
 
             // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = new GraphDTO(graph, 0); // ...
+            GraphDTO graphDTO = GraphDTOConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
 
             return graphDTO;
+        }
+
+        public async Task StoreGraph(GraphDTO graphDTO)
+        {
+            GraphEntity graphEntity = GraphDTOConverter.GetGraphEntityFromGraphDTO(graphDTO);
+
+            await graphRepository.AddAsync(graphEntity);
         }
 
         private Graph GetGraphFromNodesAndEdgesDTO(List<NodeDTO> nodes, List<EdgeDTO> edges)

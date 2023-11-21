@@ -1,11 +1,6 @@
 ﻿using GraphAlgorithms.Repository.Data;
-using GraphAlgorithms.Repository.Models;
+using GraphAlgorithms.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Repository.Repositories
 {
@@ -18,19 +13,19 @@ namespace GraphAlgorithms.Repository.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<Graph>> GetAllAsync()
+        public async Task<IEnumerable<GraphEntity>> GetAllAsync()
         {
-            List<Graph> graphs = await _context.Graphs.ToListAsync();
+            List<GraphEntity> graphs = await _context.Graphs.ToListAsync();
             return graphs;
         }
 
-        public async Task<Graph> GetByIdAsync(int id)
+        public async Task<GraphEntity> GetByIdAsync(int id)
         {
-            Graph graph = await _context.Graphs.FindAsync(id);
+            GraphEntity graph = await _context.Graphs.FindAsync(id);
             return graph;
         }
 
-        public async Task AddAsync(Graph graph)
+        public async Task AddAsync(GraphEntity graph)
         {
             await _context.Graphs.AddAsync(graph);
             await _context.SaveChangesAsync();

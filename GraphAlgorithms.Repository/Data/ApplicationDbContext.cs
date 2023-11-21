@@ -1,4 +1,4 @@
-﻿using GraphAlgorithms.Repository.Models;
+﻿using GraphAlgorithms.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.Text;
@@ -11,21 +11,23 @@ namespace GraphAlgorithms.Repository.Data
         : base(options)
         { }
 
-        public DbSet<Graph> Graphs { get; set; }
-        public DbSet<ActionType> ActionTypes { get; set; }
-        public DbSet<GraphClass> GraphClasses { get; set; }
-        public DbSet<Models.Action> Actions { get; set; }
+        public DbSet<GraphEntity> Graphs { get; set; }
+        public DbSet<ActionTypeEntity> ActionTypes { get; set; }
+        public DbSet<GraphClassEntity> GraphClasses { get; set; }
+        public DbSet<ActionEntity> Actions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<Graph>()
+            ConfigureEntityToTableMappings(modelBuilder);
+
+            modelBuilder.Entity<GraphEntity>()
                 .HasMany(g => g.GraphClasses)
                 .WithMany(gc => gc.Graphs);
 
-            modelBuilder.Entity<Models.Action>()
+            modelBuilder.Entity<ActionEntity>()
                 .HasMany(a => a.Graphs)
                 .WithMany(g => g.Actions);
 
@@ -33,20 +35,28 @@ namespace GraphAlgorithms.Repository.Data
             SeedTables(modelBuilder);
         }
 
+        private void ConfigureEntityToTableMappings(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ActionEntity>().ToTable("Actions");
+            modelBuilder.Entity<ActionTypeEntity>().ToTable("ActionTypes");
+            modelBuilder.Entity<GraphClassEntity>().ToTable("GraphClasses");
+            modelBuilder.Entity<GraphEntity>().ToTable("Graphs");
+        }
+
         private void SeedTables(ModelBuilder modelBuilder)
         {
             // Seed for GraphClass
-            modelBuilder.Entity<GraphClass>().HasData(
+            modelBuilder.Entity<GraphClassEntity>().HasData(
                 Enum.GetValues(typeof(GraphClassEnum))
                     .Cast<GraphClassEnum>()
-                    .Select(e => new GraphClass() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
+                    .Select(e => new GraphClassEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
             );
 
             // Seed for ActionType
-            modelBuilder.Entity<ActionType>().HasData(
+            modelBuilder.Entity<ActionTypeEntity>().HasData(
                 Enum.GetValues(typeof(ActionTypeEnum))
                     .Cast<ActionTypeEnum>()
-                    .Select(e => new ActionType() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
+                    .Select(e => new ActionTypeEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
             );
         }
 

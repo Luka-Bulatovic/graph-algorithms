@@ -14,6 +14,7 @@
 
     <div class="graph-container"></div>
     <div class="status-bar">
+        <button type="button" class="btn-save">Save</button>
         <span class="status-bar-fullscreen">
             <i class="fa fa-expand" aria-hidden="true"></i>
         </span>
@@ -26,6 +27,7 @@
         contextMenu: $("#@ViewID .context-menu"),
         container: $("#@ViewID .graph-container"),
         statusBar: $("#@ViewID .status-bar"),
+        btnSave: $("#@ViewID .status-bar .btn-save"),
         network: null,
         nodes: @Html.Raw(Model.NodesJSON),
         edges: @Html.Raw(Model.EdgesJSON),

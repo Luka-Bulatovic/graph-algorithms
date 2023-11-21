@@ -1,11 +1,11 @@
-﻿using GraphAlgorithms.Repository.Models;
+﻿using GraphAlgorithms.Repository.Entities;
 
 namespace GraphAlgorithms.Repository.Repositories
 {
     public interface IGraphRepository
     {
-        Task<IEnumerable<Graph>> GetAllAsync();
-        Task<Graph> GetByIdAsync(int id);
-        Task AddAsync(Graph graph);
+        Task<IEnumerable<GraphEntity>> GetAllAsync();
+        Task<GraphEntity> GetByIdAsync(int id);
+        Task AddAsync(GraphEntity graph);
     }
 }

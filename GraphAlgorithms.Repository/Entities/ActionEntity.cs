@@ -4,15 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Repository.Models
+namespace GraphAlgorithms.Repository.Entities
 {
-    public class Action
+    public class ActionEntity
     {
         public int ID { get; set; }
         public int ActionTypeID { get; set; }
         public DateTime CreatedDate { get; set; }
 
-        public virtual ActionType ActionType { get; set; }
-        public ICollection<Graph> Graphs { get; set; }
+        public virtual ActionTypeEntity ActionType { get; set; }
+        public ICollection<GraphEntity> Graphs { get; set; }
     }
 }

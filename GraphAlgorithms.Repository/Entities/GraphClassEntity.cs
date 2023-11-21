@@ -4,13 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Repository.Models
+namespace GraphAlgorithms.Repository.Entities
 {
-    public class ActionType
+    public class GraphClassEntity
     {
         public int ID { get; set; }
         public string Name { get; set; }
+
+        public ICollection<GraphEntity> Graphs { get; set; }
     }
 
-    public enum ActionTypeEnum { Draw = 1, Import = 2, GenerateRandom = 3 }
+    public enum GraphClassEnum { Tree = 1, UnicyclicGraph = 2 };
 }

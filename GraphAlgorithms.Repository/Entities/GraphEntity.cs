@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Repository.Models
+namespace GraphAlgorithms.Repository.Entities
 {
-    public class Graph
+    public class GraphEntity
     {
         public int ID { get; set; }
         public string Name { get; set; }
@@ -15,7 +15,7 @@ namespace GraphAlgorithms.Repository.Models
         public string DataXML { get; set; }
         public int WienerIndex { get; set; }
 
-        public ICollection<GraphClass> GraphClasses { get; set; }
-        public ICollection<Action> Actions { get; set; }
+        public ICollection<GraphClassEntity> GraphClasses { get; set; }
+        public ICollection<ActionEntity> Actions { get; set; }
     }
 }
