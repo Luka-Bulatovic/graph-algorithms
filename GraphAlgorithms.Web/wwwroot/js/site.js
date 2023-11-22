@@ -40,8 +40,46 @@ var GraphCanvasPartial = new function () {
             return;
 
         let selectedEdges = viewDataObj.network.getSelectedEdges();
-        if (selectedEdges != null && selectedEdges.length > 0)
-            viewDataObj.network.body.data.edges.remove(selectedEdges);
+        if (selectedEdges != null && selectedEdges.length > 0) {
+            var edgeId = selectedEdges[0];
+            //var fromNodeIdx = -1;
+            //var toNodeIdx = -1;
+
+            //for (var i = 0; i < viewDataObj.nodes.length; i++) {
+            //    var nodeIncidentToDeletedEdge =
+            //        viewObj
+            //            .network
+            //            .body
+            //            .nodes[i]
+            //            .edges.filter(e => e.id == edgeId).length > 0;
+
+            //    if (nodeIncidentToDeletedEdge && fromNodeIdx == -1)
+            //        fromNodeIdx = viewObj.network.body.nodes[i].id;
+            //    else if (nodeIncidentToDeletedEdge && toNodeIdx == -1)
+            //        toNodeIdx = viewObj.network.body.nodes[i].id;
+            //}
+
+            //if (fromNodeIdx != -1 && toNodeIdx != -1) {
+            //    //var edgeIdx =
+
+            //    viewDataObj.edges.splice(, 1);
+            //}
+
+            var isDeleted = false;
+
+            for (var i = 0; i < viewDataObj.edges.length; i++)
+            {
+                if (viewDataObj.edges[i].id == edgeId) {
+                    isDeleted = true;
+                    viewDataObj.edges.splice(i, 1);
+                    viewDataObj.network.body.data.edges.remove(edgeId);
+                    break;
+                }
+            }
+
+            if (!isDeleted)
+                alert("Error deleting edge!");
+        }
     }
 
     this.onStartAddingEdge = function (viewDataObj) {
@@ -63,7 +101,14 @@ var GraphCanvasPartial = new function () {
             viewDataObj.graphEdit.newEdgeEndNode = selectedEndNodes[0];
 
             if (viewDataObj.graphEdit.newEdgeStartNode != null) {
-                viewDataObj.network.body.data.edges.add({ from: viewDataObj.graphEdit.newEdgeStartNode, to: viewDataObj.graphEdit.newEdgeEndNode });
+                var edgeId = viewDataObj.network.body.data.edges.add({ from: viewDataObj.graphEdit.newEdgeStartNode, to: viewDataObj.graphEdit.newEdgeEndNode });
+                edgeId = edgeId[0];
+
+                viewDataObj.edges.push({
+                    from: viewDataObj.graphEdit.newEdgeStartNode,
+                    to: viewDataObj.graphEdit.newEdgeEndNode,
+                    id: edgeId
+                });
             }
 
             viewDataObj.graphEdit.newEdgeStartNode = null;
