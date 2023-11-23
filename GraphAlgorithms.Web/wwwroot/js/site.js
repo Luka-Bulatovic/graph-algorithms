@@ -60,7 +60,7 @@ var GraphCanvasPartial = new function () {
                 let fromNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.edges[i].from);
                 let toNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.edges[i].to);
 
-                GraphCanvasPartial.setStatus(viewDataObj, `Deleted edge ${fromNode.label} <-> ${toNode.label}`);
+                GraphCanvasPartial.setStatus(viewDataObj, `Deleted edge ${fromNode.label} - ${toNode.label}`);
 
                 viewDataObj.edges.splice(i, 1);
                 viewDataObj.network.body.data.edges.remove(edgeId);
@@ -111,7 +111,7 @@ var GraphCanvasPartial = new function () {
             let fromNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeStartNode);
             let toNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeEndNode);
 
-            GraphCanvasPartial.setStatus(viewDataObj, `Added edge ${fromNode.label} <-> ${toNode.label}`);
+            GraphCanvasPartial.setStatus(viewDataObj, `Added edge ${fromNode.label} - ${toNode.label}`);
         }
 
         viewDataObj.graphEdit.newEdgeStartNode = null;
@@ -182,7 +182,7 @@ var GraphCanvasPartial = new function () {
     }
 
     this.setStatus = function (viewDataObj, status) {
-        viewDataObj.statusMsg.html(`Status: ${status}`);
+        viewDataObj.statusMsg.html(`<b>Status</b>: ${status}`);
     }
 
     this.getNodeByID = function (viewDataObj, id) {

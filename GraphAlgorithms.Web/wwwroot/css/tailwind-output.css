@@ -739,18 +739,29 @@ select {
 }
 
 .graph-canvas-container .status-bar {
-  position: relative;
+  display: flex;
   height: 3rem;
   width: 100%;
+  flex-direction: row;
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
 }
 
-.graph-canvas-container .status-bar .status-bar-fullscreen {
-  position: absolute;
-  bottom: 0px;
-  right: 0px;
-  cursor: pointer;
+.graph-canvas-container .status-bar .status-bar-buttons {
+  display: flex;
+  width: 60%;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.25rem;
+}
+
+.graph-canvas-container .status-bar .status-msg {
+  width: 40%;
+  overflow-wrap: normal;
+  word-break: normal;
+  padding-left: 0.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
 }
 
 /* Buttons */
@@ -807,6 +818,24 @@ select {
 .btn-edit:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
+
+.btn-fullscreen {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.btn-fullscreen:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(75 85 99 / var(--tw-bg-opacity));
 }
 
 .visible {
@@ -877,8 +906,24 @@ select {
   display: none;
 }
 
+.h-full {
+  height: 100%;
+}
+
 .h-screen {
   height: 100vh;
+}
+
+.w-2\/5 {
+  width: 40%;
+}
+
+.w-3\/5 {
+  width: 60%;
+}
+
+.w-full {
+  width: 100%;
 }
 
 .grow {
@@ -891,6 +936,22 @@ select {
 
 .resize {
   resize: both;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {

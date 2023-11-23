@@ -16,22 +16,20 @@
     <div class="status-bar">
         <span class="status-msg"></span>
 
-        <button type="button" class="btn-edit">
-            <i class="fas fa-pencil-alt"></i>
-            Edit
-        </button>
-        <button type="button" class="btn-save">
-            <i class="fas fa-save"></i>
-            Save
-        </button>
-        <button type="button" class="btn-save-as-new">
-            <i class="fas fa-save"></i><i class="fas fa-plus"></i>
-            Save as New
-        </button>
-
-        <span class="status-bar-fullscreen">
-            <i class="fa fa-expand" aria-hidden="true"></i>
-        </span>
+        <div class="status-bar-buttons">
+            <button type="button" class="btn-edit @(Model.ShowEditButton ? "" : "hidden")">
+                <i class="fas fa-pencil-alt"></i> Edit
+            </button>
+            <button type="button" class="btn-save @(Model.ShowSaveButton ? "" : "hidden")">
+                <i class="fas fa-save"></i> Save
+            </button>
+            <button type="button" class="btn-save-as-new @(Model.ShowSaveAsNewButton ? "" : "hidden")">
+                <i class="fas fa-save"></i><i class="fas fa-plus"></i> Save as New
+            </button>
+            <button type="button" class="btn-fullscreen">
+                <i class="fa fa-expand" aria-hidden="true"></i>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -44,7 +42,7 @@
         statusBar: $("#@ViewID .status-bar"),
         statusMsg: $("#@ViewID .status-msg"),
         btnSave: $("#@ViewID .status-bar .btn-save"),
-        btnFullScreen: $("#@ViewID .status-bar .status-bar-fullscreen"),
+        btnFullScreen: $("#@ViewID .status-bar .btn-fullscreen"),
         network: null,
         nodes: @Html.Raw(Model.NodesJSON),
         edges: @Html.Raw(Model.EdgesJSON),

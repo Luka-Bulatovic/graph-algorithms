@@ -14,11 +14,15 @@
     }
 
     .graph-canvas-container .status-bar {
-        @apply h-12 w-full bg-gray-300 relative;
+        @apply flex flex-row h-12 w-full bg-gray-300;
     }
-
-    .graph-canvas-container .status-bar .status-bar-fullscreen {
-        @apply absolute bottom-0 right-0 cursor-pointer;
+    
+    .graph-canvas-container .status-bar .status-bar-buttons {
+        @apply w-3/5 flex items-center justify-end gap-1;
+    }
+    
+    .graph-canvas-container .status-bar .status-msg {
+        @apply w-2/5 pl-1 break-normal text-sm;
     }
 
     /* Buttons */
@@ -32,5 +36,9 @@
 
     .btn-edit {
         @apply bg-blue-500 hover:bg-blue-700 text-white font-normal py-1 px-2 rounded;
+    }
+
+    .btn-fullscreen {
+        @apply bg-gray-400 hover:bg-gray-600 text-white font-normal py-1 px-2 rounded;
     }
 }

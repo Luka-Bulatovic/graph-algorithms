@@ -16,16 +16,23 @@ namespace GraphAlgorithms.Web.Controllers
 
         public async Task<ViewResult> Index()
         {
-            var model = new GraphDrawingModel(0);
+            GraphDrawingModel model = new GraphDrawingModel(0, showSaveButton: true);
 
-            // Get best of Unicyclic graphs
-            //model.GraphCanvasModel.Graph = mainService.GetBestUnicyclicBipartiteGraphs(7, 7, 4)[0];
-            
-            // This is how we load graph by ID
-            // We have to handle storing colors, indices, bipartite components etc.
-            model.GraphCanvasModel.Graph = await mainService.GetGraphDTOByIDAsync(1);
+            GraphDTO graph = new GraphDTO();
+            model.SetCanvasGraph(graph);
 
             return View(model);
+        }
+
+        public async Task<ViewResult> Edit(int id)
+        {
+            bool showSaveButton = true; // we should handle this depending on the logic whether graph is editable
+            GraphDrawingModel model = new GraphDrawingModel(id, showSaveAsNewButton: true, showSaveButton: showSaveButton);
+            
+            GraphDTO graph = await mainService.GetGraphDTOByIDAsync(id);
+            model.SetCanvasGraph(graph);
+
+            return View("Index", model);
         }
 
         public async Task Store(GraphDTO graphDTO)
