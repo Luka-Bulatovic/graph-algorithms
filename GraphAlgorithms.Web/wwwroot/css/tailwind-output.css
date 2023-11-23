@@ -722,21 +722,92 @@ select {
   }
 }
 
-/* General Buttons */
+/* Graph Canvas */
 
-/* Form */
+.graph-canvas-container {
+  display: flex;
+  height: 32rem;
+  width: 32rem;
+  flex-direction: column;
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+}
 
-/* Form Field (label + field) container */
+.graph-canvas-container .graph-container {
+  flex-grow: 1;
+}
 
-/* Form Label */
+.graph-canvas-container .status-bar {
+  position: relative;
+  height: 3rem;
+  width: 100%;
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
 
-/* Form Input Field */
+.graph-canvas-container .status-bar .status-bar-fullscreen {
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+  cursor: pointer;
+}
 
-/* Grid */
+/* Buttons */
 
-/* Grid Buttons */
+.btn-save {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(34 197 94 / var(--tw-bg-opacity));
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
 
-/* Pagination */
+.btn-save:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(21 128 61 / var(--tw-bg-opacity));
+}
+
+.btn-save-as-new {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.btn-save-as-new:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(161 98 7 / var(--tw-bg-opacity));
+}
+
+.btn-edit {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity));
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.btn-edit:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(29 78 216 / var(--tw-bg-opacity));
+}
 
 .visible {
   visibility: visible;
@@ -847,12 +918,12 @@ select {
   background-color: rgb(229 231 235 / var(--tw-bg-opacity));
 }
 
-.p-4 {
-  padding: 1rem;
-}
-
 .p-2 {
   padding: 0.5rem;
+}
+
+.p-4 {
+  padding: 1rem;
 }
 
 .p-8 {

@@ -14,7 +14,21 @@
 
     <div class="graph-container"></div>
     <div class="status-bar">
-        <button type="button" class="btn-save">Save</button>
+        <span class="status-msg"></span>
+
+        <button type="button" class="btn-edit">
+            <i class="fas fa-pencil-alt"></i>
+            Edit
+        </button>
+        <button type="button" class="btn-save">
+            <i class="fas fa-save"></i>
+            Save
+        </button>
+        <button type="button" class="btn-save-as-new">
+            <i class="fas fa-save"></i><i class="fas fa-plus"></i>
+            Save as New
+        </button>
+
         <span class="status-bar-fullscreen">
             <i class="fa fa-expand" aria-hidden="true"></i>
         </span>
@@ -24,10 +38,13 @@
 <script type="text/javascript">
     var @(ViewDataObj) = {
         viewID: "@ViewID",
+        canvasContainer: $("#@(ViewID).graph-canvas-container"),
         contextMenu: $("#@ViewID .context-menu"),
-        container: $("#@ViewID .graph-container"),
+        graphContainer: $("#@ViewID .graph-container"),
         statusBar: $("#@ViewID .status-bar"),
+        statusMsg: $("#@ViewID .status-msg"),
         btnSave: $("#@ViewID .status-bar .btn-save"),
+        btnFullScreen: $("#@ViewID .status-bar .status-bar-fullscreen"),
         network: null,
         nodes: @Html.Raw(Model.NodesJSON),
         edges: @Html.Raw(Model.EdgesJSON),

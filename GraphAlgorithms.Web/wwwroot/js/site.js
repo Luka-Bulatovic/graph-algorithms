@@ -11,7 +11,7 @@ var GraphCanvasPartial = new function () {
         });
 
         // Opening Context Menu
-        viewDataObj.container.contextmenu(function (event) {
+        viewDataObj.graphContainer.contextmenu(function (event) {
             event.preventDefault();
             GraphCanvasPartial.openContextMenu(viewDataObj, event.clientY, event.clientX);
             return false;
@@ -19,6 +19,9 @@ var GraphCanvasPartial = new function () {
 
         // Save Button click
         viewDataObj.btnSave.on('click', function (e) { GraphCanvasPartial.onBtnSaveClick(viewDataObj); });
+
+        // Full Screen click
+        viewDataObj.btnFullScreen.on('click', function (e) { GraphCanvasPartial.onFullScreenBtnClick(viewDataObj); });
 
         // Initial network
         GraphCanvasPartial.createInitialNetwork(viewDataObj);
@@ -39,47 +42,34 @@ var GraphCanvasPartial = new function () {
         if (viewDataObj.network == null)
             return;
 
-        let selectedEdges = viewDataObj.network.getSelectedEdges();
-        if (selectedEdges != null && selectedEdges.length > 0) {
-            var edgeId = selectedEdges[0];
-            //var fromNodeIdx = -1;
-            //var toNodeIdx = -1;
+        var selectedEdges = viewDataObj.network.getSelectedEdges();
 
-            //for (var i = 0; i < viewDataObj.nodes.length; i++) {
-            //    var nodeIncidentToDeletedEdge =
-            //        viewObj
-            //            .network
-            //            .body
-            //            .nodes[i]
-            //            .edges.filter(e => e.id == edgeId).length > 0;
-
-            //    if (nodeIncidentToDeletedEdge && fromNodeIdx == -1)
-            //        fromNodeIdx = viewObj.network.body.nodes[i].id;
-            //    else if (nodeIncidentToDeletedEdge && toNodeIdx == -1)
-            //        toNodeIdx = viewObj.network.body.nodes[i].id;
-            //}
-
-            //if (fromNodeIdx != -1 && toNodeIdx != -1) {
-            //    //var edgeIdx =
-
-            //    viewDataObj.edges.splice(, 1);
-            //}
-
-            var isDeleted = false;
-
-            for (var i = 0; i < viewDataObj.edges.length; i++)
-            {
-                if (viewDataObj.edges[i].id == edgeId) {
-                    isDeleted = true;
-                    viewDataObj.edges.splice(i, 1);
-                    viewDataObj.network.body.data.edges.remove(edgeId);
-                    break;
-                }
-            }
-
-            if (!isDeleted)
-                alert("Error deleting edge!");
+        if (selectedEdges == null || selectedEdges.length == 0) {
+            alert("Error: You must select edge.");
+            return;
         }
+
+        var edgeId = selectedEdges[0];
+        var isDeleted = false;
+
+        for (let i = 0; i < viewDataObj.edges.length; i++)
+        {
+            if (viewDataObj.edges[i].id == edgeId) {
+                isDeleted = true;
+
+                let fromNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.edges[i].from);
+                let toNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.edges[i].to);
+
+                GraphCanvasPartial.setStatus(viewDataObj, `Deleted edge ${fromNode.label} <-> ${toNode.label}`);
+
+                viewDataObj.edges.splice(i, 1);
+                viewDataObj.network.body.data.edges.remove(edgeId);
+                break;
+            }
+        }
+
+        if (!isDeleted)
+            alert("Error deleting edge!");
     }
 
     this.onStartAddingEdge = function (viewDataObj) {
@@ -89,6 +79,10 @@ var GraphCanvasPartial = new function () {
         let selectedStartNodes = viewDataObj.network.getSelectedNodes();
         if (selectedStartNodes != null && selectedStartNodes.length > 0) {
             viewDataObj.graphEdit.newEdgeStartNode = selectedStartNodes[0];
+
+            var node = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeStartNode);
+
+            GraphCanvasPartial.setStatus(viewDataObj, `Adding edge with starting node ${node.label}`);
         }
     }
 
@@ -97,23 +91,31 @@ var GraphCanvasPartial = new function () {
             return;
 
         let selectedEndNodes = viewDataObj.network.getSelectedNodes();
-        if (selectedEndNodes != null && selectedEndNodes.length > 0) {
-            viewDataObj.graphEdit.newEdgeEndNode = selectedEndNodes[0];
-
-            if (viewDataObj.graphEdit.newEdgeStartNode != null) {
-                var edgeId = viewDataObj.network.body.data.edges.add({ from: viewDataObj.graphEdit.newEdgeStartNode, to: viewDataObj.graphEdit.newEdgeEndNode });
-                edgeId = edgeId[0];
-
-                viewDataObj.edges.push({
-                    from: viewDataObj.graphEdit.newEdgeStartNode,
-                    to: viewDataObj.graphEdit.newEdgeEndNode,
-                    id: edgeId
-                });
-            }
-
-            viewDataObj.graphEdit.newEdgeStartNode = null;
-            viewDataObj.graphEdit.newEdgeEndNode = null;
+        if (selectedEndNodes == null || selectedEndNodes.length == 0) {
+            alert("Error: You must select node.");
+            return;
         }
+
+        viewDataObj.graphEdit.newEdgeEndNode = selectedEndNodes[0];
+
+        if (viewDataObj.graphEdit.newEdgeStartNode != null) {
+            var edgeId = viewDataObj.network.body.data.edges.add({ from: viewDataObj.graphEdit.newEdgeStartNode, to: viewDataObj.graphEdit.newEdgeEndNode });
+            edgeId = edgeId[0];
+
+            viewDataObj.edges.push({
+                from: viewDataObj.graphEdit.newEdgeStartNode,
+                to: viewDataObj.graphEdit.newEdgeEndNode,
+                id: edgeId
+            });
+
+            let fromNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeStartNode);
+            let toNode = GraphCanvasPartial.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeEndNode);
+
+            GraphCanvasPartial.setStatus(viewDataObj, `Added edge ${fromNode.label} <-> ${toNode.label}`);
+        }
+
+        viewDataObj.graphEdit.newEdgeStartNode = null;
+        viewDataObj.graphEdit.newEdgeEndNode = null;
     }
 
     this.openContextMenu = function (viewDataObj, posY, posX) {
@@ -127,7 +129,7 @@ var GraphCanvasPartial = new function () {
 
     this.createInitialNetwork = function (viewDataObj) {
         viewDataObj.network = new vis.Network(
-            viewDataObj.container[0],
+            viewDataObj.graphContainer[0],
             {
                 nodes: new vis.DataSet(viewDataObj.nodes),
                 edges: new vis.DataSet(viewDataObj.edges)
@@ -144,5 +146,51 @@ var GraphCanvasPartial = new function () {
         }).done(function (data) {
             alert("Saved");
         });
+    }
+
+    this.onFullScreenBtnClick = function (viewDataObj) {
+        if (
+            document.fullscreenElement ||
+            document.webkitFullscreenElement ||
+            document.mozFullScreenElement ||
+            document.msFullscreenElement
+        )
+        {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
+        }
+        else {
+            let container = viewDataObj.canvasContainer.get(0);
+
+            if (container.requestFullscreen) {
+                container.requestFullscreen();
+            } else if (container.mozRequestFullScreen) {
+                container.mozRequestFullScreen();
+            } else if (container.webkitRequestFullscreen) {
+                container.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+            } else if (container.msRequestFullscreen) {
+                container.msRequestFullscreen();
+            }
+        }
+    }
+
+    this.setStatus = function (viewDataObj, status) {
+        viewDataObj.statusMsg.html(`Status: ${status}`);
+    }
+
+    this.getNodeByID = function (viewDataObj, id) {
+        var nodes = viewDataObj.nodes.filter(n => n.id == id);
+
+        if (nodes.length > 0)
+            return nodes[0];
+        else
+            return null;
     }
 };

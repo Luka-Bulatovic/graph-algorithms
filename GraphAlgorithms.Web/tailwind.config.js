@@ -2,7 +2,14 @@
 module.exports = {
   content: ["./wwwroot/**/*.js", "./Views/**/*.cshtml"],
   theme: {
-    extend: {},
+    extend: {
+          width: {
+              '128': '32rem'
+          },
+          height: {
+              '128': '32rem'
+          }
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),

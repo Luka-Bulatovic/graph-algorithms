@@ -4,112 +4,33 @@
 @tailwind variants;
 
 @layer components {
-    /* General Buttons */
-    .ck-btn-blue {
-        @apply bg-blue-500 text-white font-bold py-2 px-4 rounded;
+    /* Graph Canvas */
+    .graph-canvas-container {
+        @apply flex flex-col w-128 h-128 border border-gray-300;
     }
 
-    .ck-btn-blue:hover {
-        @apply bg-blue-700;
+    .graph-canvas-container .graph-container {
+        @apply flex-grow;
     }
 
-    .ck-btn-blue:focus {
-        @apply outline-none;
+    .graph-canvas-container .status-bar {
+        @apply h-12 w-full bg-gray-300 relative;
     }
 
-    .ck-btn-red {
-        @apply bg-red-500 text-white font-bold py-2 px-4 rounded;
+    .graph-canvas-container .status-bar .status-bar-fullscreen {
+        @apply absolute bottom-0 right-0 cursor-pointer;
     }
 
-    .ck-btn-red:hover {
-        @apply bg-red-700;
+    /* Buttons */
+    .btn-save {
+        @apply bg-green-500 hover:bg-green-700 text-white font-normal py-1 px-2 rounded;
     }
 
-    .ck-btn-red:focus {
-        @apply outline-none;
+    .btn-save-as-new {
+        @apply bg-yellow-500 hover:bg-yellow-700 text-white font-normal py-1 px-2 rounded;
     }
 
-    .ck-btn-green {
-        @apply p-2 bg-green-500 text-white text-center rounded;
-    }
-
-    .ck-btn-green:hover {
-        @apply bg-green-600;
-    }
-
-    .ck-btn-green:focus {
-        @apply outline-none;
-    }
-
-
-    /* Form */
-    .ck-form {
-        @apply bg-white shadow-md rounded px-8 pt-2 pb-2 mb-4;
-    }
-
-
-    /* Form Field (label + field) container */
-    .ck-form-field-container {
-        @apply mb-2 max-w-sm;
-    }
-
-    /* Form Label */
-    .ck-form-label {
-        @apply block text-gray-700 text-sm font-bold mb-2;
-    }
-
-
-
-    /* Form Input Field */
-    .ck-form-input {
-        @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight;
-    }
-
-    .ck-form-input:focus {
-        @apply outline-none;
-    }
-
-
-    /* Grid */
-    .ck-grid-header-cell {
-        @apply border p-2 bg-gray-200 font-bold text-center flex items-center;
-    }
-
-    .ck-grid-data-cell {
-        @apply border p-2 flex items-center;
-    }
-
-    .ck-grid-actions-cell {
-        @apply border p-2 flex items-center justify-center space-x-4;
-    }
-
-    /* Grid Buttons */
-    .ck-grid-btn-blue {
-        @apply px-2 py-1 bg-blue-500 text-white text-center rounded;
-    }
-
-    .ck-grid-btn-blue:hover {
-        @apply bg-blue-600;
-    }
-
-    .ck-grid-btn-red {
-        @apply px-2 py-1 bg-red-500 text-white text-center rounded;
-    }
-
-    .ck-grid-btn-red:hover {
-        @apply bg-red-600;
-    }
-
-    /* Pagination */
-    .ck-pagination-container {
-        @apply mt-4 flex justify-center;
-    }
-
-    .ck-btn-pagination {
-        @apply mx-1 px-4 py-2 border rounded text-white bg-blue-500;
-    }
-
-    .ck-btn-pagination-selected {
-        @apply mx-1 px-4 py-2 border rounded text-white bg-blue-700;
+    .btn-edit {
+        @apply bg-blue-500 hover:bg-blue-700 text-white font-normal py-1 px-2 rounded;
     }
 }
