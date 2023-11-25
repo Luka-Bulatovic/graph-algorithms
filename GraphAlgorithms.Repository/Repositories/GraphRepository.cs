@@ -25,9 +25,13 @@ namespace GraphAlgorithms.Repository.Repositories
             return graph;
         }
 
-        public async Task AddAsync(GraphEntity graph)
+        public async Task SaveAsync(GraphEntity graph)
         {
-            await _context.Graphs.AddAsync(graph);
+            if(graph.ID == 0)
+                await _context.Graphs.AddAsync(graph);
+            else if(graph.ID > 0)
+                _context.Graphs.Update(graph);
+            
             await _context.SaveChangesAsync();
         }
     }

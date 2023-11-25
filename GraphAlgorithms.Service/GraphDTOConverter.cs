@@ -10,7 +10,7 @@ namespace GraphAlgorithms.Service
     {
         public static Graph GetGraphFromGraphDTO(GraphDTO graphDTO)
         {
-            Graph graph = new Graph(graphDTO.nodes.Count);
+            Graph graph = new Graph(graphDTO.id, graphDTO.nodes.Count);
 
             for (int i = 0; i < graphDTO.nodes.Count; i++)
                 graph.AddNode(new Node(graphDTO.nodes[i].id, graphDTO.nodes[i].label));
@@ -32,6 +32,8 @@ namespace GraphAlgorithms.Service
         public static GraphDTO GetGraphDTOFromGraph(Graph graph)
         {
             GraphDTO graphDTO = new GraphDTO();
+
+            graphDTO.id = graph.ID;
 
             foreach (Node node in graph.Nodes)
                 graphDTO.nodes.Add(new NodeDTO(node));
@@ -59,7 +61,7 @@ namespace GraphAlgorithms.Service
 
             return new GraphEntity()
             {
-                //ID = ?,
+                ID = graph.ID,
                 Name = "",
                 Order = graphDTO.nodes.Count,
                 Size = graphDTO.edges.Count,

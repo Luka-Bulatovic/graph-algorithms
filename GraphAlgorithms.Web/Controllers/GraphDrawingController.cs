@@ -18,7 +18,7 @@ namespace GraphAlgorithms.Web.Controllers
         {
             GraphDrawingModel model = new GraphDrawingModel(0, showSaveButton: true);
 
-            GraphDTO graph = new GraphDTO();
+            GraphDTO graph = new();
             model.SetCanvasGraph(graph);
 
             return View(model);

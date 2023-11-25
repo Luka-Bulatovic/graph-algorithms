@@ -106,7 +106,7 @@ namespace GraphAlgorithms.Core.Factories
             this.cycleLength = this.cycleLength == 0 ? GetRandomCycleLength() : this.cycleLength;
 
             // Create graph
-            Graph g = new Graph(n);
+            Graph g = new Graph(0, n);
 
             // Create list of Nodes
             for (int i = 0; i < n; i++)

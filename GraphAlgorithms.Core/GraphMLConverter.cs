@@ -48,7 +48,7 @@ namespace GraphAlgorithms.Core
             return sb.ToString();
         }
     
-        public static Graph GetGraphFromGraphML(string graphML)
+        public static Graph GetGraphFromGraphML(int id, string graphML)
         {
             var xdoc = XDocument.Parse(graphML);
 
@@ -75,7 +75,7 @@ namespace GraphAlgorithms.Core
                 throw new InvalidDataException(string.Format("Each edge must contain source and target attributes:\r\n{0}", graphML));
 
             // Create Graph
-            Graph graph = new Graph(nodeElements.Count(), isUndirected);
+            Graph graph = new Graph(id, nodeElements.Count(), isUndirected);
 
             foreach (var nodeElement in nodeElements)
             {

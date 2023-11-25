@@ -6,6 +6,6 @@ namespace GraphAlgorithms.Repository.Repositories
     {
         Task<IEnumerable<GraphEntity>> GetAllAsync();
         Task<GraphEntity> GetByIdAsync(int id);
-        Task AddAsync(GraphEntity graph);
+        Task SaveAsync(GraphEntity graph);
     }
 }

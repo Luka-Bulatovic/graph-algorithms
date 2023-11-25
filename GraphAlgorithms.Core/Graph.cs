@@ -8,6 +8,7 @@ namespace GraphAlgorithms.Core
 {
     public class Graph
     {
+        public int ID { get; set; }
         public int N { get; set; } // Number of Nodes
         public int M // Number of Edges
         {
@@ -26,8 +27,9 @@ namespace GraphAlgorithms.Core
         private bool isUndirected;
         public bool IsUndirected => isUndirected;
 
-        public Graph(int n, bool isUndirected = true)
+        public Graph(int id, int n, bool isUndirected = true)
         {
+            ID = id;
             N = n;
             nodes = new List<Node>();
             edges = new List<Edge>();

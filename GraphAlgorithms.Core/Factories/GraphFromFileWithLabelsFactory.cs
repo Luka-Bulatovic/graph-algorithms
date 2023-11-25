@@ -22,7 +22,7 @@ namespace GraphAlgorithms.Core.Factories
             int n = Int32.Parse(lines[0]);
             int m = lines.Length - 1;
 
-            Graph g = new Graph(n, isUndirected: false);
+            Graph g = new Graph(0, n, isUndirected: false);
 
             int currNodeIndex = 0;
 

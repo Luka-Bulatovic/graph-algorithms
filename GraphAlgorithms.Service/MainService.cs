@@ -57,9 +57,10 @@ namespace GraphAlgorithms.Service
             return bestGraphs;
         }
 
-        public int GetWienerIndexValueForGraphFromDTO(List<NodeDTO> nodes, List<EdgeDTO> edges)
+        public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO)
         {
-            Graph g = GetGraphFromNodesAndEdgesDTO(nodes, edges);
+            Graph g = GraphDTOConverter.GetGraphFromGraphDTO(graphDTO);
+
             WienerIndexAlgorithm wie = new WienerIndexAlgorithm(g);
             wie.Run();
 
@@ -71,7 +72,8 @@ namespace GraphAlgorithms.Service
             GraphEntity graphEntity = await graphRepository.GetByIdAsync(id);
 
             // Transform Graph Repository model into actual Graph object
-            Graph graph = GraphMLConverter.GetGraphFromGraphML(graphEntity.DataXML);
+            // TODO: We should change this and introduce some GraphEntityConverter, so that we get Graph from GraphEntity
+            Graph graph = GraphMLConverter.GetGraphFromGraphML(graphEntity.ID, graphEntity.DataXML);
 
             // Transform Graph object into GraphDTO
             GraphDTO graphDTO = GraphDTOConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
@@ -83,29 +85,7 @@ namespace GraphAlgorithms.Service
         {
             GraphEntity graphEntity = GraphDTOConverter.GetGraphEntityFromGraphDTO(graphDTO);
 
-            await graphRepository.AddAsync(graphEntity);
+            await graphRepository.SaveAsync(graphEntity);
         }
-
-        private Graph GetGraphFromNodesAndEdgesDTO(List<NodeDTO> nodes, List<EdgeDTO> edges)
-        {
-            Graph g = new Graph(nodes.Count);
-
-            for (int i = 0; i < nodes.Count; i++)
-                g.AddNode(new Node(nodes[i].id, nodes[i].label));
-
-            for (int i = 0; i < edges.Count; i++)
-            {
-                int fromIndex = edges[i].from;
-                int toIndex = edges[i].to;
-
-                Node fromNode = g.GetNode(fromIndex);
-                Node toNode = g.GetNode(toIndex);
-
-                g.ConnectNodes(fromNode, toNode);
-            }
-
-            return g;
-        }
-
     }
 }

@@ -140,6 +140,7 @@ var GraphCanvasPartial = new function () {
 
     this.onBtnSaveClick = function (viewDataObj) {
         $.post("/GraphDrawing/Store", {
+            id: viewDataObj.graphID,
             nodes: viewDataObj.nodes,
             edges: viewDataObj.edges,
             score: 0

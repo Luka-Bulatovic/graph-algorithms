@@ -10,7 +10,7 @@ namespace GraphAlgorithms.Service
     public interface IMainService
     {
         public List<GraphDTO> GetBestUnicyclicBipartiteGraphs(int p, int q, int k);
-        public int GetWienerIndexValueForGraphFromDTO(List<NodeDTO> nodes, List<EdgeDTO> edges);
+        public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO);
         public Task<GraphDTO> GetGraphDTOByIDAsync(int id);
         public Task StoreGraph(GraphDTO graphDTO);
     }

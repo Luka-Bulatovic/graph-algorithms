@@ -23,7 +23,7 @@ namespace GraphAlgorithms.Core.Factories
 
         public Graph CreateGraph()
         {
-            Graph g = new Graph(n);
+            Graph g = new Graph(0, n);
             UnionFind uf = new UnionFind(n);
 
             // Create list of Nodes
