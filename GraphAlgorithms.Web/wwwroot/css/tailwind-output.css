@@ -726,7 +726,7 @@ select {
 
 .graph-canvas-container {
   display: flex;
-  height: 48rem;
+  height: 100%;
   width: 100%;
   flex-direction: column;
   border-width: 1px;
@@ -908,6 +908,10 @@ select {
 
 .h-screen {
   height: 100vh;
+}
+
+.h-192 {
+  height: 48rem;
 }
 
 .w-1\/5 {
