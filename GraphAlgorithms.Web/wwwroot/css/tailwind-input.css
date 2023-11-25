@@ -6,7 +6,7 @@
 @layer components {
     /* Graph Canvas */
     .graph-canvas-container {
-        @apply flex flex-col w-128 h-128 border border-gray-300;
+        @apply flex flex-col w-full h-192 border border-gray-300;
     }
 
     .graph-canvas-container .graph-container {

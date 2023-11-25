@@ -726,8 +726,8 @@ select {
 
 .graph-canvas-container {
   display: flex;
-  height: 32rem;
-  width: 32rem;
+  height: 48rem;
+  width: 100%;
   flex-direction: column;
   border-width: 1px;
   --tw-border-opacity: 1;
@@ -906,20 +906,16 @@ select {
   display: none;
 }
 
-.h-full {
-  height: 100%;
-}
-
 .h-screen {
   height: 100vh;
 }
 
-.w-2\/5 {
-  width: 40%;
+.w-1\/5 {
+  width: 20%;
 }
 
-.w-3\/5 {
-  width: 60%;
+.w-4\/5 {
+  width: 80%;
 }
 
 .w-full {
@@ -936,22 +932,6 @@ select {
 
 .resize {
   resize: both;
-}
-
-.flex-row {
-  flex-direction: row;
-}
-
-.items-center {
-  align-items: center;
-}
-
-.justify-end {
-  justify-content: flex-end;
-}
-
-.gap-1 {
-  gap: 0.25rem;
 }
 
 .space-y-2 > :not([hidden]) ~ :not([hidden]) {

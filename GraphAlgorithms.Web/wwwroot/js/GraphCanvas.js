@@ -53,8 +53,7 @@ var GraphCanvas = new function () {
 
         viewDataObj.newNodeIDCounter++;
 
-        viewDataObj.nodes.push({ id: viewDataObj.newNodeIDCounter, label: viewDataObj.newNodeIDCounter + '' });
-        viewDataObj.network.body.data.nodes.add({ id: viewDataObj.newNodeIDCounter, label: viewDataObj.newNodeIDCounter + '' });
+        viewDataObj.nodes.add({ id: viewDataObj.newNodeIDCounter, label: viewDataObj.newNodeIDCounter + '' });
         viewDataObj.network.stabilize();
     }
 
@@ -69,17 +68,11 @@ var GraphCanvas = new function () {
         }
 
         let selectedNodeID = selectedNodes[0];
+        let node = viewDataObj.nodes.get(selectedNodeID);
+        GraphCanvas.setStatus(viewDataObj, `Deleted node ${node.label}`);
+        viewDataObj.nodes.remove(selectedNodeID);
 
-        for (let i = 0; i < viewDataObj.nodes.length; i++) {
-            let node = viewDataObj.nodes[i];
-
-            if (node.id == selectedNodeID) {
-                GraphCanvas.setStatus(viewDataObj, `Deleted node ${node.label}`);
-
-                viewDataObj.nodes.splice(i, 1);
-                viewDataObj.network.body.data.nodes.remove(selectedNodeID);
-            }
-        }
+        console.log("Edges after deleting node:", viewDataObj.edges.get());
     }
 
     this.onDeleteEdge = function (viewDataObj) {
@@ -93,26 +86,13 @@ var GraphCanvas = new function () {
             return;
         }
 
-        var edgeId = selectedEdges[0];
-        var isDeleted = false;
+        var edgeID = selectedEdges[0];
 
-        for (let i = 0; i < viewDataObj.edges.length; i++) {
-            if (viewDataObj.edges[i].id == edgeId) {
-                isDeleted = true;
+        let fromNode = viewDataObj.nodes.get(viewDataObj.edges.get(edgeID).from);
+        let toNode = viewDataObj.nodes.get(viewDataObj.edges.get(edgeID).to);
 
-                let fromNode = GraphCanvas.getNodeByID(viewDataObj, viewDataObj.edges[i].from);
-                let toNode = GraphCanvas.getNodeByID(viewDataObj, viewDataObj.edges[i].to);
-
-                GraphCanvas.setStatus(viewDataObj, `Deleted edge ${fromNode.label} - ${toNode.label}`);
-
-                viewDataObj.edges.splice(i, 1);
-                viewDataObj.network.body.data.edges.remove(edgeId);
-                break;
-            }
-        }
-
-        if (!isDeleted)
-            alert("Error deleting edge!");
+        viewDataObj.edges.remove(edgeID);
+        GraphCanvas.setStatus(viewDataObj, `Deleted edge ${fromNode.label} - ${toNode.label}`);
     }
 
     this.onStartAddingEdge = function (viewDataObj) {
@@ -123,7 +103,7 @@ var GraphCanvas = new function () {
         if (selectedStartNodes != null && selectedStartNodes.length > 0) {
             viewDataObj.graphEdit.newEdgeStartNode = selectedStartNodes[0];
 
-            var node = GraphCanvas.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeStartNode);
+            var node = viewDataObj.nodes.get(viewDataObj.graphEdit.newEdgeStartNode);
 
             GraphCanvas.setStatus(viewDataObj, `Adding edge with starting node ${node.label}`);
         }
@@ -142,17 +122,11 @@ var GraphCanvas = new function () {
         viewDataObj.graphEdit.newEdgeEndNode = selectedEndNodes[0];
 
         if (viewDataObj.graphEdit.newEdgeStartNode != null) {
-            var edgeId = viewDataObj.network.body.data.edges.add({ from: viewDataObj.graphEdit.newEdgeStartNode, to: viewDataObj.graphEdit.newEdgeEndNode });
+            var edgeId = viewDataObj.edges.add({ from: viewDataObj.graphEdit.newEdgeStartNode, to: viewDataObj.graphEdit.newEdgeEndNode });
             edgeId = edgeId[0];
 
-            viewDataObj.edges.push({
-                from: viewDataObj.graphEdit.newEdgeStartNode,
-                to: viewDataObj.graphEdit.newEdgeEndNode,
-                id: edgeId
-            });
-
-            let fromNode = GraphCanvas.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeStartNode);
-            let toNode = GraphCanvas.getNodeByID(viewDataObj, viewDataObj.graphEdit.newEdgeEndNode);
+            let fromNode = viewDataObj.nodes.get(viewDataObj.graphEdit.newEdgeStartNode);
+            let toNode = viewDataObj.nodes.get(viewDataObj.graphEdit.newEdgeEndNode);
 
             GraphCanvas.setStatus(viewDataObj, `Added edge ${fromNode.label} - ${toNode.label}`);
         }
@@ -179,29 +153,52 @@ var GraphCanvas = new function () {
                     springLength: 95
                 },
                 stabilization: { iterations: 150 } // Stabilize the network after initial layout
+            },
+            manipulation: {
+                enabled: true
             }
         };
+
+        // This modifies initial nodes/edges JSONs to represent vis.js DataSets and should only be called once!
+        viewDataObj.nodes = new vis.DataSet(viewDataObj.nodes);
+        viewDataObj.edges = new vis.DataSet(viewDataObj.edges);
 
         viewDataObj.network = new vis.Network(
             viewDataObj.graphContainer[0],
             {
-                nodes: new vis.DataSet(viewDataObj.nodes),
-                edges: new vis.DataSet(viewDataObj.edges)
+                nodes: viewDataObj.nodes,
+                edges: viewDataObj.edges
             },
             options // {}
         );
+
+        // Handle removal of nodes to also remove their adjacent edges
+        viewDataObj.network.on("remove", function (params) {
+            console.log("Triggered remove:", params);
+            //if (params.nodes.length > 0) {
+            //    params.nodes.forEach(nodeID => {
+            //        const connectedEdges = viewDataObj.edges.get({
+            //            filter: function (edge) {
+            //                return edge.from === nodeID || edge.to === nodeID;
+            //            }
+            //        });
+            //        viewDataObj.edges.remove(connectedEdges.map(edge => edge.id));
+            //    });
+            //}
+        });
     }
 
     this.onBtnSaveClick = function (viewDataObj) {
-        console.log("Custom nodes", viewDataObj.nodes);
-        console.log("Lib nodes", viewDataObj.network.body.data.nodes.get());
-        console.log("Custom edges", viewDataObj.edges);
-        console.log("Lib edges", viewDataObj.network.body.data.edges.get());
+        var nodes = viewDataObj.nodes.get();
+        var edges = viewDataObj.edges.get();
+
+        GraphCanvas.reassignNodeIDs(viewDataObj);
+        return;
 
         $.post("/GraphDrawing/Store", {
             id: viewDataObj.graphID,
-            nodes: viewDataObj.nodes,
-            edges: viewDataObj.edges,
+            nodes: nodes,
+            edges: edges,
             score: 0
         }).done(function (data) {
             alert("Saved");
@@ -244,12 +241,36 @@ var GraphCanvas = new function () {
         viewDataObj.statusMsg.html(`<b>Status</b>: ${status}`);
     }
 
-    this.getNodeByID = function (viewDataObj, id) {
-        var nodes = viewDataObj.nodes.filter(n => n.id == id);
+    this.reassignNodeIDs = function (viewDataObj) {
+        let nodesCount = viewDataObj.nodes.get().length;
+        let edgesCount = viewDataObj.edges.get().length;
+        let newNodeIDs = [...Array(nodesCount).keys()];
 
-        if (nodes.length > 0)
-            return nodes[0];
-        else
-            return null;
+        //console.log("Edges before: ", JSON.stringify(viewDataObj.edges.get()));
+        viewDataObj.edges.get().forEach((e) => {
+            let fromNodeIdx = GraphCanvas.getNodeIndexByID(viewDataObj, e.from);
+            let toNodeIdx = GraphCanvas.getNodeIndexByID(viewDataObj, e.to);
+
+            e.from = newNodeIDs[fromNodeIdx];
+            e.to = newNodeIDs[toNodeIdx];
+        });
+
+        viewDataObj.nodes.get().forEach((n, i) => {
+            n.id = newNodeIDs[i];
+        });
+
+        console.log(viewDataObj.nodes.get());
+        console.log(viewDataObj.edges.get());
+    }
+
+    this.getNodeIndexByID = function (viewDataObj, id) {
+        var idx = -1;
+
+        viewDataObj.nodes.get().forEach((n, i) => {
+            if (n.id == id)
+                idx = i;
+        });
+
+        return idx;
     }
 };
