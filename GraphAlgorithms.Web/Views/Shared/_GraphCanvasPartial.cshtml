@@ -7,6 +7,8 @@
 
 <div id="@ViewID" class="graph-canvas-container">
     <div class="context-menu">
+        <div class="item context-item-add-node">Add Node</div>
+        <div class="item context-item-delete-node">Delete Node</div>
         <div class="item context-item-delete-edge">Delete Edge</div>
         <div class="item context-item-start-adding-edge">Start Adding Edge</div>
         <div class="item context-item-finish-adding-edge">Finish Adding Edge</div>
@@ -49,13 +51,14 @@
         edges: @Html.Raw(Model.EdgesJSON),
         graphEdit: {
             newEdgeStartNode: null,
-            newEdgeEndNode: null
+            newEdgeEndNode: null,
+            newNodeIDCounter: 0
         }
     };
 
     $(document).ready(() => {
         var viewDataObj = @(ViewDataObj);
 
-        GraphCanvasPartial.Initialize(viewDataObj);
+        GraphCanvas.Initialize(viewDataObj);
     });
 </script>

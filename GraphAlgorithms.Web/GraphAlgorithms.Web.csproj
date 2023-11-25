@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\GraphCanvas.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\GraphCanvas.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\js\GraphCanvas.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GraphAlgorithms.Service\GraphAlgorithms.Service.csproj" />
   </ItemGroup>
 
