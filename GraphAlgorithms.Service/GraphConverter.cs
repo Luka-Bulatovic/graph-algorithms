@@ -6,9 +6,9 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace GraphAlgorithms.Service
 {
-    public static class GraphConverter
+    public class GraphConverter : IGraphConverter
     {
-        public static Graph GetGraphFromGraphDTO(GraphDTO graphDTO)
+        public Graph GetGraphFromGraphDTO(GraphDTO graphDTO)
         {
             Graph graph = new Graph(graphDTO.id, graphDTO.nodes.Count);
 
@@ -29,7 +29,7 @@ namespace GraphAlgorithms.Service
             return graph;
         }
 
-        public static GraphDTO GetGraphDTOFromGraph(Graph graph)
+        public GraphDTO GetGraphDTOFromGraph(Graph graph)
         {
             GraphDTO graphDTO = new GraphDTO();
 
@@ -52,7 +52,7 @@ namespace GraphAlgorithms.Service
             return graphDTO;
         }
 
-        public static GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
+        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
         {
             Graph graph = GetGraphFromGraphDTO(graphDTO);
             

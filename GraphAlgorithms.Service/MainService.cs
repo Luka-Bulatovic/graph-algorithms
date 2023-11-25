@@ -12,11 +12,13 @@ namespace GraphAlgorithms.Service
     public class MainService : IMainService
     {
         private readonly IGraphRepository graphRepository;
+        private readonly IGraphConverter graphConverter;
 
         // So far, this is for testing only, so we put all in MainService
-        public MainService(IGraphRepository graphRepository)
+        public MainService(IGraphRepository graphRepository, IGraphConverter graphConverter)
         {
             this.graphRepository = graphRepository;
+            this.graphConverter = graphConverter;
         }
 
         public List<GraphDTO> GetBestUnicyclicBipartiteGraphs(int p, int q, int k)
@@ -41,7 +43,7 @@ namespace GraphAlgorithms.Service
 
             for (int i = 0; i < numberOfBestGraphs; i++)
             {
-                GraphDTO graphDTO = GraphConverter.GetGraphDTOFromGraph(graphsList[i].G);
+                GraphDTO graphDTO = graphConverter.GetGraphDTOFromGraph(graphsList[i].G);
                 /*
                  * TODO: Make GraphProperties class that contains properties such as Wiener Index. 
                  * Add its instance to Graph Core class, so that we can convert it alltogether in GraphDTOConverter and 
@@ -59,7 +61,7 @@ namespace GraphAlgorithms.Service
 
         public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO)
         {
-            Graph g = GraphConverter.GetGraphFromGraphDTO(graphDTO);
+            Graph g = graphConverter.GetGraphFromGraphDTO(graphDTO);
 
             WienerIndexAlgorithm wie = new WienerIndexAlgorithm(g);
             wie.Run();
@@ -76,14 +78,14 @@ namespace GraphAlgorithms.Service
             Graph graph = GraphMLConverter.GetGraphFromGraphML(graphEntity.ID, graphEntity.DataXML);
 
             // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = GraphConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
+            GraphDTO graphDTO = graphConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
 
             return graphDTO;
         }
 
         public async Task StoreGraph(GraphDTO graphDTO)
         {
-            GraphEntity graphEntity = GraphConverter.GetGraphEntityFromGraphDTO(graphDTO);
+            GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
 
             await graphRepository.SaveAsync(graphEntity);
         }
