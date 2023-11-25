@@ -74,11 +74,10 @@ namespace GraphAlgorithms.Service
             GraphEntity graphEntity = await graphRepository.GetByIdAsync(id);
 
             // Transform Graph Repository model into actual Graph object
-            // TODO: We should change this and introduce some GraphEntityConverter, so that we get Graph from GraphEntity
-            Graph graph = GraphMLConverter.GetGraphFromGraphML(graphEntity.ID, graphEntity.DataXML);
+            Graph graph = graphConverter.GetGraphFromGraphEntity(graphEntity);
 
             // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = graphConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
+            GraphDTO graphDTO = graphConverter.GetGraphDTOFromGraph(graph);
 
             return graphDTO;
         }
