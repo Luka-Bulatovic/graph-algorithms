@@ -41,7 +41,7 @@ namespace GraphAlgorithms.Service
 
             for (int i = 0; i < numberOfBestGraphs; i++)
             {
-                GraphDTO graphDTO = GraphDTOConverter.GetGraphDTOFromGraph(graphsList[i].G);
+                GraphDTO graphDTO = GraphConverter.GetGraphDTOFromGraph(graphsList[i].G);
                 /*
                  * TODO: Make GraphProperties class that contains properties such as Wiener Index. 
                  * Add its instance to Graph Core class, so that we can convert it alltogether in GraphDTOConverter and 
@@ -59,7 +59,7 @@ namespace GraphAlgorithms.Service
 
         public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO)
         {
-            Graph g = GraphDTOConverter.GetGraphFromGraphDTO(graphDTO);
+            Graph g = GraphConverter.GetGraphFromGraphDTO(graphDTO);
 
             WienerIndexAlgorithm wie = new WienerIndexAlgorithm(g);
             wie.Run();
@@ -76,14 +76,14 @@ namespace GraphAlgorithms.Service
             Graph graph = GraphMLConverter.GetGraphFromGraphML(graphEntity.ID, graphEntity.DataXML);
 
             // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = GraphDTOConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
+            GraphDTO graphDTO = GraphConverter.GetGraphDTOFromGraph(graph); //new GraphDTO(graph, 0); // ...
 
             return graphDTO;
         }
 
         public async Task StoreGraph(GraphDTO graphDTO)
         {
-            GraphEntity graphEntity = GraphDTOConverter.GetGraphEntityFromGraphDTO(graphDTO);
+            GraphEntity graphEntity = GraphConverter.GetGraphEntityFromGraphDTO(graphDTO);
 
             await graphRepository.SaveAsync(graphEntity);
         }

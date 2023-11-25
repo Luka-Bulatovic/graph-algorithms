@@ -6,7 +6,7 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace GraphAlgorithms.Service
 {
-    public static class GraphDTOConverter
+    public static class GraphConverter
     {
         public static Graph GetGraphFromGraphDTO(GraphDTO graphDTO)
         {
