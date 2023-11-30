@@ -21,6 +21,8 @@ namespace GraphAlgorithms.Core
         private List<Edge> edges;
         public List<Edge> Edges => edges;
 
+        public GraphProperties GraphProperties { get; }
+
         private AdjacencyList AdjList;
         private AdjacencyMatrix AdjMatrix;
 
@@ -36,6 +38,8 @@ namespace GraphAlgorithms.Core
             
             AdjMatrix = new AdjacencyMatrix(N);
             AdjList = new AdjacencyList(N);
+
+            GraphProperties = new GraphProperties();
 
             this.isUndirected = isUndirected;
         }

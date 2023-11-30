@@ -12,9 +12,10 @@ namespace GraphAlgorithms.Service
     public interface IGraphConverter
     {
         public Graph GetGraphFromGraphDTO(GraphDTO graphDTO);
-        public GraphDTO GetGraphDTOFromGraph(Graph graph);
         public Graph GetGraphFromGraphEntity(GraphEntity graphEntity);
+        public GraphDTO GetGraphDTOFromGraph(Graph graph);
         public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity);
         public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO);
+        public GraphEntity GetGraphEntityFromGraph(Graph graph);
     }
 }
