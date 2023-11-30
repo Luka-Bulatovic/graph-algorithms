@@ -9,6 +9,8 @@ namespace GraphAlgorithms.Service.DTO
         public List<EdgeDTO> edges { get; set; }
         public int score { get; set; }
         public string actionTypeName { get; set; }
+        public string classNames { get; set; }
+        public DateTime createdDate { get; set; }
 
         public GraphDTO()
         {
@@ -16,6 +18,9 @@ namespace GraphAlgorithms.Service.DTO
             nodes = new List<NodeDTO>();
             edges = new List<EdgeDTO>();
             score = 0;
+            actionTypeName = "";
+            classNames = "";
+            createdDate = DateTime.Now;
         }
     }
 }

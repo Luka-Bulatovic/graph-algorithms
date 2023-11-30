@@ -16,7 +16,7 @@ namespace GraphAlgorithms.Repository.Entities
         public string DataXML { get; set; }
         public int WienerIndex { get; set; }
         public DateTime CreatedDate { get; set; }
-        public DateTime UpdatedDate { get; set; }
+        public DateTime? UpdatedDate { get; set; }
 
         public ICollection<GraphClassEntity> GraphClasses { get; set; }
         public virtual ActionTypeEntity ActionType { get; set; }

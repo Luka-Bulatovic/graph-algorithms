@@ -21,7 +21,9 @@ namespace GraphAlgorithms.Repository.Repositories
 
         public async Task<GraphEntity> GetByIdAsync(int id)
         {
-            GraphEntity graph = await _context.Graphs.FindAsync(id);
+            GraphEntity graph = await _context.Graphs
+                                              .Include(g => g.ActionType)
+                                              .FirstOrDefaultAsync(g => g.ID == id);
             return graph;
         }
 

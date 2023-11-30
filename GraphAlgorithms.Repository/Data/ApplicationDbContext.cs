@@ -35,6 +35,33 @@ namespace GraphAlgorithms.Repository.Data
             SeedTables(modelBuilder);
         }
 
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e => (e.Entity is GraphEntity /* Add more here if needed */)
+                            && (e.State == EntityState.Added || e.State == EntityState.Modified));
+
+            foreach (var entityEntry in entries)
+            {
+                var now = DateTime.UtcNow; // Use UtcNow for consistency across time zones
+                var entity = (GraphEntity)entityEntry.Entity;
+
+                if (entityEntry.State == EntityState.Added)
+                {
+                    entity.CreatedDate = now;
+                }
+                else if (entityEntry.State == EntityState.Modified)
+                {
+                    // Ensure CreatedDate is not modified
+                    entityEntry.Property("CreatedDate").IsModified = false;
+                    entity.UpdatedDate = now;
+                }
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+
         private void ConfigureEntityToTableMappings(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<ActionTypeEntity>().ToTable("ActionTypes");
