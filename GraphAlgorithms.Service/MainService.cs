@@ -78,9 +78,10 @@ namespace GraphAlgorithms.Service
             return graphDTO;
         }
 
-        public async Task StoreGraph(GraphDTO graphDTO)
+        public async Task StoreGraph(GraphDTO graphDTO, int ActionTypeID = 1)
         {
             GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
+            graphEntity.ActionTypeID = ActionTypeID;
             
             // TODO: Add some stuff here that should be passed as parameters to this method
             // That stuff, such as ActionTypeID etc, should be added to graphEntity before persisting it
