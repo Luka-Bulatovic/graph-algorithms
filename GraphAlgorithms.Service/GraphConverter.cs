@@ -30,6 +30,12 @@ namespace GraphAlgorithms.Service
                 graph.ConnectNodes(fromNode, toNode);
             }
 
+            // Calculate Graph properties
+            WienerIndexAlgorithm wienerAlg = new WienerIndexAlgorithm(graph);
+            wienerAlg.Run();
+
+            graph.GraphProperties.WienerIndex = wienerAlg.WienerIndexValue;
+
             return graph;
         }
 
@@ -54,6 +60,7 @@ namespace GraphAlgorithms.Service
             }
 
             // TODO: Here, we will add mapping for WienerIndex and some more properties in future (other indices)
+            graphDTO.score = graph.GraphProperties.WienerIndex;
 
             return graphDTO;
         }
@@ -108,26 +115,31 @@ namespace GraphAlgorithms.Service
             }
 
             // TODO: Here, we will add more stuff for mapping GraphProperties
+            graph.GraphProperties.WienerIndex = graphEntity.WienerIndex;
 
             return graph;
+        }
+
+        public GraphEntity GetGraphEntityFromGraph(Graph graph)
+        {
+            return new GraphEntity()
+            {
+                ID = graph.ID,
+                Name = "",
+                Order = graph.Nodes.Count,
+                Size = graph.Edges.Count,
+                DataXML = GetGraphMLForGraph(graph),
+                WienerIndex = graph.GraphProperties.WienerIndex
+            };
         }
 
         public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
         {
             Graph graph = GetGraphFromGraphDTO(graphDTO);
 
-            WienerIndexAlgorithm wienerAlg = new WienerIndexAlgorithm(graph);
-            wienerAlg.Run();
+            GraphEntity graphEntity = GetGraphEntityFromGraph(graph);
 
-            return new GraphEntity()
-            {
-                ID = graph.ID,
-                Name = "",
-                Order = graphDTO.nodes.Count,
-                Size = graphDTO.edges.Count,
-                DataXML = GetGraphMLForGraph(graph),
-                WienerIndex = wienerAlg.WienerIndexValue
-            };
+            return graphEntity;
         }
 
         public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity)

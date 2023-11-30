@@ -63,10 +63,7 @@ namespace GraphAlgorithms.Service
         {
             Graph graph = graphConverter.GetGraphFromGraphDTO(graphDTO);
 
-            WienerIndexAlgorithm wIdxAlgorithm = new WienerIndexAlgorithm(graph);
-            wIdxAlgorithm.Run();
-
-            return wIdxAlgorithm.WienerIndexValue;
+            return graph.GraphProperties.WienerIndex;
         }
 
         public async Task<GraphDTO> GetGraphDTOByIDAsync(int id)
