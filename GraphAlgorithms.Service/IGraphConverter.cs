@@ -13,7 +13,8 @@ namespace GraphAlgorithms.Service
     {
         public Graph GetGraphFromGraphDTO(GraphDTO graphDTO);
         public GraphDTO GetGraphDTOFromGraph(Graph graph);
-        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO);
         public Graph GetGraphFromGraphEntity(GraphEntity graphEntity);
+        public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity);
+        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO);
     }
 }

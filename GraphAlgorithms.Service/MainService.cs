@@ -61,23 +61,19 @@ namespace GraphAlgorithms.Service
 
         public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO)
         {
-            Graph g = graphConverter.GetGraphFromGraphDTO(graphDTO);
+            Graph graph = graphConverter.GetGraphFromGraphDTO(graphDTO);
 
-            WienerIndexAlgorithm wie = new WienerIndexAlgorithm(g);
-            wie.Run();
+            WienerIndexAlgorithm wIdxAlgorithm = new WienerIndexAlgorithm(graph);
+            wIdxAlgorithm.Run();
 
-            return wie.WienerIndexValue;
+            return wIdxAlgorithm.WienerIndexValue;
         }
 
         public async Task<GraphDTO> GetGraphDTOByIDAsync(int id)
         {
             GraphEntity graphEntity = await graphRepository.GetByIdAsync(id);
 
-            // Transform Graph Repository model into actual Graph object
-            Graph graph = graphConverter.GetGraphFromGraphEntity(graphEntity);
-
-            // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = graphConverter.GetGraphDTOFromGraph(graph);
+            GraphDTO graphDTO = graphConverter.GetGraphDTOFromGraphEntity(graphEntity);
 
             return graphDTO;
         }
@@ -85,6 +81,9 @@ namespace GraphAlgorithms.Service
         public async Task StoreGraph(GraphDTO graphDTO)
         {
             GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
+            
+            // TODO: Add some stuff here that should be passed as parameters to this method
+            // That stuff, such as ActionTypeID etc, should be added to graphEntity before persisting it
 
             await graphRepository.SaveAsync(graphEntity);
         }

@@ -8,6 +8,7 @@ namespace GraphAlgorithms.Service.DTO
         public List<NodeDTO> nodes { get; set; }
         public List<EdgeDTO> edges { get; set; }
         public int score { get; set; }
+        public string actionTypeName { get; set; }
 
         public GraphDTO()
         {

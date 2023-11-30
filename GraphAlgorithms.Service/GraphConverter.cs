@@ -53,25 +53,9 @@ namespace GraphAlgorithms.Service
                 }
             }
 
+            // TODO: Here, we will add mapping for WienerIndex and some more properties in future (other indices)
+
             return graphDTO;
-        }
-
-        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
-        {
-            Graph graph = GetGraphFromGraphDTO(graphDTO);
-            
-            WienerIndexAlgorithm wienerAlg = new WienerIndexAlgorithm(graph);
-            wienerAlg.Run();
-
-            return new GraphEntity()
-            {
-                ID = graph.ID,
-                Name = "",
-                Order = graphDTO.nodes.Count,
-                Size = graphDTO.edges.Count,
-                DataXML = GetGraphMLForGraph(graph),
-                WienerIndex = wienerAlg.WienerIndexValue
-            };
         }
 
         public Graph GetGraphFromGraphEntity(GraphEntity graphEntity)
@@ -123,7 +107,41 @@ namespace GraphAlgorithms.Service
                 graph.ConnectNodes(graph.GetNode(sourceIndex), graph.GetNode(targetIndex));
             }
 
+            // TODO: Here, we will add more stuff for mapping GraphProperties
+
             return graph;
+        }
+
+        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
+        {
+            Graph graph = GetGraphFromGraphDTO(graphDTO);
+
+            WienerIndexAlgorithm wienerAlg = new WienerIndexAlgorithm(graph);
+            wienerAlg.Run();
+
+            return new GraphEntity()
+            {
+                ID = graph.ID,
+                Name = "",
+                Order = graphDTO.nodes.Count,
+                Size = graphDTO.edges.Count,
+                DataXML = GetGraphMLForGraph(graph),
+                WienerIndex = wienerAlg.WienerIndexValue
+            };
+        }
+
+        public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity)
+        {
+            // Transform Graph Repository model into actual Graph object
+            Graph graph = GetGraphFromGraphEntity(graphEntity);
+
+            // Transform Graph object into GraphDTO
+            GraphDTO graphDTO = GetGraphDTOFromGraph(graph);
+
+            // Add additional data to GraphDTO that are stored to DB and not contained in Graph object
+            graphDTO.actionTypeName = "";//graphEntity.ActionType
+
+            return graphDTO;
         }
 
         private string GetGraphMLForGraph(Graph g)

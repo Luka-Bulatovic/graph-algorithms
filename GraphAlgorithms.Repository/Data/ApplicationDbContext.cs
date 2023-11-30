@@ -14,7 +14,6 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<GraphEntity> Graphs { get; set; }
         public DbSet<ActionTypeEntity> ActionTypes { get; set; }
         public DbSet<GraphClassEntity> GraphClasses { get; set; }
-        public DbSet<ActionEntity> Actions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -27,9 +26,10 @@ namespace GraphAlgorithms.Repository.Data
                 .HasMany(g => g.GraphClasses)
                 .WithMany(gc => gc.Graphs);
 
-            modelBuilder.Entity<ActionEntity>()
-                .HasMany(a => a.Graphs)
-                .WithMany(g => g.Actions);
+            modelBuilder.Entity<GraphEntity>()
+                .HasOne(g => g.ActionType) // GraphEntity has one ActionType
+                .WithMany() // ActionType can be associated with many GraphEntities
+                .HasForeignKey(g => g.ActionTypeID);
 
             // Seeders
             SeedTables(modelBuilder);
@@ -37,7 +37,6 @@ namespace GraphAlgorithms.Repository.Data
 
         private void ConfigureEntityToTableMappings(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ActionEntity>().ToTable("Actions");
             modelBuilder.Entity<ActionTypeEntity>().ToTable("ActionTypes");
             modelBuilder.Entity<GraphClassEntity>().ToTable("GraphClasses");
             modelBuilder.Entity<GraphEntity>().ToTable("Graphs");
