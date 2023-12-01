@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Service
 {
-    public interface IMainService
+    public interface IGraphDrawingService
     {
-        public List<GraphDTO> GetBestUnicyclicBipartiteGraphs(int p, int q, int k);
         public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO);
         public Task<GraphDTO> GetGraphDTOByIDAsync(int id);
         public Task StoreGraph(GraphDTO graphDTO, int ActionTypeID = 1);

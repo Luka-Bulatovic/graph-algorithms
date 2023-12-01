@@ -8,8 +8,8 @@ namespace GraphAlgorithms.Web.Controllers
 {
     public class GraphDrawingController : Controller
     {
-        private readonly IMainService mainService;
-        public GraphDrawingController(IMainService mainService)
+        private readonly IGraphDrawingService mainService;
+        public GraphDrawingController(IGraphDrawingService mainService)
         {
             this.mainService = mainService;
         }

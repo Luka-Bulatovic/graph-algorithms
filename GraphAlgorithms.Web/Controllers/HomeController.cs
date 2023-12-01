@@ -11,9 +11,9 @@ namespace GraphAlgorithms.Web.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IMainService mainService;
+        private readonly IGraphDrawingService mainService;
 
-        public HomeController(ILogger<HomeController> logger, IMainService mainService)
+        public HomeController(ILogger<HomeController> logger, IGraphDrawingService mainService)
         {
             _logger = logger;
             this.mainService = mainService;
