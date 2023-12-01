@@ -142,10 +142,11 @@ var GraphCanvas = new function () {
         GraphCanvas.reassignNodeIDs(viewDataObj);
 
         $.post("/GraphDrawing/Store", {
-            id: viewDataObj.graphID,
-            nodes: nodes,
-            edges: edges,
-            score: 0
+            graph: {
+                id: viewDataObj.graphID,
+                nodes: nodes,
+                edges: edges
+            }
         }).done(function (data) {
             alert("Saved");
         });
