@@ -13,6 +13,10 @@
         @apply flex-col h-24 p-2 bg-gray-300;
     }
 
+    .graph-canvas-container .graph-and-status-bar-container {
+        @apply w-full h-full p-0 flex flex-col;
+    }
+
     .graph-canvas-container .graph-container {
         @apply flex-grow;
     }

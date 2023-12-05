@@ -743,6 +743,14 @@ select {
   padding: 0.5rem;
 }
 
+.graph-canvas-container .graph-and-status-bar-container {
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-direction: column;
+  padding: 0px;
+}
+
 .graph-canvas-container .graph-container {
   flex-grow: 1;
 }
