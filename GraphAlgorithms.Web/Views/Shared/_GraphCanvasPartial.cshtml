@@ -37,9 +37,9 @@
         <span class="status-msg"></span>
 
         <div class="status-bar-buttons">
-            <button type="button" class="btn-edit @(Model.ShowEditButton ? "" : "hidden")">
+            <a class="btn-edit @(Model.ShowEditButton ? "" : "hidden")" href="@Url.Action("Edit", "GraphDrawing", new { id = Model.ID })">
                 <i class="fas fa-pencil-alt"></i> Edit
-            </button>
+            </a>
             <button type="button" class="btn-save @(Model.ShowSaveButton ? "" : "hidden")">
                 <i class="fas fa-save"></i> Save
             </button>
