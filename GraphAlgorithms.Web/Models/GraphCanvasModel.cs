@@ -37,20 +37,14 @@ namespace GraphAlgorithms.Web.Models
         #endregion
 
         #region Constructors
-        public GraphCanvasModel(int id, bool isEditable = false, bool showEditButton = false, bool showSaveButton = false, bool showSaveAsNewButton = false)
+        public GraphCanvasModel(GraphDTO graph, bool isEditable = false, bool showEditButton = false, bool showSaveButton = false, bool showSaveAsNewButton = false)
         {
-            ID = id;
+            ID = graph.id;
+            this.graph = graph;
             IsEditable = isEditable;
             ShowEditButton = showEditButton;
             ShowSaveButton = showSaveButton;
             ShowSaveAsNewButton = showSaveAsNewButton;
-        }
-        #endregion
-
-        #region Methods
-        public void SetGraph(GraphDTO graph)
-        {
-            this.graph = graph;
         }
         #endregion
     }

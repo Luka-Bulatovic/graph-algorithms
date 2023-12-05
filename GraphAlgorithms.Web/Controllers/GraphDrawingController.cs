@@ -8,18 +8,17 @@ namespace GraphAlgorithms.Web.Controllers
 {
     public class GraphDrawingController : Controller
     {
-        private readonly IGraphDrawingService mainService;
+        private readonly IGraphDrawingService graphDrawingService;
         public GraphDrawingController(IGraphDrawingService mainService)
         {
-            this.mainService = mainService;
+            this.graphDrawingService = mainService;
         }
 
         public async Task<ViewResult> Index()
         {
-            GraphDrawingModel model = new GraphDrawingModel(0, showSaveButton: true);
-
             GraphDTO graph = new();
-            model.SetCanvasGraph(graph);
+
+            GraphDrawingModel model = new GraphDrawingModel(graph, showSaveButton: true);
 
             return View(model);
         }
@@ -27,17 +26,17 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task<ViewResult> Edit(int id)
         {
             bool showSaveButton = true; // we should handle this depending on the logic whether graph is editable
-            GraphDrawingModel model = new GraphDrawingModel(id, showSaveAsNewButton: true, showSaveButton: showSaveButton);
-            
-            GraphDTO graph = await mainService.GetGraphDTOByIDAsync(id);
-            model.SetCanvasGraph(graph);
+
+            GraphDTO graph = await graphDrawingService.GetGraphDTOByIDAsync(id);
+
+            GraphDrawingModel model = new GraphDrawingModel(graph, showSaveAsNewButton: true, showSaveButton: showSaveButton);
 
             return View("Index", model);
         }
 
         public async Task Store(GraphDTO graph)
         {
-            await mainService.StoreGraph(graph, 1);
+            await graphDrawingService.StoreGraph(graph, 1);
         }
     }
 }

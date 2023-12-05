@@ -1,0 +1,28 @@
+﻿@model GraphLibraryModel
+
+@{
+    int numberOfRows = (int)Math.Ceiling((decimal)Model.Graphs.Count / (decimal)Model.ItemsPerRow);
+}
+
+<div class="container">
+    @for(int i = 0; i < numberOfRows; i++)
+    {
+        <div class="library-row w-full flex flex-row">
+            @for(int j = 0; j < Model.ItemsPerRow; j++)
+            {
+                if (i * Model.ItemsPerRow + j < Model.Graphs.Count)
+                {
+                    <div class="library-item w-1/3 h-192">
+                        @{
+                            var model = new GraphCanvasModel(
+                                Model.Graphs[i * Model.ItemsPerRow + j],
+                                showEditButton: true
+                            );
+                        }
+                        @Html.Partial("_GraphCanvasPartial", model)
+                    </div>
+                }
+            }
+        </div>
+    }
+</div>

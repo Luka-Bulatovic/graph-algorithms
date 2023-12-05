@@ -7,15 +7,10 @@ namespace GraphAlgorithms.Web.Models
         public int ID { get; set; }
         public GraphCanvasModel GraphCanvasModel { get; set; }
 
-        public GraphDrawingModel(int id, bool showSaveButton = false, bool showSaveAsNewButton = false)
+        public GraphDrawingModel(GraphDTO graph, bool showSaveButton = false, bool showSaveAsNewButton = false)
         {
-            ID = id;
-            GraphCanvasModel = new GraphCanvasModel(id, isEditable: true, showSaveButton: showSaveButton, showSaveAsNewButton: showSaveAsNewButton);
-        }
-
-        public void SetCanvasGraph(GraphDTO graph)
-        {
-            this.GraphCanvasModel.SetGraph(graph);
+            ID = graph.id;
+            GraphCanvasModel = new GraphCanvasModel(graph, isEditable: true, showSaveButton: showSaveButton, showSaveAsNewButton: showSaveAsNewButton);
         }
     }
 }

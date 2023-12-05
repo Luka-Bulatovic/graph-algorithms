@@ -13,6 +13,7 @@ namespace GraphAlgorithms.Service
         public static IServiceCollection AddServiceProjectServices(this IServiceCollection services)
         {
             services.AddScoped<IGraphDrawingService, GraphDrawingService>();
+            services.AddScoped<IGraphLibraryService, GraphLibraryService>();
             services.AddScoped<IGraphConverter, GraphConverter>();
 
             return services;

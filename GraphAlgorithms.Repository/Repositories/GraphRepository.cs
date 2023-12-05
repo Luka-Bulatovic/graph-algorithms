@@ -13,9 +13,11 @@ namespace GraphAlgorithms.Repository.Repositories
             _context = context;
         }
 
-        public async Task<IEnumerable<GraphEntity>> GetAllAsync()
+        public async Task<List<GraphEntity>> GetAllAsync()
         {
-            List<GraphEntity> graphs = await _context.Graphs.ToListAsync();
+            List<GraphEntity> graphs = await _context.Graphs
+                                                    .Include(g => g.ActionType)
+                                                    .ToListAsync();
             return graphs;
         }
 
