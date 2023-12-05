@@ -57,6 +57,7 @@
     var @(ViewDataObj) = {
         viewID: "@ViewID",
         graphID: @Model.Graph.id,
+        isEditable: @(Model.IsEditable ? "true" : "false"),
         canvasContainer: $("#@(ViewID).graph-canvas-container"),
         contextMenu: $("#@ViewID .context-menu"),
         graphContainer: $("#@ViewID .graph-container"),

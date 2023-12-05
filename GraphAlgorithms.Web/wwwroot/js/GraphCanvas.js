@@ -70,7 +70,7 @@ var GraphCanvas = new function () {
                 stabilization: { iterations: 150 } // Stabilize the network after initial layout
             },
             manipulation: {
-                enabled: true,
+                enabled: viewDataObj.isEditable,
                 deleteNode: GraphCanvas.onDeleteNode.bind(null, viewDataObj),
                 deleteEdge: GraphCanvas.onDeleteEdge.bind(null, viewDataObj),
                 addNode: GraphCanvas.onAddNode.bind(null, viewDataObj),
