@@ -21,6 +21,17 @@ namespace GraphAlgorithms.Repository.Repositories
             return graphs;
         }
 
+        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize)
+        {
+            var totalCount = await _context.Graphs.CountAsync();
+            var graphs = await _context.Graphs
+                                       .Include(g => g.ActionType)
+                                       .Skip((pageNumber - 1) * pageSize)
+                                       .Take(pageSize)
+                                       .ToListAsync();
+            return (graphs, totalCount);
+        }
+
         public async Task<GraphEntity> GetByIdAsync(int id)
         {
             GraphEntity graph = await _context.Graphs

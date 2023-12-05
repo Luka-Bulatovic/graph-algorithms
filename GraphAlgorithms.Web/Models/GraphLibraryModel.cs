@@ -8,15 +8,11 @@ namespace GraphAlgorithms.Web.Models
     {
         public List<GraphDTO> Graphs { get; set; }
 
-        public int ItemsPerRow = 3;
-        public int ItemsPerPage { get; }
+        public PaginationInfoModel PaginationInfo { get; set; }
 
-        public GraphLibraryModel(int itemsPerPage = 9)
+        public GraphLibraryModel()
         {
-            if (itemsPerPage % ItemsPerRow > 0)
-                throw new ArgumentException(string.Format("ItemsPerPage must be multiple of {0}", ItemsPerRow));
-
-            ItemsPerPage = itemsPerPage;
+            PaginationInfo = new();
         }
     }
 }

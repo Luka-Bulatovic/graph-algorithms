@@ -1,21 +1,22 @@
 ﻿@model GraphLibraryModel
 
 @{
-    int numberOfRows = (int)Math.Ceiling((decimal)Model.Graphs.Count / (decimal)Model.ItemsPerRow);
+    int itemsPerRow = 3;
+    int numberOfRows = (int)Math.Ceiling((decimal)Model.Graphs.Count / (decimal)itemsPerRow);
 }
 
 <div class="container">
     @for(int i = 0; i < numberOfRows; i++)
     {
         <div class="library-row w-full flex flex-row">
-            @for(int j = 0; j < Model.ItemsPerRow; j++)
+            @for(int j = 0; j < itemsPerRow; j++)
             {
-                if (i * Model.ItemsPerRow + j < Model.Graphs.Count)
+                if (i * itemsPerRow + j < Model.Graphs.Count)
                 {
                     <div class="library-item w-1/3 h-192">
                         @{
                             var model = new GraphCanvasModel(
-                                Model.Graphs[i * Model.ItemsPerRow + j],
+                                Model.Graphs[i * itemsPerRow + j],
                                 showEditButton: true
                             );
                         }
@@ -25,4 +26,28 @@
             }
         </div>
     }
+
+    <!-- Pagination -->
+    <div class="pagination-container">
+        @if (Model.PaginationInfo.PageNumber > 1)
+        {
+            <a href="@Url.Action("Index", new { pageNumber = Model.PaginationInfo.PageNumber - 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
+                Previous
+            </a>
+        }
+
+        @for (int i = 1; i <= Model.PaginationInfo.TotalPages; i++)
+        {
+            <a href="@Url.Action("Index", new { pageNumber = i /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="@(i == Model.PaginationInfo.PageNumber ? "btn-pagination-selected" : "btn-pagination")">
+                @i
+            </a>
+        }
+
+        @if (Model.PaginationInfo.PageNumber < Model.PaginationInfo.TotalPages)
+        {
+            <a href="@Url.Action("Index", new { pageNumber = Model.PaginationInfo.PageNumber + 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
+                Next
+            </a>
+        }
+    </div>
 </div>

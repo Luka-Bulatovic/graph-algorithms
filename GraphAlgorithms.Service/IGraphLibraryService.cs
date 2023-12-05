@@ -10,5 +10,6 @@ namespace GraphAlgorithms.Service
     public interface IGraphLibraryService
     {
         public Task<List<GraphDTO>> GetGraphs();
+        public Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize);
     }
 }
