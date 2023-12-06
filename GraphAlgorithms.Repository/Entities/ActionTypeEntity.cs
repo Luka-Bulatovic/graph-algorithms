@@ -10,6 +10,7 @@ namespace GraphAlgorithms.Repository.Entities
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public ICollection<ActionEntity> Actions { get; set; }
     }
 
     public enum ActionTypeEnum { Draw = 1, Import = 2, GenerateRandom = 3 }

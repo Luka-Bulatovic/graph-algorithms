@@ -14,6 +14,7 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<GraphEntity> Graphs { get; set; }
         public DbSet<ActionTypeEntity> ActionTypes { get; set; }
         public DbSet<GraphClassEntity> GraphClasses { get; set; }
+        public DbSet<ActionEntity> Actions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -67,6 +68,7 @@ namespace GraphAlgorithms.Repository.Data
             modelBuilder.Entity<ActionTypeEntity>().ToTable("ActionTypes");
             modelBuilder.Entity<GraphClassEntity>().ToTable("GraphClasses");
             modelBuilder.Entity<GraphEntity>().ToTable("Graphs");
+            modelBuilder.Entity<ActionEntity>().ToTable("Actions");
         }
 
         private void SeedTables(ModelBuilder modelBuilder)

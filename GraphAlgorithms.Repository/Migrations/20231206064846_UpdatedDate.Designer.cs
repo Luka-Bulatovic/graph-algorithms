@@ -4,6 +4,7 @@ using GraphAlgorithms.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GraphAlgorithms.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20231206064846_UpdatedDate")]
+    partial class UpdatedDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,30 +24,6 @@ namespace GraphAlgorithms.Repository.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("GraphAlgorithms.Repository.Entities.ActionEntity", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("ActionTypeID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedByID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("ActionTypeID");
-
-                    b.ToTable("Actions", (string)null);
-                });
 
             modelBuilder.Entity("GraphAlgorithms.Repository.Entities.ActionTypeEntity", b =>
                 {
@@ -165,17 +144,6 @@ namespace GraphAlgorithms.Repository.Migrations
                     b.ToTable("GraphClassEntityGraphEntity");
                 });
 
-            modelBuilder.Entity("GraphAlgorithms.Repository.Entities.ActionEntity", b =>
-                {
-                    b.HasOne("GraphAlgorithms.Repository.Entities.ActionTypeEntity", "ActionType")
-                        .WithMany("Actions")
-                        .HasForeignKey("ActionTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("ActionType");
-                });
-
             modelBuilder.Entity("GraphAlgorithms.Repository.Entities.GraphEntity", b =>
                 {
                     b.HasOne("GraphAlgorithms.Repository.Entities.ActionTypeEntity", "ActionType")
@@ -200,11 +168,6 @@ namespace GraphAlgorithms.Repository.Migrations
                         .HasForeignKey("GraphsID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("GraphAlgorithms.Repository.Entities.ActionTypeEntity", b =>
-                {
-                    b.Navigation("Actions");
                 });
 #pragma warning restore 612, 618
         }
