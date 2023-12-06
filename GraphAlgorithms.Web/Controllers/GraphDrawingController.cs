@@ -36,7 +36,7 @@ namespace GraphAlgorithms.Web.Controllers
 
         public async Task Store(GraphDTO graph)
         {
-            await graphDrawingService.StoreGraph(graph, 1);
+            await graphDrawingService.StoreGraph(graph);
         }
     }
 }

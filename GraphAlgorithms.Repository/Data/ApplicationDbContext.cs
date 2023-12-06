@@ -27,11 +27,6 @@ namespace GraphAlgorithms.Repository.Data
                 .HasMany(g => g.GraphClasses)
                 .WithMany(gc => gc.Graphs);
 
-            modelBuilder.Entity<GraphEntity>()
-                .HasOne(g => g.ActionType) // GraphEntity has one ActionType
-                .WithMany() // ActionType can be associated with many GraphEntities
-                .HasForeignKey(g => g.ActionTypeID);
-
             // Seeders
             SeedTables(modelBuilder);
         }

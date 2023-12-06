@@ -18,5 +18,6 @@ namespace GraphAlgorithms.Repository.Entities
         public DateTime CreatedDate { get; set; }
 
         public ActionTypeEntity ActionType { get; set; }
+        public ICollection<GraphEntity> Graphs { get; set; }
     }
 }

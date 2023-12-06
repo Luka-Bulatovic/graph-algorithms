@@ -151,7 +151,7 @@ namespace GraphAlgorithms.Service
             GraphDTO graphDTO = GetGraphDTOFromGraph(graph);
 
             // Add additional data to GraphDTO that are stored to DB and not contained in Graph object
-            graphDTO.actionTypeName = graphEntity.ActionType.Name;
+            graphDTO.actionTypeName = graphEntity.Action.ActionType.Name;
             graphDTO.createdDate = graphEntity.CreatedDate;
 
             return graphDTO;

@@ -11,6 +11,6 @@ namespace GraphAlgorithms.Service
     {
         public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO);
         public Task<GraphDTO> GetGraphDTOByIDAsync(int id);
-        public Task StoreGraph(GraphDTO graphDTO, int ActionTypeID = 1);
+        public Task StoreGraph(GraphDTO graphDTO);
     }
 }

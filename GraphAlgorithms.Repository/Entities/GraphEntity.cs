@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -10,7 +11,8 @@ namespace GraphAlgorithms.Repository.Entities
     {
         public int ID { get; set; }
         public string Name { get; set; }
-        public int ActionTypeID { get; set; }
+        [ForeignKey("Action")]
+        public int ActionID { get; set; }
         public int Order { get; set; }
         public int Size { get; set; }
         public string DataXML { get; set; }
@@ -19,6 +21,6 @@ namespace GraphAlgorithms.Repository.Entities
         public DateTime? UpdatedDate { get; set; }
 
         public ICollection<GraphClassEntity> GraphClasses { get; set; }
-        public virtual ActionTypeEntity ActionType { get; set; }
+        public ActionEntity Action { get; set; }
     }
 }
