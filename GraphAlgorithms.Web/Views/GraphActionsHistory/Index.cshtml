@@ -4,11 +4,30 @@
 <div class="grid grid-cols-4 gap-4">
     @foreach(var action in Model.Actions)
     {
-        <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
-            <div class="font-semibold text-lg mb-2">Action @action.ID</div>
-            <p class="text-gray-600 text-sm mb-2">Action Type: @action.ActionTypeName</p>
-            <p class="text-gray-600 text-sm mb-2">User: @action.CreatedByUserName</p>
-            <p class="text-gray-600 text-sm">Date: @action.CreatedDate.ToString("yyyy-MM-dd")</p>
-        </div>
+        @Html.Partial("_ActionCardPartial", new ActionCardModel(action))
+    }
+</div>
+
+<!-- Pagination -->
+<div class="pagination-container">
+    @if (Model.PaginationInfo.PageNumber > 1)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = Model.PaginationInfo.PageNumber - 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
+            Previous
+        </a>
+    }
+
+    @for (int i = 1; i <= Model.PaginationInfo.TotalPages; i++)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = i /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="@(i == Model.PaginationInfo.PageNumber ? "btn-pagination-selected" : "btn-pagination")">
+            @i
+        </a>
+    }
+
+    @if (Model.PaginationInfo.PageNumber < Model.PaginationInfo.TotalPages)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = Model.PaginationInfo.PageNumber + 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
+            Next
+        </a>
     }
 </div>

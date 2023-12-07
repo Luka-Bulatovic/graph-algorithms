@@ -1,0 +1,8 @@
+﻿@model ActionCardModel
+
+<div class="action-card">
+    <div class="action-card-title">Action @Model.Action.ID</div>
+    <p class="action-card-text">Action Type: <span class="font-semibold">@Model.Action.ActionTypeName</span></p>
+    <p class="action-card-text">User: @Model.Action.CreatedByUserName</p>
+    <p class="action-card-text">Date: @Model.Action.CreatedDate.ToString("yyyy-MM-dd")</p>
+</div>
