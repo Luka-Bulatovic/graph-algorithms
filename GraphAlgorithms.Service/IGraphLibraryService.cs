@@ -11,5 +11,6 @@ namespace GraphAlgorithms.Service
     {
         public Task<List<GraphDTO>> GetGraphs();
         public Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize);
+        public Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize);
     }
 }

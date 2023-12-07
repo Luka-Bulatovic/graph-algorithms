@@ -52,5 +52,18 @@ namespace GraphAlgorithms.Repository.Repositories
             
             await _context.SaveChangesAsync();
         }
+
+        public async Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize)
+        {
+            var totalCount = await _context.Graphs.CountAsync();
+            var graphs = await _context.Graphs
+                                       .Where(g => g.ActionID == actionID)
+                                       .Include(g => g.Action)
+                                       .ThenInclude(a => a.ActionType)
+                                       .Skip((pageNumber - 1) * pageSize)
+                                       .Take(pageSize)
+                                       .ToListAsync();
+            return (graphs, totalCount);
+        }
     }
 }

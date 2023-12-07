@@ -27,10 +27,21 @@ namespace GraphAlgorithms.Service
             return graphEntities.Select(graphEntity => graphConverter.GetGraphDTOFromGraphEntity(graphEntity))
                                 .ToList();
         }
-
+        
         public async Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize)
         {
             (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsPaginatedAsync(pageNumber, pageSize);
+
+            List<GraphDTO> graphDTOs = graphEntities
+                                        .Select(graphEntity => graphConverter.GetGraphDTOFromGraphEntity(graphEntity))
+                                        .ToList();
+
+            return (graphDTOs, totalCount);
+        }
+
+        public async Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize)
+        {
+            (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsForActionPaginatedAsync(actionID, pageNumber, pageSize);
 
             List<GraphDTO> graphDTOs = graphEntities
                                         .Select(graphEntity => graphConverter.GetGraphDTOFromGraphEntity(graphEntity))

@@ -27,5 +27,18 @@ namespace GraphAlgorithms.Web.Controllers
 
             return View(model);
         }
+
+        public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9)
+        {
+            GraphLibraryModel model = new GraphLibraryModel();
+
+            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsForActionPaginated(actionID, pageNumber, pageSize);
+
+            model.ForActionID = actionID;
+            model.Graphs = graphs;
+            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
+
+            return View("Index", model);
+        }
     }
 }
