@@ -13,6 +13,7 @@ namespace GraphAlgorithms.Repository
         public static IServiceCollection AddRepositoryServices(this IServiceCollection services)
         {
             services.AddScoped<IGraphRepository, GraphRepository>();
+            services.AddScoped<IActionRepository, ActionRepository>();
 
             return services;
         }

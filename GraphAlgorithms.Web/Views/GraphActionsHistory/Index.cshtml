@@ -1,0 +1,14 @@
+﻿@model GraphActionsHistoryModel
+<h1 class="font-semibold text-2xl mb-8">Actions History</h1>
+
+<div class="grid grid-cols-4 gap-4">
+    @foreach(var action in Model.Actions)
+    {
+        <div class="bg-gray-50 border border-gray-300 rounded-lg p-4">
+            <div class="font-semibold text-lg mb-2">Action @action.ID</div>
+            <p class="text-gray-600 text-sm mb-2">Action Type: @action.ActionTypeName</p>
+            <p class="text-gray-600 text-sm mb-2">User: @action.CreatedByUserName</p>
+            <p class="text-gray-600 text-sm">Date: @action.CreatedDate.ToString("yyyy-MM-dd")</p>
+        </div>
+    }
+</div>

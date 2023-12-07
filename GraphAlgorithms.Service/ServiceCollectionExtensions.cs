@@ -14,7 +14,10 @@ namespace GraphAlgorithms.Service
         {
             services.AddScoped<IGraphDrawingService, GraphDrawingService>();
             services.AddScoped<IGraphLibraryService, GraphLibraryService>();
+            services.AddScoped<IGraphActionsService, GraphActionsService>();
+            
             services.AddScoped<IGraphConverter, GraphConverter>();
+            services.AddScoped<IActionConverter, ActionConverter>();
 
             return services;
         }
