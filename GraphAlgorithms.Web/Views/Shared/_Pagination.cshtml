@@ -1,0 +1,24 @@
+﻿@model PaginationModel
+
+<div class="pagination-container">
+    @if (Model.PageNumber > 1)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = Model.PageNumber - 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
+            Previous
+        </a>
+    }
+
+    @for (int i = 1; i <= Model.TotalPages; i++)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = i /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="@(i == Model.PageNumber ? "btn-pagination-selected" : "btn-pagination")">
+            @i
+        </a>
+    }
+
+    @if (Model.PageNumber < Model.TotalPages)
+    {
+        <a href="@Url.Action("Index", new { pageNumber = Model.PageNumber + 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
+            Next
+        </a>
+    }
+</div>

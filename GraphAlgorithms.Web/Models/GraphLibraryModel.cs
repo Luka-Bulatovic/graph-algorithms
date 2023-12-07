@@ -8,7 +8,7 @@ namespace GraphAlgorithms.Web.Models
     {
         public List<GraphDTO> Graphs { get; set; }
 
-        public PaginationInfoModel PaginationInfo { get; set; }
+        public PaginationModel PaginationInfo { get; set; }
 
         public GraphLibraryModel()
         {

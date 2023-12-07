@@ -6,7 +6,7 @@ namespace GraphAlgorithms.Web.Models
     public class GraphActionsHistoryModel
     {
         public List<ActionDTO> Actions { get; set; }
-        public PaginationInfoModel PaginationInfo { get; set; }
+        public PaginationModel PaginationInfo { get; set; }
 
         public GraphActionsHistoryModel()
         {

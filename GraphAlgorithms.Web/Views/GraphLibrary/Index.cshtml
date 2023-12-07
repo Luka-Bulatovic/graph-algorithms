@@ -20,7 +20,7 @@
                                 showEditButton: true
                             );
                         }
-                        @Html.Partial("_GraphCanvasPartial", model)
+                        @Html.Partial("_GraphCanvas", model)
                     </div>
                 }
             }
@@ -28,26 +28,5 @@
     }
 
     <!-- Pagination -->
-    <div class="pagination-container">
-        @if (Model.PaginationInfo.PageNumber > 1)
-        {
-            <a href="@Url.Action("Index", new { pageNumber = Model.PaginationInfo.PageNumber - 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
-                Previous
-            </a>
-        }
-
-        @for (int i = 1; i <= Model.PaginationInfo.TotalPages; i++)
-        {
-            <a href="@Url.Action("Index", new { pageNumber = i /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="@(i == Model.PaginationInfo.PageNumber ? "btn-pagination-selected" : "btn-pagination")">
-                @i
-            </a>
-        }
-
-        @if (Model.PaginationInfo.PageNumber < Model.PaginationInfo.TotalPages)
-        {
-            <a href="@Url.Action("Index", new { pageNumber = Model.PaginationInfo.PageNumber + 1 /*, SearchByID = Model.SearchByID, SearchText = Model.SearchText*/ })" class="btn-pagination">
-                Next
-            </a>
-        }
-    </div>
+    @Html.Partial("_Pagination", Model.PaginationInfo)
 </div>
