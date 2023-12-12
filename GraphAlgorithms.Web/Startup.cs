@@ -22,7 +22,12 @@ namespace GraphAlgorithms.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews()
+                    .AddViewOptions(options =>
+                    {
+                        options.HtmlHelperOptions.ClientValidationEnabled = true;
+                    });
+
 
             // Inject DbContext with connection to SQL Server DB, used by Repository
             string connectionString = Configuration.GetConnectionString("WebAppDB");

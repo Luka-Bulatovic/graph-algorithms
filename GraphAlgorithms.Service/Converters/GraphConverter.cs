@@ -2,11 +2,12 @@
 using GraphAlgorithms.Core.Algorithms;
 using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Service.Interfaces;
 using System.Text;
 using System.Xml.Linq;
 using static System.Formats.Asn1.AsnWriter;
 
-namespace GraphAlgorithms.Service
+namespace GraphAlgorithms.Service.Converters
 {
     public class GraphConverter : IGraphConverter
     {
@@ -74,7 +75,7 @@ namespace GraphAlgorithms.Service
             if (xdoc.Root == null)
                 throw new InvalidDataException(string.Format("Root node does not exist:\r\n{0}", graphML));
 
-            var graphElement = xdoc.Root.Element(this.Namespace + "graph");
+            var graphElement = xdoc.Root.Element(Namespace + "graph");
             if (graphElement == null)
                 throw new InvalidDataException(string.Format("Graph node not found:\r\n{0}", graphML));
 
@@ -83,8 +84,8 @@ namespace GraphAlgorithms.Service
             if (edgeDefaultAttr != null)
                 isUndirected = edgeDefaultAttr.Value == "undirected";
 
-            var nodeElements = graphElement.Elements(this.Namespace + "node");
-            var edgeElements = graphElement.Elements(this.Namespace + "edge");
+            var nodeElements = graphElement.Elements(Namespace + "node");
+            var edgeElements = graphElement.Elements(Namespace + "edge");
 
             // Check if nodes and Edges are in valid format
             if (nodeElements.Any(n => n.Attribute("id") == null))
@@ -98,7 +99,7 @@ namespace GraphAlgorithms.Service
             foreach (var nodeElement in nodeElements)
             {
                 var nodeIndex = nodeElement.Attribute("id").Value;
-                var nodeLabel = nodeElement.Element(this.Namespace + "data")?.Value;
+                var nodeLabel = nodeElement.Element(Namespace + "data")?.Value;
 
                 Node node = new Node(int.Parse(nodeIndex), nodeLabel);
 
@@ -160,26 +161,26 @@ namespace GraphAlgorithms.Service
         private string GetGraphMLForGraph(Graph g)
         {
             var xdoc = new XDocument();
-            var root = new XElement(this.Namespace + "graphml");
+            var root = new XElement(Namespace + "graphml");
 
-            root.Add(new XElement(this.Namespace + "key", new XAttribute("id", "d0"), new XAttribute("for", "node"), new XAttribute("attr.name", "label"), new XAttribute("attr.type", "string")));
-            root.Add(new XElement(this.Namespace + "key", new XAttribute("id", "d1"), new XAttribute("for", "node"), new XAttribute("attr.name", "color"), new XAttribute("attr.type", "string")));
+            root.Add(new XElement(Namespace + "key", new XAttribute("id", "d0"), new XAttribute("for", "node"), new XAttribute("attr.name", "label"), new XAttribute("attr.type", "string")));
+            root.Add(new XElement(Namespace + "key", new XAttribute("id", "d1"), new XAttribute("for", "node"), new XAttribute("attr.name", "color"), new XAttribute("attr.type", "string")));
             //root.Add(new XElement("key", new XAttribute("id", "d2"), new XAttribute("for", "edge"), new XAttribute("attr.name", "weight"), new XAttribute("attr.type", "double")));
 
-            var graphElement = new XElement(this.Namespace + "graph",
+            var graphElement = new XElement(Namespace + "graph",
                 new XAttribute("id", "G"),
                 new XAttribute("edgedefault", g.IsUndirected ? "undirected" : "directed"));
 
             foreach (Node node in g.Nodes)
             {
-                var nodeElement = new XElement(this.Namespace + "node", new XAttribute("id", node.Index));
-                nodeElement.Add(new XElement(this.Namespace + "data", new XAttribute("key", "d0"), node.Label));
+                var nodeElement = new XElement(Namespace + "node", new XAttribute("id", node.Index));
+                nodeElement.Add(new XElement(Namespace + "data", new XAttribute("key", "d0"), node.Label));
                 graphElement.Add(nodeElement);
             }
 
             foreach (Edge edge in g.Edges)
             {
-                var edgeElement = new XElement(this.Namespace + "edge",
+                var edgeElement = new XElement(Namespace + "edge",
                     new XAttribute("source", edge.GetSrcNodeIndex()),
                     new XAttribute("target", edge.GetDestNodeIndex()));
                 //edgeElement.Add(new XElement("data", new XAttribute("key", "d2"), edge.Weight));

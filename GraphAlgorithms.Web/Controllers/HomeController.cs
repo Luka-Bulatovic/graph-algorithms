@@ -1,5 +1,5 @@
-﻿using GraphAlgorithms.Service;
-using GraphAlgorithms.Service.DTO;
+﻿using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;

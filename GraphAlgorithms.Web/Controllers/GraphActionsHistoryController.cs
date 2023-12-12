@@ -1,9 +1,9 @@
 ﻿using GraphAlgorithms.Service.DTO;
-using GraphAlgorithms.Service;
 using GraphAlgorithms.Web.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using GraphAlgorithms.Service.Interfaces;
 
 namespace GraphAlgorithms.Web.Controllers
 {

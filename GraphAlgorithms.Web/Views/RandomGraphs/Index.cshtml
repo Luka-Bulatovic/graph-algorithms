@@ -1,0 +1,51 @@
+﻿@model RandomGraphsModel
+
+@{
+    string ViewDataObj = string.Format("RandomGraphsContainer_ViewData");
+}
+
+<div id="random-graphs-container" class="container">
+    <form asp-action="Save" asp-controller="RandomGraphs" method="post">
+        <div class="grid grid-cols-1 gap-y-4">
+            <div class="col-span-full">
+                <label asp-for="GraphClassID" class="block text-sm font-medium leading-6 text-gray-900">Class</label>
+                <div class="mt-2">
+                    <select asp-for="GraphClassID" asp-items="Model.GraphClassList" class="sl-graph-class block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                        <option value="0">- Please select -</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="random-graph-params-container random-connected-graph-params-container hidden">
+                @Html.Partial("_RandomConnectedGraph", Model.RandomConnectedGraphModel)
+            </div>
+            <div class="random-graph-params-container random-unicyclic-bipartite-graph-params-container hidden">
+                @Html.Partial("_RandomUnicyclicBipartiteGraph", Model.RandomUnicyclicBipartiteGraphModel)
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-submit">Generate</button>
+    </form>
+</div>
+
+<script type="text/javascript">
+    var @(ViewDataObj) = {
+        viewID: "random-graphs-container",
+        form: $("#random-graphs-container form"),
+        container: $("#random-graphs-container"),
+        graphClassList: $("#random-graphs-container .sl-graph-class"),
+        paramsContainers: $("#random-graphs-container .random-graph-params-container"),
+        connectedGraphParamsContainer: $("#random-graphs-container .random-connected-graph-params-container"),
+        unicyclicBipartiteGraphParamsContainer: $("#random-graphs-container .random-unicyclic-bipartite-graph-params-container"),
+    };
+
+    $(document).ready(() => {
+        var viewDataObj = @(ViewDataObj);
+        viewDataObj.form.validate(); // Initialize jQuery Validation on your form
+
+        var settngs = $.data(viewDataObj.form[0], 'validator').settings;
+        settngs.ignore = ".ignore-val";
+
+        RandomGraphs.Initialize(viewDataObj);
+    });
+</script>

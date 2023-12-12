@@ -1,13 +1,14 @@
 ﻿using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Service
+namespace GraphAlgorithms.Service.Services
 {
     public class GraphLibraryService : IGraphLibraryService
     {
@@ -27,7 +28,7 @@ namespace GraphAlgorithms.Service
             return graphEntities.Select(graphEntity => graphConverter.GetGraphDTOFromGraphEntity(graphEntity))
                                 .ToList();
         }
-        
+
         public async Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize)
         {
             (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsPaginatedAsync(pageNumber, pageSize);

@@ -1,13 +1,14 @@
 ﻿using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Service.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Service
+namespace GraphAlgorithms.Service.Services
 {
     public class GraphActionsService : IGraphActionsService
     {

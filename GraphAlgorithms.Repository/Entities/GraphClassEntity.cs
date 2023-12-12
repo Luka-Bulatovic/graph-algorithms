@@ -14,5 +14,5 @@ namespace GraphAlgorithms.Repository.Entities
         public ICollection<GraphEntity> Graphs { get; set; }
     }
 
-    public enum GraphClassEnum { Tree = 1, UnicyclicGraph = 2 };
+    public enum GraphClassEnum { ConnectedGraph = 1, UnicyclicBipartiteGraph = 2, Tree = 3, UnicyclicGraph = 4 };
 }

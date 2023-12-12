@@ -1,7 +1,7 @@
 ﻿using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Service.DTO;
 
-namespace GraphAlgorithms.Service
+namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IActionConverter
     {

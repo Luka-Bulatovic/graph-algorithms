@@ -6,9 +6,10 @@ using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Repository.Migrations;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Service.Interfaces;
 using System.Collections.Concurrent;
 
-namespace GraphAlgorithms.Service
+namespace GraphAlgorithms.Service.Services
 {
     public class GraphDrawingService : IGraphDrawingService
     {

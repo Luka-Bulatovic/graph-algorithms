@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GraphAlgorithms.Service
+namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IGraphLibraryService
     {
