@@ -78,4 +78,9 @@
     .btn-pagination-selected {
         @apply mx-1 px-4 py-2 border rounded text-white bg-blue-700;
     }
+
+    /* Text */
+    .text-danger {
+        @apply text-xs text-red-500;
+    }
 }

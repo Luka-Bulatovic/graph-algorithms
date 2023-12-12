@@ -43,6 +43,7 @@
         var viewDataObj = @(ViewDataObj);
         viewDataObj.form.validate(); // Initialize jQuery Validation on your form
 
+        // Ignore validation of elements with ignore-val
         var settngs = $.data(viewDataObj.form[0], 'validator').settings;
         settngs.ignore = ".ignore-val";
 
