@@ -24,7 +24,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-submit">Generate</button>
+        <button type="submit" class="btn btn-submit mt-4 hidden">Generate</button>
     </form>
 </div>
 
@@ -33,6 +33,7 @@
         viewID: "random-graphs-container",
         form: $("#random-graphs-container form"),
         container: $("#random-graphs-container"),
+        btnGenerate: $("#random-graphs-container button.btn-submit"),
         graphClassList: $("#random-graphs-container .sl-graph-class"),
         paramsContainers: $("#random-graphs-container .random-graph-params-container"),
         connectedGraphParamsContainer: $("#random-graphs-container .random-connected-graph-params-container"),

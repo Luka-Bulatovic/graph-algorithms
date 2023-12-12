@@ -11,10 +11,12 @@ namespace GraphAlgorithms.Web.Controllers
     public class RandomGraphsController : Controller
     {
         public readonly IGraphClassService graphClassService;
+        public readonly IRandomGraphsService randomGraphsService;
 
-        public RandomGraphsController(IGraphClassService graphClassService)
+        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService)
         {
             this.graphClassService = graphClassService;
+            this.randomGraphsService = randomGraphsService;
         }
 
 
@@ -28,11 +30,14 @@ namespace GraphAlgorithms.Web.Controllers
             return View(model);
         }
 
-        public IActionResult Save(RandomGraphsModel model)
+        public async Task<IActionResult> Save(RandomGraphsModel model)
         {
-            int ret = 0;
+            ActionDTO actionDTO = null;
+            if (model.GraphClassID == 1)
+                actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor/100);
+            //else if()
 
-            return Json(new { ret = ret });
+            return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });
         }
     }
 }

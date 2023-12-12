@@ -15,8 +15,8 @@ namespace GraphAlgorithms.Web.Models
 
         public RandomGraphsModel()
         {
-            RandomConnectedGraphModel = new RandomConnectedGraphModel();
-            RandomUnicyclicBipartiteGraphModel = new RandomUnicyclicBipartiteGraphModel();
+            RandomConnectedGraphModel = new RandomConnectedGraphModel("RandomConnectedGraphModel");
+            RandomUnicyclicBipartiteGraphModel = new RandomUnicyclicBipartiteGraphModel("RandomUnicyclicBipartiteGraphModel");
         }
     }
 }

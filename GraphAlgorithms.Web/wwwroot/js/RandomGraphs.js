@@ -30,6 +30,11 @@ var RandomGraphs = new function () {
         }
 
         this.toggleValidationForClass(viewDataObj, e.target.value, false);
+
+        if (e.target.value > 0)
+            viewDataObj.btnGenerate.removeClass('hidden');
+        else
+            viewDataObj.btnGenerate.addClass('hidden');
     }
 
     this.disableValidationForAllClasses = function (viewDataObj) {

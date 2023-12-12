@@ -24,5 +24,12 @@ namespace GraphAlgorithms.Web.Models
         )]
         [DisplayName("Cycle Length")]
         public int CycleLength { get; set; }
+
+        public string PropertyNamePrefix { get; set; }
+
+        public RandomUnicyclicBipartiteGraphModel(string propertyNamePrefix)
+        {
+            PropertyNamePrefix = propertyNamePrefix;
+        }
     }
 }

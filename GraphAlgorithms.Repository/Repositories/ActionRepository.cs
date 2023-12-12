@@ -29,5 +29,13 @@ namespace GraphAlgorithms.Repository.Repositories
                                         .ToListAsync();
             return (actions, totalCount);
         }
+
+        public async Task<ActionEntity> GetByIdAsync(int id)
+        {
+            var action = await _context.Actions
+                                        .Include(g => g.ActionType)
+                                        .FirstOrDefaultAsync(g => g.ID == id);
+            return action;
+        }
     }
 }

@@ -55,7 +55,10 @@ namespace GraphAlgorithms.Repository.Repositories
 
         public async Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize)
         {
-            var totalCount = await _context.Graphs.CountAsync();
+            var totalCount = await _context.Graphs
+                                            .Where(g => g.ActionID == actionID)
+                                            .CountAsync();
+
             var graphs = await _context.Graphs
                                        .Where(g => g.ActionID == actionID)
                                        .Include(g => g.Action)

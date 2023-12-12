@@ -14,5 +14,12 @@ namespace GraphAlgorithms.Web.Models
         [Required]
         [Range(1, 100)]
         public int MinEdgesFactor { get; set; }
+
+        public string PropertyNamePrefix { get; set; }
+
+        public RandomConnectedGraphModel(string propertyNamePrefix)
+        {
+            PropertyNamePrefix = propertyNamePrefix;
+        }
     }
 }
