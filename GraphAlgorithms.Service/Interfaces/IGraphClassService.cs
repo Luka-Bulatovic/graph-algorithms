@@ -10,5 +10,6 @@ namespace GraphAlgorithms.Service.Interfaces
     public interface IGraphClassService
     {
         Task<List<GraphClassDTO>> GetGraphClasses();
+        Task<List<GraphClassDTO>> GetGraphClassesForGeneratingRandomGraphs();
     }
 }

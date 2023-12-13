@@ -10,6 +10,7 @@ namespace GraphAlgorithms.Repository.Entities
     {
         public int ID { get; set; }
         public string Name { get; set; }
+        public bool CanGenerateRandomGraphs { get; set; } = false;
 
         public ICollection<GraphEntity> Graphs { get; set; }
     }

@@ -24,5 +24,14 @@ namespace GraphAlgorithms.Repository.Repositories
             
             return graphClasses;
         }
+
+        public async Task<List<GraphClassEntity>> GetGraphClassesForGeneratingRandomGraphsAsync()
+        {
+            List<GraphClassEntity> graphClasses = await _context.GraphClasses
+                                                                .Where(gc => gc.CanGenerateRandomGraphs)
+                                                                .ToListAsync();
+
+            return graphClasses;
+        }
     }
 }

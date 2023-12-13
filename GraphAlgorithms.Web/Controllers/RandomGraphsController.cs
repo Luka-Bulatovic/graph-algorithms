@@ -24,7 +24,7 @@ namespace GraphAlgorithms.Web.Controllers
         {
             RandomGraphsModel model = new();
 
-            List<GraphClassDTO> graphClasses = await graphClassService.GetGraphClasses();
+            List<GraphClassDTO> graphClasses = await graphClassService.GetGraphClassesForGeneratingRandomGraphs();
             model.GraphClassList = new SelectList(graphClasses, "ID", "Name");
 
             return View(model);

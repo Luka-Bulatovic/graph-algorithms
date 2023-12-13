@@ -28,5 +28,13 @@ namespace GraphAlgorithms.Service.Services
             return graphClassEntities.Select(graphClassEntity => graphClassConverter.GetGraphClassDTOFromGraphClassEntity(graphClassEntity))
                                      .ToList();
         }
+
+        public async Task<List<GraphClassDTO>> GetGraphClassesForGeneratingRandomGraphs()
+        {
+            List<GraphClassEntity> graphClassEntities = await graphClassRepository.GetGraphClassesForGeneratingRandomGraphsAsync();
+
+            return graphClassEntities.Select(graphClassEntity => graphClassConverter.GetGraphClassDTOFromGraphClassEntity(graphClassEntity))
+                                     .ToList();
+        }
     }
 }
