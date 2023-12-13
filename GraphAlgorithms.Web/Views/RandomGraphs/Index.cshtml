@@ -5,12 +5,14 @@
 }
 
 <div id="random-graphs-container" class="container">
+    <h1 class="text-2xl font-bold mb-8">Generate Random Graphs</h1>
+
     <form asp-action="Save" asp-controller="RandomGraphs" method="post">
         <div class="grid grid-cols-1 gap-y-4">
             <div class="col-span-full">
-                <label asp-for="GraphClassID" class="block text-sm font-medium leading-6 text-gray-900">Class</label>
+                <label asp-for="GraphClassID" class="form-label">Class</label>
                 <div class="mt-2">
-                    <select asp-for="GraphClassID" asp-items="Model.GraphClassList" class="sl-graph-class block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6">
+                    <select asp-for="GraphClassID" asp-items="Model.GraphClassList" class="sl-graph-class form-input-field">
                         <option value="0">- Please select -</option>
                     </select>
                 </div>
@@ -21,6 +23,23 @@
             </div>
             <div class="random-graph-params-container random-unicyclic-bipartite-graph-params-container hidden">
                 @Html.Partial("_RandomUnicyclicBipartiteGraph", Model.RandomUnicyclicBipartiteGraphModel)
+            </div>
+
+            <div class="number-of-graphs-container hidden">
+                <div class="col-span-full">
+                    <label asp-for="TotalNumberOfRandomGraphs" class="form-label"></label>
+                    <div class="mt-2">
+                        <input asp-for="TotalNumberOfRandomGraphs" type="number" step="1" class="form-input-field">
+                    </div>
+                    <span asp-validation-for="TotalNumberOfRandomGraphs" class="text-danger"></span>
+                </div>
+                <div class="col-span-full">
+                    <label asp-for="StoreTopNumberOfGraphs" class="form-label"></label>
+                    <div class="mt-2">
+                        <input asp-for="StoreTopNumberOfGraphs" type="number" step="1" class="form-input-field">
+                    </div>
+                    <span asp-validation-for="StoreTopNumberOfGraphs" class="text-danger"></span>
+                </div>
             </div>
         </div>
 
@@ -34,6 +53,7 @@
         form: $("#random-graphs-container form"),
         container: $("#random-graphs-container"),
         btnGenerate: $("#random-graphs-container button.btn-submit"),
+        numberOfGraphsContainer: $("#random-graphs-container .number-of-graphs-container"),
         graphClassList: $("#random-graphs-container .sl-graph-class"),
         paramsContainers: $("#random-graphs-container .random-graph-params-container"),
         connectedGraphParamsContainer: $("#random-graphs-container .random-connected-graph-params-container"),

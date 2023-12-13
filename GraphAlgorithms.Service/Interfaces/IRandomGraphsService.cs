@@ -9,6 +9,6 @@ namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IRandomGraphsService
     {
-        Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor);
+        Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs);
     }
 }

@@ -32,10 +32,8 @@ namespace GraphAlgorithms.Service.Services
             this.actionRepository = actionRepository;
         }
 
-        public async Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor)
+        public async Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
         {
-            int totalNumberOfGraphs = 10000;
-            int storeNumberOfGraphs = 6;
             RandomConnectedUndirectedGraphFactory factory = new(numberOfNodes, minEdgeFactor);
 
             List<Graph> graphs = new();
@@ -44,7 +42,7 @@ namespace GraphAlgorithms.Service.Services
 
             //      Generating graphs
             // Generate totalNumberOfGraphs Random Graphs
-            for (int i = 0; i < totalNumberOfGraphs; i++)
+            for (int i = 0; i < totalNumberOfRandomGraphs; i++)
             {
                 Graph graph = factory.CreateGraph();
 
@@ -58,7 +56,7 @@ namespace GraphAlgorithms.Service.Services
 
             // Take top storeNumberOfGraphs Graphs with largest Wiener index value
             graphs = graphs.OrderByDescending(graph => graph.GraphProperties.WienerIndex).ToList();
-            graphs = graphs.GetRange(0, storeNumberOfGraphs);
+            graphs = graphs.GetRange(0, storeTopNumberOfGraphs);
 
 
 

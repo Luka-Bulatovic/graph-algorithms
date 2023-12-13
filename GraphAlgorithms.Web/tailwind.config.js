@@ -7,6 +7,7 @@ module.exports = {
               '128': '32rem'
           },
           height: {
+              '32': '8rem',
               '128': '32rem',
               '160': '40rem',
               '192': '48rem'

@@ -34,7 +34,7 @@ namespace GraphAlgorithms.Web.Controllers
         {
             ActionDTO actionDTO = null;
             if (model.GraphClassID == 1)
-                actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor/100);
+                actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor/100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
             //else if()
 
             return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });

@@ -20,6 +20,9 @@ namespace GraphAlgorithms.Web.Models
         public RandomConnectedGraphModel(string propertyNamePrefix)
         {
             PropertyNamePrefix = propertyNamePrefix;
+
+            if (!string.IsNullOrEmpty(PropertyNamePrefix) && !PropertyNamePrefix.EndsWith('.'))
+                PropertyNamePrefix = PropertyNamePrefix + '.';
         }
     }
 }
