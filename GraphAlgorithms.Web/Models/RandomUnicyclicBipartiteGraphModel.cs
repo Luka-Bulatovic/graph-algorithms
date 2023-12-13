@@ -30,6 +30,9 @@ namespace GraphAlgorithms.Web.Models
         public RandomUnicyclicBipartiteGraphModel(string propertyNamePrefix)
         {
             PropertyNamePrefix = propertyNamePrefix;
+
+            if (!string.IsNullOrEmpty(PropertyNamePrefix) && !PropertyNamePrefix.EndsWith('.'))
+                PropertyNamePrefix = PropertyNamePrefix + '.';
         }
     }
 }

@@ -35,7 +35,8 @@ namespace GraphAlgorithms.Web.Controllers
             ActionDTO actionDTO = null;
             if (model.GraphClassID == 1)
                 actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor/100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
-            //else if()
+            else if(model.GraphClassID == 2)
+                actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.RandomUnicyclicBipartiteGraphModel.FirstPartitionSize, model.RandomUnicyclicBipartiteGraphModel.SecondPartitionSize, model.RandomUnicyclicBipartiteGraphModel.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
 
             return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });
         }

@@ -1,6 +1,7 @@
 ﻿using GraphAlgorithms.Core;
 using GraphAlgorithms.Core.Algorithms;
 using GraphAlgorithms.Core.Factories;
+using GraphAlgorithms.Core.Interfaces;
 using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
@@ -36,9 +37,19 @@ namespace GraphAlgorithms.Service.Services
         {
             RandomConnectedUndirectedGraphFactory factory = new(numberOfNodes, minEdgeFactor);
 
+            return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+        }
+
+        public async Task<ActionDTO> GenerateRandomUnicyclicBipartiteGraphs(int firstPartitionSize, int secondPartitionSize, int cycleLength, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
+        {
+            RandomUnicyclicBipartiteGraphFactory factory = new(firstPartitionSize, secondPartitionSize, cycleLength);
+
+            return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+        }
+
+        private async Task<ActionDTO> GenerateRandomGraphs(IGraphFactory factory, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
+        {
             List<Graph> graphs = new();
-
-
 
             //      Generating graphs
             // Generate totalNumberOfGraphs Random Graphs
@@ -59,8 +70,6 @@ namespace GraphAlgorithms.Service.Services
             graphs = graphs.GetRange(0, storeTopNumberOfGraphs);
 
 
-
-
             //      Persisting data
             // Create an ActionEntity and set its properties
             var actionEntity = new ActionEntity
@@ -74,7 +83,7 @@ namespace GraphAlgorithms.Service.Services
             foreach (var graph in graphs)
             {
                 GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraph(graph);
-                
+
                 // Associate the ActionEntity with the GraphEntity
                 graphEntity.Action = actionEntity;
 
