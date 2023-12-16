@@ -57,7 +57,9 @@ namespace GraphAlgorithms.Core.Factories
 
                 // Assign node to bipartition component
                 firstNode.Label = string.Format("v{0},{1}", i % 2, i / 2);
-                firstNode.BipartitionComponent = i % 2;
+                firstNode.NodeProperties.BipartitionComponent = i % 2;
+                firstNode.NodeProperties.Color = firstNode.NodeProperties.BipartitionComponent == 0 ?
+                                                        BipartiteGraphColors.FirstColor : BipartiteGraphColors.SecondColor;
             }
         }
 
@@ -86,7 +88,7 @@ namespace GraphAlgorithms.Core.Factories
                 int randomNodeIndex = rnd.Next(currNodesConnected);
                 Node randomNode = g.GetNode(randomNodeIndex);
 
-                if (randomNode.BipartitionComponent != newNode.BipartitionComponent)
+                if (randomNode.NodeProperties.BipartitionComponent != newNode.NodeProperties.BipartitionComponent)
                 {
                     g.ConnectNodes(randomNode, newNode);
 
@@ -138,8 +140,10 @@ namespace GraphAlgorithms.Core.Factories
                 currNodesCntInQ += newNodeComponent == 1 ? 1 : 0;
 
                 // Assign next node to its chosen component and assign the correct label to it
-                newNode.BipartitionComponent = newNodeComponent;
+                newNode.NodeProperties.BipartitionComponent = newNodeComponent;
                 newNode.Label = string.Format("v{0},{1}", newNodeComponent, newNodeComponent == 0 ? currNodesCntInP - 1 : currNodesCntInQ - 1);
+                newNode.NodeProperties.Color = newNode.NodeProperties.BipartitionComponent == 0 ?
+                                                        BipartiteGraphColors.FirstColor : BipartiteGraphColors.SecondColor;
 
                 // Connect new node to the rest of the graph
                 ConnectNewNodeToGraph(g, newNode, currNodesConnected);

@@ -99,9 +99,23 @@ namespace GraphAlgorithms.Service.Converters
             foreach (var nodeElement in nodeElements)
             {
                 var nodeIndex = nodeElement.Attribute("id").Value;
-                var nodeLabel = nodeElement.Element(Namespace + "data")?.Value;
+                var nodeLabelElement = nodeElement.Elements(Namespace + "data")
+                                                    .Where(e => e.Attribute("key").Value == "d0")
+                                                    .FirstOrDefault();
 
+                var nodeColorElement = nodeElement.Elements(Namespace + "data")
+                                                    .Where(e => e.Attribute("key").Value == "d1")
+                                                    .FirstOrDefault();
+
+                var nodeLabel = nodeLabelElement.Value;
+                
                 Node node = new Node(int.Parse(nodeIndex), nodeLabel);
+
+                if (nodeColorElement != null)
+                {
+                    var nodeColor = nodeColorElement.Value;
+                    node.NodeProperties.Color = nodeColor;
+                }
 
                 graph.Nodes.Add(node);
             }
@@ -177,6 +191,7 @@ namespace GraphAlgorithms.Service.Converters
             {
                 var nodeElement = new XElement(Namespace + "node", new XAttribute("id", node.Index));
                 nodeElement.Add(new XElement(Namespace + "data", new XAttribute("key", "d0"), node.Label));
+                nodeElement.Add(new XElement(Namespace + "data", new XAttribute("key", "d1"), node.NodeProperties.Color));
                 graphElement.Add(nodeElement);
             }
 

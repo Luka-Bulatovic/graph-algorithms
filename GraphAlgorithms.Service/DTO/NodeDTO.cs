@@ -21,7 +21,7 @@ namespace GraphAlgorithms.Service.DTO
             label = v.Label;
 
             color = new Dictionary<string, string>();
-            color["background"] = v.BipartitionComponent == 0 ? "#66ccff" : "#ff6666";
+            color["background"] = v.NodeProperties.Color;
         }
     }
 }

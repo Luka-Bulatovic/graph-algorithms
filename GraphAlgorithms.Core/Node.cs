@@ -10,13 +10,15 @@ namespace GraphAlgorithms.Core
     {
         public int Index { get; set; }
         public string Label { get; set; }
-        public int BipartitionComponent { get; set; }
+        public NodeProperties NodeProperties { get; set; }
 
-        public Node(int index, string label, int bipartitionComponent = 0)
+        public Node(int index, string label)
         {
             Index = index;
             Label = label;
-            BipartitionComponent = bipartitionComponent;
+            NodeProperties = new();
+
+            NodeProperties.BipartitionComponent = 0;
         }
 
         public override string ToString()
