@@ -1,4 +1,5 @@
 ﻿(function ($) {
+    // lessthanorequaltoproperty
     $.validator.addMethod('lessthanorequaltoproperty', function (value, element, params) {
         var isValid = true;
 
@@ -21,5 +22,26 @@
             otherpropertynames: options.params.otherpropertynames
         };
         options.messages['lessthanorequaltoproperty'] = options.message;
+    });
+
+
+
+    // evenvalue
+    $.validator.addMethod('evenvalue', function (value, element, params) {
+        var isValid = true;
+
+        if (!this.optional(element)) {
+            var toValidateValue = parseInt(value);
+
+            if (toValidateValue % 2 > 0)
+                isValid = false;
+        }
+
+        return isValid;
+    }, '');
+
+    $.validator.unobtrusive.adapters.add('evenvalue', [], function (options) {
+        options.rules['evenvalue'] = {};
+        options.messages['evenvalue'] = options.message;
     });
 }(jQuery));

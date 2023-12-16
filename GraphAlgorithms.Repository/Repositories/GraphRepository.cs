@@ -18,6 +18,7 @@ namespace GraphAlgorithms.Repository.Repositories
             List<GraphEntity> graphs = await _context.Graphs
                                                     .Include(g => g.Action)
                                                     .ThenInclude(a => a.ActionType)
+                                                    .OrderByDescending(g => g.ID)
                                                     .ToListAsync();
             return graphs;
         }
@@ -28,6 +29,7 @@ namespace GraphAlgorithms.Repository.Repositories
             var graphs = await _context.Graphs
                                        .Include(g => g.Action)
                                        .ThenInclude(a => a.ActionType)
+                                       .OrderByDescending(g => g.ID)
                                        .Skip((pageNumber - 1) * pageSize)
                                        .Take(pageSize)
                                        .ToListAsync();

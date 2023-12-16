@@ -22,6 +22,7 @@ namespace GraphAlgorithms.Web.Models
             new string[] { "FirstPartitionSize", "SecondPartitionSize" },
             "Value must be less than or equal to Partition 1 and 2 Sizes."
         )]
+        [EvenValue("Value must be even.")]
         [DisplayName("Cycle Length")]
         public int CycleLength { get; set; }
 
