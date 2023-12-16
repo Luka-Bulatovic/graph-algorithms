@@ -17,7 +17,8 @@ var GraphCanvas = new function () {
         */
 
         // Save Button click
-        viewDataObj.btnSave.on('click', function (e) { GraphCanvas.onBtnSaveClick(viewDataObj); });
+        viewDataObj.btnSave.on('click', function (e) { GraphCanvas.onBtnSaveClick(viewDataObj, false); });
+        viewDataObj.btnSaveAsNew.on('click', function (e) { GraphCanvas.onBtnSaveClick(viewDataObj, true); });
 
         // Full Screen click
         viewDataObj.btnFullScreen.on('click', function (e) { GraphCanvas.onFullScreenBtnClick(viewDataObj); });
@@ -135,7 +136,7 @@ var GraphCanvas = new function () {
         callback(edgeData);
     }
 
-    this.onBtnSaveClick = function (viewDataObj) {
+    this.onBtnSaveClick = function (viewDataObj, saveAsNew = false) {
         var nodes = viewDataObj.nodes.get();
         var edges = viewDataObj.edges.get();
 
@@ -143,7 +144,7 @@ var GraphCanvas = new function () {
 
         $.post("/GraphDrawing/Store", {
             graph: {
-                id: viewDataObj.graphID,
+                id: saveAsNew ? 0 : viewDataObj.graphID,
                 nodes: nodes,
                 edges: edges
             }
