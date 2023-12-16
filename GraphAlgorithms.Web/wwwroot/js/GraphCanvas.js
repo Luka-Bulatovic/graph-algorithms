@@ -172,7 +172,8 @@ var GraphCanvas = new function () {
             viewDataObj.network.fit();
         }
         else {
-            let container = viewDataObj.graphAndStatusBarContainer.get(0);
+            //let container = viewDataObj.graphAndStatusBarContainer.get(0);
+            let container = viewDataObj.graphContainer.get(0);
 
             if (container.requestFullscreen) {
                 container.requestFullscreen();
