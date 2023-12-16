@@ -75,6 +75,7 @@ namespace GraphAlgorithms.Service.Services
             var actionEntity = new ActionEntity
             {
                 ActionTypeID = (int)ActionTypeEnum.GenerateRandom,
+                ForGraphClassID = (int)factory.GetGraphClass(),
                 CreatedByID = 0, // Set the creator's ID,
                 CreatedDate = DateTime.UtcNow
             };

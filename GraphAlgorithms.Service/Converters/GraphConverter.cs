@@ -153,6 +153,8 @@ namespace GraphAlgorithms.Service.Converters
 
             // Add additional data to GraphDTO that are stored to DB and not contained in Graph object
             graphDTO.actionTypeName = graphEntity.Action.ActionType.Name;
+            graphDTO.actionForGraphClassName = graphEntity.Action.ForGraphClass != null 
+                                            ? graphEntity.Action.ForGraphClass.Name : "";
             graphDTO.createdDate = graphEntity.CreatedDate;
 
             return graphDTO;

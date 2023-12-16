@@ -17,7 +17,9 @@ namespace GraphAlgorithms.Repository.Repositories
         {
             List<GraphEntity> graphs = await _context.Graphs
                                                     .Include(g => g.Action)
-                                                    .ThenInclude(a => a.ActionType)
+                                                        .ThenInclude(a => a.ActionType)
+                                                    .Include(g => g.Action)
+                                                        .ThenInclude(a => a.ForGraphClass)
                                                     .OrderByDescending(g => g.ID)
                                                     .ToListAsync();
             return graphs;
@@ -27,21 +29,25 @@ namespace GraphAlgorithms.Repository.Repositories
         {
             var totalCount = await _context.Graphs.CountAsync();
             var graphs = await _context.Graphs
-                                       .Include(g => g.Action)
-                                       .ThenInclude(a => a.ActionType)
-                                       .OrderByDescending(g => g.ID)
-                                       .Skip((pageNumber - 1) * pageSize)
-                                       .Take(pageSize)
-                                       .ToListAsync();
+                                        .Include(g => g.Action)
+                                            .ThenInclude(a => a.ActionType)
+                                        .Include(g => g.Action)
+                                            .ThenInclude(a => a.ForGraphClass)
+                                        .OrderByDescending(g => g.ID)
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
             return (graphs, totalCount);
         }
 
         public async Task<GraphEntity> GetByIdAsync(int id)
         {
             GraphEntity graph = await _context.Graphs
-                                              .Include(g => g.Action)
-                                              .ThenInclude(a => a.ActionType)
-                                              .FirstOrDefaultAsync(g => g.ID == id);
+                                                .Include(g => g.Action)
+                                                    .ThenInclude(a => a.ActionType)
+                                                .Include(g => g.Action)
+                                                    .ThenInclude(a => a.ForGraphClass)
+                                                .FirstOrDefaultAsync(g => g.ID == id);
             return graph;
         }
 
@@ -62,12 +68,14 @@ namespace GraphAlgorithms.Repository.Repositories
                                             .CountAsync();
 
             var graphs = await _context.Graphs
-                                       .Where(g => g.ActionID == actionID)
-                                       .Include(g => g.Action)
-                                       .ThenInclude(a => a.ActionType)
-                                       .Skip((pageNumber - 1) * pageSize)
-                                       .Take(pageSize)
-                                       .ToListAsync();
+                                        .Where(g => g.ActionID == actionID)
+                                        .Include(g => g.Action)
+                                            .ThenInclude(a => a.ActionType)
+                                        .Include(g => g.Action)
+                                            .ThenInclude(a => a.ForGraphClass)
+                                        .Skip((pageNumber - 1) * pageSize)
+                                        .Take(pageSize)
+                                        .ToListAsync();
             return (graphs, totalCount);
         }
     }

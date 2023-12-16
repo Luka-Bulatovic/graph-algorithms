@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Web.Controllers
 {
@@ -33,10 +34,18 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task<IActionResult> Save(RandomGraphsModel model)
         {
             ActionDTO actionDTO = null;
-            if (model.GraphClassID == 1)
-                actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor/100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
-            else if(model.GraphClassID == 2)
-                actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.RandomUnicyclicBipartiteGraphModel.FirstPartitionSize, model.RandomUnicyclicBipartiteGraphModel.SecondPartitionSize, model.RandomUnicyclicBipartiteGraphModel.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+
+            switch(model.GraphClassID)
+            {
+                case (int)GraphClassEnum.ConnectedGraph:
+                    actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor / 100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                    break;
+                case (int)GraphClassEnum.UnicyclicBipartiteGraph:
+                    actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.RandomUnicyclicBipartiteGraphModel.FirstPartitionSize, model.RandomUnicyclicBipartiteGraphModel.SecondPartitionSize, model.RandomUnicyclicBipartiteGraphModel.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                    break;
+                default:
+                    break;
+            }
 
             return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });
         }

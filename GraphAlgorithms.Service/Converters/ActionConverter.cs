@@ -17,6 +17,8 @@ namespace GraphAlgorithms.Service.Converters
             {
                 ID = actionEntity.ID,
                 ActionTypeName = actionEntity.ActionType.Name,
+                ForGraphClassName = actionEntity.ForGraphClass != null 
+                                        ? actionEntity.ForGraphClass.Name : "",
                 CreatedByUserName = "System", // TODO
                 CreatedDate = actionEntity.CreatedDate
             };

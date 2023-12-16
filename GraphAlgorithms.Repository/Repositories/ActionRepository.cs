@@ -23,6 +23,7 @@ namespace GraphAlgorithms.Repository.Repositories
             var totalCount = await _context.Actions.CountAsync();
             var actions = await _context.Actions
                                         .Include(g => g.ActionType)
+                                        .Include(g => g.ForGraphClass)
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
                                         .OrderByDescending(a => a.ID)
@@ -34,6 +35,7 @@ namespace GraphAlgorithms.Repository.Repositories
         {
             var action = await _context.Actions
                                         .Include(g => g.ActionType)
+                                        .Include(g => g.ForGraphClass)
                                         .FirstOrDefaultAsync(g => g.ID == id);
             return action;
         }

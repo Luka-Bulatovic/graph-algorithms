@@ -1081,28 +1081,16 @@ select {
   margin-bottom: 2rem;
 }
 
+.ml-64 {
+  margin-left: 16rem;
+}
+
 .mt-2 {
   margin-top: 0.5rem;
 }
 
 .mt-4 {
   margin-top: 1rem;
-}
-
-.ml-16 {
-  margin-left: 4rem;
-}
-
-.ml-24 {
-  margin-left: 6rem;
-}
-
-.ml-48 {
-  margin-left: 12rem;
-}
-
-.ml-64 {
-  margin-left: 16rem;
 }
 
 .block {
@@ -1161,32 +1149,16 @@ select {
   width: 33.333333%;
 }
 
-.w-1\/5 {
-  width: 20%;
-}
-
-.w-4\/5 {
-  width: 80%;
+.w-64 {
+  width: 16rem;
 }
 
 .w-full {
   width: 100%;
 }
 
-.w-16 {
-  width: 4rem;
-}
-
-.w-24 {
-  width: 6rem;
-}
-
-.w-48 {
-  width: 12rem;
-}
-
-.w-64 {
-  width: 16rem;
+.w-2\/3 {
+  width: 66.666667%;
 }
 
 .flex-grow {
@@ -1233,14 +1205,6 @@ select {
   --tw-space-y-reverse: 0;
   margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
   margin-bottom: calc(0.5rem * var(--tw-space-y-reverse));
-}
-
-.overflow-auto {
-  overflow: auto;
-}
-
-.overflow-scroll {
-  overflow: scroll;
 }
 
 .truncate {

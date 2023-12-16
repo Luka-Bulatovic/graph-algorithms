@@ -10,6 +10,7 @@ namespace GraphAlgorithms.Service.DTO
     {
         public int ID { get; set; }
         public string ActionTypeName { get; set; }
+        public string ForGraphClassName { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedByUserName { get; set; }
     }

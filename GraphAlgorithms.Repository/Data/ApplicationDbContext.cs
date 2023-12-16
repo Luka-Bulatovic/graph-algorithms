@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using System.Text;
+using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Repository.Data
 {

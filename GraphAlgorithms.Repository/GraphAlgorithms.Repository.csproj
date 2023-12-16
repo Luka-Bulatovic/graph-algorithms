@@ -16,4 +16,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GraphAlgorithms.Shared\GraphAlgorithms.Shared.csproj" />
+  </ItemGroup>
+
 </Project>

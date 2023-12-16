@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Core.Factories
 {
@@ -149,6 +150,11 @@ namespace GraphAlgorithms.Core.Factories
             Console.WriteLine("Cycle Length = " + cycleLength);
 
             return g;
+        }
+
+        public GraphClassEnum GetGraphClass()
+        {
+            return GraphClassEnum.UnicyclicBipartiteGraph;
         }
     }
 }

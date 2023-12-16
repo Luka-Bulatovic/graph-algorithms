@@ -14,10 +14,14 @@ namespace GraphAlgorithms.Repository.Entities
         [ForeignKey("ActionType")]
         public int ActionTypeID { get; set; }
 
+        [ForeignKey("ForGraphClass")]
+        public int? ForGraphClassID { get; set; }
+
         public int CreatedByID { get; set; }
         public DateTime CreatedDate { get; set; }
 
         public ActionTypeEntity ActionType { get; set; }
+        public GraphClassEntity? ForGraphClass { get; set; }
         public ICollection<GraphEntity> Graphs { get; set; }
     }
 }
