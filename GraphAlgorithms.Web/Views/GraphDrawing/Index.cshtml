@@ -1,5 +1,14 @@
 ﻿@model GraphDrawingModel
 
-<div class="container w-full h-192">
-    @Html.Partial("_GraphCanvas", Model.GraphCanvasModel)
+<div class="container w-full h-192 flex flex-row">
+    <div class="@(Model.IsEditing ? "w-1/2" : "w-full")">
+        @Html.Partial("_GraphCanvas", Model.CreateGraphCanvasModel)
+    </div>
+
+    @if (Model.IsEditing)
+    {
+        <div class="w-1/2">
+            @Html.Partial("_GraphCanvas", Model.EditGraphCanvasModel)
+        </div>
+    }
 </div>

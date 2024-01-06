@@ -3,12 +3,10 @@
 @{
     string ViewID = string.Format("GraphCanvasView_{0}", Guid.NewGuid().ToString().Replace("-", ""));
     string ViewDataObj = string.Format("{0}_ViewData", ViewID);
-
-    bool showHeader = true;
 }
 
 <div id="@ViewID" class="graph-canvas-container">
-    <div class="canvas-header @(showHeader ? "flex" : "hidden")">
+    <div class="canvas-header @(Model.ShowHeader ? "flex" : "hidden")">
         <div class="flex flex-row w-full">
             <div class="w-full"><b>Action:</b> @Model.Graph.actionTypeName @(Model.Graph.actionForGraphClassName != "" ? string.Format("({0})", Model.Graph.actionForGraphClassName) : "")</div>
         </div>
@@ -43,6 +41,9 @@
                 <a class="btn-edit @(Model.ShowEditButton ? "" : "hidden")" href="@Url.Action("Edit", "GraphDrawing", new { id = Model.ID })">
                     <i class="fas fa-pencil-alt"></i> Edit
                 </a>
+                <button type="button" class="btn-calculate @(Model.ShowCalculateButton ? "" : "hidden")">
+                    <i class="fas fa-solid fa-calculator"></i> Calculate
+                </button>
                 <button type="button" class="btn-save @(Model.ShowSaveButton ? "" : "hidden")">
                     <i class="fas fa-save"></i> Save
                 </button>
@@ -71,6 +72,7 @@
         btnSave: $("#@ViewID .status-bar .btn-save"),
         btnSaveAsNew: $("#@ViewID .status-bar .btn-save-as-new"),
         btnFullScreen: $("#@ViewID .status-bar .btn-fullscreen"),
+        btnCalculate: $("#@ViewID .status-bar .btn-calculate"),
         network: null,
         nodes: @Html.Raw(Model.NodesJSON),
         edges: @Html.Raw(Model.EdgesJSON),

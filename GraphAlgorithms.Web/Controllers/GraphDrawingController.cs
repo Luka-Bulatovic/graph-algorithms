@@ -18,18 +18,16 @@ namespace GraphAlgorithms.Web.Controllers
         {
             GraphDTO graph = new();
 
-            GraphDrawingModel model = new GraphDrawingModel(graph, showSaveButton: true);
+            GraphDrawingModel model = new GraphDrawingModel(graph);
 
             return View(model);
         }
 
         public async Task<ViewResult> Edit(int id)
         {
-            bool showSaveButton = true; // we should handle this depending on the logic whether graph is editable
-
             GraphDTO graph = await graphDrawingService.GetGraphDTOByIDAsync(id);
 
-            GraphDrawingModel model = new GraphDrawingModel(graph, showSaveAsNewButton: true, showSaveButton: showSaveButton);
+            GraphDrawingModel model = new GraphDrawingModel(graph);
 
             return View("Index", model);
         }
@@ -37,6 +35,13 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task Store(GraphDTO graph)
         {
             await graphDrawingService.StoreGraph(graph);
+        }
+
+        public int CalculateWienerIndex(GraphDTO graph)
+        {
+            int result = graphDrawingService.CalculateWienerIndex(graph);
+
+            return result;
         }
     }
 }

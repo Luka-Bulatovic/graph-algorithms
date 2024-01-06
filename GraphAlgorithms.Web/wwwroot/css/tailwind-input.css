@@ -80,6 +80,10 @@
         @apply mx-1 px-4 py-2 border rounded text-white bg-blue-500;
     }
 
+    .btn-calculate {
+        @apply bg-blue-500 hover:bg-blue-700 text-white font-normal py-1 px-2 rounded;
+    }
+
     .btn-pagination-selected {
         @apply mx-1 px-4 py-2 border rounded text-white bg-blue-700;
     }

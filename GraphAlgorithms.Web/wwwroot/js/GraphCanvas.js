@@ -23,6 +23,9 @@ var GraphCanvas = new function () {
         // Full Screen click
         viewDataObj.btnFullScreen.on('click', function (e) { GraphCanvas.onFullScreenBtnClick(viewDataObj); });
 
+        // Calculate click
+        viewDataObj.btnCalculate.on('click', function (e) { GraphCanvas.onCalculateBtnClick(viewDataObj); })
+
         // Initial network
         GraphCanvas.createInitialNetwork(viewDataObj);
     }
@@ -188,6 +191,25 @@ var GraphCanvas = new function () {
 
             viewDataObj.network.fit();
         }
+    }
+
+    this.onCalculateBtnClick = function (viewDataObj) {
+        var nodes = viewDataObj.nodes.get();
+        var edges = viewDataObj.edges.get();
+
+        GraphCanvas.reassignNodeIDs(viewDataObj);
+
+        GraphCanvas.setStatus(viewDataObj, `Calculating Wiener Index...`);
+
+        $.post("/GraphDrawing/CalculateWienerIndex", {
+            graph: {
+                id: 0,
+                nodes: nodes,
+                edges: edges
+            }
+        }).done(function (result) {
+            GraphCanvas.setStatus(viewDataObj, `Wiener Index value = ${result}`);
+        });
     }
 
     this.setStatus = function (viewDataObj, status) {

@@ -12,6 +12,8 @@ namespace GraphAlgorithms.Web.Models
         public bool ShowEditButton { get; set; }
         public bool ShowSaveButton { get; set; }
         public bool ShowSaveAsNewButton { get; set; }
+        public bool ShowCalculateButton { get; set; }
+        public bool ShowHeader { get; set; }
 
         private GraphDTO graph;
         public GraphDTO Graph => graph;
@@ -37,14 +39,19 @@ namespace GraphAlgorithms.Web.Models
         #endregion
 
         #region Constructors
-        public GraphCanvasModel(GraphDTO graph, bool isEditable = false, bool showEditButton = false, bool showSaveButton = false, bool showSaveAsNewButton = false)
+        public GraphCanvasModel(GraphDTO graph, bool isEditable = false, bool showEditButton = false, bool showSaveButton = false, bool showSaveAsNewButton = false, bool showCalculateButton = false, bool showHeader = true)
         {
             ID = graph.id;
             this.graph = graph;
+            
             IsEditable = isEditable;
+            
             ShowEditButton = showEditButton;
             ShowSaveButton = showSaveButton;
             ShowSaveAsNewButton = showSaveAsNewButton;
+            ShowCalculateButton = showCalculateButton;
+            
+            ShowHeader = showHeader;
         }
         #endregion
     }

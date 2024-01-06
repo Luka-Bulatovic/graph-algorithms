@@ -9,8 +9,8 @@ namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IGraphDrawingService
     {
-        public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO);
         public Task<GraphDTO> GetGraphDTOByIDAsync(int id);
         public Task StoreGraph(GraphDTO graphDTO);
+        public int CalculateWienerIndex(GraphDTO graphDTO);
     }
 }

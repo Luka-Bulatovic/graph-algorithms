@@ -22,13 +22,6 @@ namespace GraphAlgorithms.Service.Services
             this.graphConverter = graphConverter;
         }
 
-        public int GetWienerIndexValueForGraphFromDTO(GraphDTO graphDTO)
-        {
-            Graph graph = graphConverter.GetGraphFromGraphDTO(graphDTO);
-
-            return graph.GraphProperties.WienerIndex;
-        }
-
         public async Task<GraphDTO> GetGraphDTOByIDAsync(int id)
         {
             GraphEntity graphEntity = await graphRepository.GetByIdAsync(id);
@@ -60,6 +53,13 @@ namespace GraphAlgorithms.Service.Services
 
             // Save GraphEntity (along with the associated ActionEntity)
             await graphRepository.SaveAsync(graphEntity);
+        }
+
+        public int CalculateWienerIndex(GraphDTO graphDTO)
+        {
+            Graph graph = graphConverter.GetGraphFromGraphDTO(graphDTO);
+
+            return graph.GraphProperties.WienerIndex;
         }
     }
 }
