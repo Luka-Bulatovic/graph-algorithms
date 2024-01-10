@@ -8,19 +8,25 @@ namespace GraphAlgorithms.Web.Models
         public int ID { get; set; }
         public GraphCanvasModel CreateGraphCanvasModel { get; set; }
         public GraphCanvasModel EditGraphCanvasModel { get; set; }
-        public bool IsEditing => ID > 0;
+        public bool IsViewOnly { get; set; }
+        public bool IsEditing => ID > 0 && !IsViewOnly;
 
         // We probably don't need these params anymore
-        public GraphDrawingModel(GraphDTO graph /*, bool showSaveButton = false, bool showSaveAsNewButton = false*/)
+        public GraphDrawingModel(GraphDTO graph, bool isViewOnly = false)
         {
             ID = graph.id;
+            IsViewOnly = isViewOnly;
 
             InitializeCanvasModels(graph);
         }
 
         private void InitializeCanvasModels(GraphDTO graph)
         {
-            if (this.IsEditing)
+            if(this.IsViewOnly)
+            {
+                CreateGraphCanvasModel = new GraphCanvasModel(graph, isEditable: false);
+            }
+            else if (this.IsEditing)
             {
                 CreateGraphCanvasModel = new GraphCanvasModel(graph, isEditable: false);
                 EditGraphCanvasModel = new GraphCanvasModel(graph, isEditable: true, showSaveButton: true, showSaveAsNewButton: true, showCalculateButton: true, showHeader: false);

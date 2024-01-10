@@ -140,10 +140,10 @@ var GraphCanvas = new function () {
     }
 
     this.onBtnSaveClick = function (viewDataObj, saveAsNew = false) {
+        GraphCanvas.reassignNodeIDs(viewDataObj);
+
         var nodes = viewDataObj.nodes.get();
         var edges = viewDataObj.edges.get();
-
-        GraphCanvas.reassignNodeIDs(viewDataObj);
 
         $.post("/GraphDrawing/Store", {
             graph: {
@@ -152,7 +152,8 @@ var GraphCanvas = new function () {
                 edges: edges
             }
         }).done(function (data) {
-            alert("Saved");
+            if(data.redirectUrl != null && data.redirectUrl != "")
+                window.location.href = data.redirectUrl;
         });
     }
 

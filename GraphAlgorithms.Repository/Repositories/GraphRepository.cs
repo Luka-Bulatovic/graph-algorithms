@@ -51,7 +51,7 @@ namespace GraphAlgorithms.Repository.Repositories
             return graph;
         }
 
-        public async Task SaveAsync(GraphEntity graph)
+        public async Task<GraphEntity> SaveAsync(GraphEntity graph)
         {
             if(graph.ID == 0)
                 await _context.Graphs.AddAsync(graph);
@@ -59,6 +59,8 @@ namespace GraphAlgorithms.Repository.Repositories
                 _context.Graphs.Update(graph);
             
             await _context.SaveChangesAsync();
+
+            return await GetByIdAsync(graph.ID);
         }
 
         public async Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize)

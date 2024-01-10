@@ -31,7 +31,7 @@ namespace GraphAlgorithms.Service.Services
             return graphDTO;
         }
 
-        public async Task StoreGraph(GraphDTO graphDTO/*, int ActionTypeID = 1*/)
+        public async Task<GraphDTO> StoreGraph(GraphDTO graphDTO/*, int ActionTypeID = 1*/)
         {
             GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
 
@@ -52,7 +52,9 @@ namespace GraphAlgorithms.Service.Services
             // That stuff, such as ActionTypeID etc, should be added to graphEntity before persisting it
 
             // Save GraphEntity (along with the associated ActionEntity)
-            await graphRepository.SaveAsync(graphEntity);
+            var storedGraphEntity = await graphRepository.SaveAsync(graphEntity);
+
+            return graphConverter.GetGraphDTOFromGraphEntity(storedGraphEntity);
         }
 
         public int CalculateWienerIndex(GraphDTO graphDTO)

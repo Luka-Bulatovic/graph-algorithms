@@ -32,9 +32,22 @@ namespace GraphAlgorithms.Web.Controllers
             return View("Index", model);
         }
 
-        public async Task Store(GraphDTO graph)
+        public async Task<ViewResult> View(int id)
         {
-            await graphDrawingService.StoreGraph(graph);
+            GraphDTO graph = await graphDrawingService.GetGraphDTOByIDAsync(id);
+
+            GraphDrawingModel model = new GraphDrawingModel(graph, isViewOnly: true);
+
+            return View("Index", model);
+        }
+
+        public async Task<IActionResult> Store(GraphDTO graph)
+        {
+            var storedGraph = await graphDrawingService.StoreGraph(graph);
+
+            string redirectUrl = Url.Action("View", "GraphDrawing", new { id = storedGraph.id });
+
+            return Json(new { redirectUrl = redirectUrl });
         }
 
         public int CalculateWienerIndex(GraphDTO graph)
