@@ -2,6 +2,7 @@
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
+using GraphAlgorithms.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,9 +30,9 @@ namespace GraphAlgorithms.Service.Services
                                 .ToList();
         }
 
-        public async Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize)
+        public async Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize, List<SearchParameter> searchParams = null)
         {
-            (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsPaginatedAsync(pageNumber, pageSize);
+            (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsPaginatedAsync(pageNumber, pageSize, searchParams);
 
             List<GraphDTO> graphDTOs = graphEntities
                                         .Select(graphEntity => graphConverter.GetGraphDTOFromGraphEntity(graphEntity))

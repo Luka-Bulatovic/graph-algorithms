@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace GraphAlgorithms.Service.Interfaces
     public interface IGraphLibraryService
     {
         public Task<List<GraphDTO>> GetGraphs();
-        public Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize);
+        public Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize, List<SearchParameter> searchParams);
         public Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize);
     }
 }

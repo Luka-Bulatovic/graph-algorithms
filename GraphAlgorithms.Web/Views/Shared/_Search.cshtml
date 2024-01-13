@@ -1,0 +1,86 @@
+﻿@model GraphLibrarySearchModel
+
+@{
+    string ViewID = string.Format("SearchView_{0}", Guid.NewGuid().ToString().Replace("-", ""));
+    string ViewDataObj = string.Format("{0}_ViewData", ViewID);
+}
+
+<div id="@ViewID" class="w-full flex flex-row mb-4">
+    <div class="w-1/2 flex flex-col">
+        <h1 class="text-lg">SEARCH MODEL</h1>
+
+        <div class="flex flex-row mt-4">
+            <select asp-for="SearchByID" asp-items="Model.SearchBy" class="sl-searchby mr-2 form-input-field">
+                <option value="-1">- Please select -</option>
+            </select>
+
+            <span class="field-text-container hidden">
+                <input asp-for="TextValue" type="text" placeholder="Enter value" class="field-text form-input-field">
+            </span>
+            <span class="field-number-container hidden">
+                <input asp-for="NumberValue" type="number" placeholder="Enter value" step="1" min="0" class="field-number form-input-field">
+            </span>
+            <span class="field-number-range-container flex flex-row hidden">
+                <input asp-for="NumberRangeFromValue" type="number" placeholder="From" step="1" min="0" class="mr-2 field-number-range-from form-input-field">
+                <span>-</span>
+                <input asp-for="NumberRangeToValue" type="number" placeholder="To" step="1" min="0" class="ml-2 field-number-range-to form-input-field">
+            </span>
+            <span class="field-date-range-container flex flex-row hidden">
+                <input asp-for="DateRangeFromValue" type="date" class="mr-2 field-date-range-from form-input-field">
+                <span>-</span>
+                <input asp-for="DateRangeToValue" type="date" class="ml-2 field-date-range-to form-input-field">
+            </span>
+        </div>
+
+        <div class="flex flex-row mt-4 mb-8">
+            <button type="button" class="btn-save btn-search mr-2">
+                <i class="fas fa-save"></i> Search
+            </button>
+            <button type="button" class="btn-save btn-add-param">
+                <i class="fas fa-save"></i> Add Param
+            </button>
+        </div>
+    </div>
+    
+    <div class="w-1/2 flex flex-col border border-gray-300 p-2">
+        <h1 class="text-md font-semibold">Selected Parameters:</h1>
+        <div class="selected-parameters-container grid grid-cols-3 gap-2">
+
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var @(ViewDataObj) = {
+        viewID: "@ViewID",
+        searchFieldsJSON: '@Html.Raw(Model.SearchFieldsJSON)',
+        searchFields: JSON.parse('@Html.Raw(Model.SearchFieldsJSON)'),
+        slSearchBy: $("#@ViewID .sl-searchby"),
+
+        fldText: $("#@ViewID .field-text"),
+        fldTextContainer: $("#@ViewID .field-text-container"),
+
+        fldNumber: $("#@ViewID .field-number"),
+        fldNumberContainer: $("#@ViewID .field-number-container"),
+
+        fldNumberRangeFrom: $("#@ViewID .field-number-range-from"),
+        fldNumberRangeTo: $("#@ViewID .field-number-range-to"),
+        fldNumberRangeContainer: $("#@ViewID .field-number-range-container"),
+
+        fldDateRangeFrom: $("#@ViewID .field-date-range-from"),
+        fldDateRangeTo: $("#@ViewID .field-date-range-to"),
+        fldDateRangeContainer: $("#@ViewID .field-date-range-container"),
+
+        btnSearch: $("#@ViewID .btn-search"),
+        btnAddParam: $("#@ViewID .btn-add-param"),
+
+        currSearchParams: [],
+        selectedParamsContainer: $("#@ViewID .selected-parameters-container"),
+    };
+
+    $(document).ready(() => {
+        var viewDataObj = @(ViewDataObj);
+
+        Search.Initialize(viewDataObj);
+    });
+</script>
