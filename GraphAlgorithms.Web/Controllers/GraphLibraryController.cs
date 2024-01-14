@@ -25,6 +25,7 @@ namespace GraphAlgorithms.Web.Controllers
 
             model.Graphs = graphs;
             model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
+            model.SearchModel.SetSelectedSearchParams(searchParams);
 
             return View(model);
         }

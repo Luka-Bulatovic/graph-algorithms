@@ -55,6 +55,8 @@
         viewID: "@ViewID",
         searchFieldsJSON: '@Html.Raw(Model.SearchFieldsJSON)',
         searchFields: JSON.parse('@Html.Raw(Model.SearchFieldsJSON)'),
+        selectedSearchParamsJSON: '@Html.Raw(Model.SelectedSearchParamsJSON)',
+        selectedSearchParams: JSON.parse('@Html.Raw(Model.SelectedSearchParamsJSON)'),
         slSearchBy: $("#@ViewID .sl-searchby"),
 
         fldText: $("#@ViewID .field-text"),

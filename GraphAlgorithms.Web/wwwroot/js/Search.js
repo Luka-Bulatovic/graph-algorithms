@@ -23,6 +23,8 @@
         viewDataObj.slSearchBy.on('change', (e) => {
             Search.onSearchByChanged(viewDataObj);
         });
+
+        Search.initializeSelectedSearchParams(viewDataObj);
     }
 
     this.onSearch = function (viewDataObj) {
@@ -160,4 +162,24 @@
             viewDataObj.selectedParamsContainer.append(currElement);
         });
     }
+
+    this.initializeSelectedSearchParams = function (viewDataObj) {
+        if (viewDataObj.selectedSearchParams.length == 0)
+            return;
+
+        viewDataObj.selectedSearchParams.forEach(p => {
+            var currParam = {
+                id: p.Key,
+                displayName: p.Key, // TODO
+                paramType: p.FieldType,
+                allowMultipleValues: false, // TODO
+                values: p.Values
+            };
+
+            viewDataObj.currSearchParams.push(currParam);
+        });
+
+        Search.redrawSelectedParameters(viewDataObj);
+    }
+
 };
