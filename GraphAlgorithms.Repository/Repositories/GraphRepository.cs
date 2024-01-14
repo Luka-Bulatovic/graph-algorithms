@@ -56,11 +56,25 @@ namespace GraphAlgorithms.Repository.Repositories
                 
                 switch(searchParam.Key)
                 {
+                    case "id":
+                        if (searchParam.FieldType != SearchFieldType.Number)
+                            continue;
+
+                        var integerValuesList = searchParam.Values.Select(v => int.Parse(v)).ToList();
+                        
+                        query = query.Where(g => integerValuesList.Any(v => v == g.ID));
+                        break;
                     case "order":
                         if (searchParam.FieldType != SearchFieldType.NumberRange)
                             continue;
 
                         query = query.Where(g => g.Order >= int.Parse(searchParam.Values[0]) && g.Order <= int.Parse(searchParam.Values[1]));
+                        break;
+                    case "size":
+                        if (searchParam.FieldType != SearchFieldType.NumberRange)
+                            continue;
+
+                        query = query.Where(g => g.Size >= int.Parse(searchParam.Values[0]) && g.Size <= int.Parse(searchParam.Values[1]));
                         break;
                     default:
                         break;

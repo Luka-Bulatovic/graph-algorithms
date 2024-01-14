@@ -54,6 +54,7 @@
             id: paramID,
             displayName: searchField.DisplayValue,
             paramType: searchField.FieldType,
+            allowMultipleValues: searchField.AllowMultipleValues,
             values: []
         };
 
@@ -76,12 +77,27 @@
                 break;
         }
 
+        if (newParam.values.filter(e => e == null || e == '').length > 0) {
+            alert("Please enter values");
+            return;
+        }
+
         var existingParamIndex = viewDataObj.currSearchParams.findIndex(p => p.id == newParam.id);
 
-        if (existingParamIndex > -1)
-            viewDataObj.currSearchParams.splice(existingParamIndex, 1);
+        if (existingParamIndex > -1) {
+            if (newParam.allowMultipleValues) {
+                let existingParam = viewDataObj.currSearchParams[existingParamIndex];
+                if (existingParam.values.indexOf(newParam.values[0]) == -1)
+                    existingParam.values.push(newParam.values[0]);
+            }
+            else {
+                viewDataObj.currSearchParams.splice(existingParamIndex, 1);
+                viewDataObj.currSearchParams.push(newParam);
+            }
+        }
+        else
+            viewDataObj.currSearchParams.push(newParam);
 
-        viewDataObj.currSearchParams.push(newParam);
 
         Search.redrawSelectedParameters(viewDataObj);
     }
@@ -130,8 +146,15 @@
         viewDataObj.selectedParamsContainer.empty();
 
         viewDataObj.currSearchParams.forEach((e, i) => {
+            let values = '';
+
+            if (e.paramType == Search.SearchFieldTypes.NumberRange || e.paramType == Search.SearchFieldTypes.DateRange)
+                values = `${e.values[0]} - ${e.values[1]}`;
+            else
+                values = e.values.join(', ');
+
             let currElement = $(`
-            <div><span class="font-semibold">${i + 1}. ${e.displayName}:</span> ${e.values[0]} ${e.values.length > 1 ? " - " + e.values[1] : ""}</div>
+            <div><span class="font-semibold">${i + 1}. ${e.displayName}:</span> ${values}</div>
             <div class="col-span-2"><i class="fa-solid fa-xmark text-red-500"></i></div>`);
 
             viewDataObj.selectedParamsContainer.append(currElement);

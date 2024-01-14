@@ -28,7 +28,7 @@ namespace GraphAlgorithms.Shared
             switch (FieldType)
             {
                 case SearchFieldType.Text:
-                    if (Values.Count == 1 && !string.IsNullOrEmpty(Values[0]))
+                    if (Values.All(v => !string.IsNullOrEmpty(v)))
                         return true;
                     return false;
                 case SearchFieldType.NumberRange:
@@ -36,7 +36,7 @@ namespace GraphAlgorithms.Shared
                         return true;
                     return false;
                 case SearchFieldType.Number:
-                    if (Values.Count == 1 && int.TryParse(Values[0], out _))
+                    if (Values.All(v => int.TryParse(v, out _)))
                         return true;
                     return false;
                 case SearchFieldType.DateRange:

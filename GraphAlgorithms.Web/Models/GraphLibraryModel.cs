@@ -20,7 +20,7 @@ namespace GraphAlgorithms.Web.Models
             
             SearchModel = new GraphLibrarySearchModel(new List<SearchField>()
             {
-                new SearchField("id", "ID", SearchFieldType.Number),
+                new SearchField("id", "ID", SearchFieldType.Number, allowMultipleValues: true),
                 new SearchField("order", "Order", SearchFieldType.NumberRange),
                 new SearchField("size", "Size", SearchFieldType.NumberRange)
             });
