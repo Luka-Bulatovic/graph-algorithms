@@ -31,7 +31,9 @@
         var searchParamsString = '';
 
         viewDataObj.currSearchParams.forEach((param, index) => {
+            searchParamsString += `searchParams[${index}].DisplayName=${encodeURIComponent(param.displayName)}&`;
             searchParamsString += `searchParams[${index}].Key=${encodeURIComponent(param.id)}&`;
+            searchParamsString += `searchParams[${index}].AllowMultipleValues=${encodeURIComponent(param.allowMultipleValues)}&`;
             searchParamsString += `searchParams[${index}].FieldType=${encodeURIComponent(param.paramType)}&`;
             param.values.forEach((value, valueIndex) => {
                 searchParamsString += `searchParams[${index}].Values[${valueIndex}]=${encodeURIComponent(value)}&`;
@@ -170,9 +172,9 @@
         viewDataObj.selectedSearchParams.forEach(p => {
             var currParam = {
                 id: p.Key,
-                displayName: p.Key, // TODO
+                displayName: p.DisplayName, // TODO
                 paramType: p.FieldType,
-                allowMultipleValues: false, // TODO
+                allowMultipleValues: p.AllowMultipleValues, // TODO
                 values: p.Values
             };
 

@@ -5,8 +5,10 @@ namespace GraphAlgorithms.Shared
     public class SearchParameter
     {
         public string Key { get; set; }
+        public string DisplayName { get; set; }
         public SearchFieldType FieldType { get; set; }
         public List<string> Values { get; set; } // Can store one or more values based on FieldType
+        public bool AllowMultipleValues { get; set; }
         public bool IsValid => ValidateParameter();
 
         public SearchParameter()
