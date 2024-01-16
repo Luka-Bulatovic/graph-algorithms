@@ -24,7 +24,7 @@ namespace GraphAlgorithms.Web.Controllers
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, searchParams);
 
             model.Graphs = graphs;
-            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
+            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount, searchParams);
             model.SearchModel.SetSelectedSearchParams(searchParams);
 
             return View(model);

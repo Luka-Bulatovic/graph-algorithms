@@ -6,12 +6,12 @@ using System.Text.Json;
 
 namespace GraphAlgorithms.Web.Models
 {
-    public class GraphLibrarySearchModel
+    public class SearchModel
     {
         public int SearchByID { get; set; }
         public SelectList SearchBy { get; set; }
-        public List<SearchField> SearchFields { get; set; }
-        public string SearchFieldsJSON => JsonSerializer.Serialize(SearchFields);
+        public List<SearchParameter> SearchParams { get; set; }
+        public string SearchParamsJSON => JsonSerializer.Serialize(SearchParams);
         public List<SearchParameter> SelectedSearchParams { get; set; }
         public string SelectedSearchParamsJSON => JsonSerializer.Serialize(SelectedSearchParams);
 
@@ -24,21 +24,21 @@ namespace GraphAlgorithms.Web.Models
 
         public List<string> SearchItems { get; set; }
 
-        public GraphLibrarySearchModel()
+        public SearchModel()
         {
-            SetSearchFields(new List<SearchField>());
+            LoadSearchParams(new List<SearchParameter>());
             SelectedSearchParams = new();
         }
 
-        public GraphLibrarySearchModel(List<SearchField> searchFields) : this()
+        public SearchModel(List<SearchParameter> searchParams) : this()
         {
-            SetSearchFields(searchFields);
+            LoadSearchParams(searchParams);
         }
 
-        public void SetSearchFields(List<SearchField> searchFields)
+        public void LoadSearchParams(List<SearchParameter> searchParams)
         {
-            SearchFields = searchFields;
-            SearchBy = new SelectList(searchFields, "KeyValue", "DisplayValue");
+            SearchParams = searchParams;
+            SearchBy = new SelectList(searchParams, "Key", "DisplayName");
         }
 
         public void SetSelectedSearchParams(List<SearchParameter> selectedSearchParams)

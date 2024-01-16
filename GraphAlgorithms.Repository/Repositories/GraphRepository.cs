@@ -2,6 +2,7 @@
 using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Shared;
 using Microsoft.EntityFrameworkCore;
+using static GraphAlgorithms.Shared.SearchParameter;
 
 namespace GraphAlgorithms.Repository.Repositories
 {
@@ -57,7 +58,7 @@ namespace GraphAlgorithms.Repository.Repositories
                 switch(searchParam.Key)
                 {
                     case "id":
-                        if (searchParam.FieldType != SearchFieldType.Number)
+                        if (searchParam.ParamType != SearchParamType.Number)
                             continue;
 
                         var integerValuesList = searchParam.Values.Select(v => int.Parse(v)).ToList();
@@ -65,13 +66,13 @@ namespace GraphAlgorithms.Repository.Repositories
                         query = query.Where(g => integerValuesList.Any(v => v == g.ID));
                         break;
                     case "order":
-                        if (searchParam.FieldType != SearchFieldType.NumberRange)
+                        if (searchParam.ParamType != SearchParamType.NumberRange)
                             continue;
 
                         query = query.Where(g => g.Order >= int.Parse(searchParam.Values[0]) && g.Order <= int.Parse(searchParam.Values[1]));
                         break;
                     case "size":
-                        if (searchParam.FieldType != SearchFieldType.NumberRange)
+                        if (searchParam.ParamType != SearchParamType.NumberRange)
                             continue;
 
                         query = query.Where(g => g.Size >= int.Parse(searchParam.Values[0]) && g.Size <= int.Parse(searchParam.Values[1]));

@@ -1,5 +1,5 @@
 ﻿var Search = new function () {
-    this.SearchFieldTypes = {
+    this.SearchParamTypes = {
         Text: 1,
         NumberRange: 2,
         Number: 3,
@@ -34,7 +34,7 @@
             searchParamsString += `searchParams[${index}].DisplayName=${encodeURIComponent(param.displayName)}&`;
             searchParamsString += `searchParams[${index}].Key=${encodeURIComponent(param.id)}&`;
             searchParamsString += `searchParams[${index}].AllowMultipleValues=${encodeURIComponent(param.allowMultipleValues)}&`;
-            searchParamsString += `searchParams[${index}].FieldType=${encodeURIComponent(param.paramType)}&`;
+            searchParamsString += `searchParams[${index}].ParamType=${encodeURIComponent(param.paramType)}&`;
             param.values.forEach((value, valueIndex) => {
                 searchParamsString += `searchParams[${index}].Values[${valueIndex}]=${encodeURIComponent(value)}&`;
             });
@@ -52,28 +52,29 @@
             return;
         }
 
-        var searchField = viewDataObj.searchFields.filter(f => f.KeyValue == paramID)[0];
+        var searchParam = viewDataObj.searchParams.filter(f => f.Key == paramID)[0];
 
-        var newParam = {
-            id: paramID,
-            displayName: searchField.DisplayValue,
-            paramType: searchField.FieldType,
-            allowMultipleValues: searchField.AllowMultipleValues,
-            values: []
-        };
+        var newParam = Search.createSearchParam(paramID, searchParam.DisplayName, searchParam.ParamType, searchParam.AllowMultipleValues, []);
+        //{
+        //    id: paramID,
+        //    displayName: searchParam.DisplayName,
+        //    paramType: searchParam.ParamType,
+        //    allowMultipleValues: searchParam.AllowMultipleValues,
+        //    values: []
+        //};
 
-        switch (searchField.FieldType) {
-            case Search.SearchFieldTypes.Text:
+        switch (searchParam.ParamType) {
+            case Search.SearchParamTypes.Text:
                 newParam.values.push(viewDataObj.fldText.val());
                 break;
-            case Search.SearchFieldTypes.NumberRange:
+            case Search.SearchParamTypes.NumberRange:
                 newParam.values.push(viewDataObj.fldNumberRangeFrom.val());
                 newParam.values.push(viewDataObj.fldNumberRangeTo.val());
                 break;
-            case Search.SearchFieldTypes.Number:
+            case Search.SearchParamTypes.Number:
                 newParam.values.push(viewDataObj.fldNumber.val());
                 break;
-            case Search.SearchFieldTypes.DateRange:
+            case Search.SearchParamTypes.DateRange:
                 newParam.values.push(viewDataObj.fldDateRangeFrom.val());
                 newParam.values.push(viewDataObj.fldDateRangeTo.val());
                 break;
@@ -117,26 +118,26 @@
         if (paramID == -1)
             return;
 
-        var searchField = viewDataObj.searchFields.filter(f => f.KeyValue == paramID)[0];
+        var searchParam = viewDataObj.searchParams.filter(f => f.Key == paramID)[0];
 
-        if (searchField == null)
+        if (searchParam == null)
             return;
 
-        switch (searchField.FieldType) {
-            case Search.SearchFieldTypes.Text:
+        switch (searchParam.ParamType) {
+            case Search.SearchParamTypes.Text:
                 viewDataObj.fldText.val('');
                 viewDataObj.fldTextContainer.removeClass("hidden");
                 break;
-            case Search.SearchFieldTypes.NumberRange:
+            case Search.SearchParamTypes.NumberRange:
                 viewDataObj.fldNumberRangeFrom.val('');
                 viewDataObj.fldNumberRangeTo.val('');
                 viewDataObj.fldNumberRangeContainer.removeClass("hidden");
                 break;
-            case Search.SearchFieldTypes.Number:
+            case Search.SearchParamTypes.Number:
                 viewDataObj.fldNumber.val('');
                 viewDataObj.fldNumberContainer.removeClass("hidden");
                 break;
-            case Search.SearchFieldTypes.DateRange:
+            case Search.SearchParamTypes.DateRange:
                 viewDataObj.fldDateRangeFrom.val(null);
                 viewDataObj.fldDateRangeTo.val(null);
                 viewDataObj.fldDateRangeContainer.removeClass("hidden");
@@ -152,7 +153,7 @@
         viewDataObj.currSearchParams.forEach((e, i) => {
             let values = '';
 
-            if (e.paramType == Search.SearchFieldTypes.NumberRange || e.paramType == Search.SearchFieldTypes.DateRange)
+            if (e.paramType == Search.SearchParamTypes.NumberRange || e.paramType == Search.SearchParamTypes.DateRange)
                 values = `${e.values[0]} - ${e.values[1]}`;
             else
                 values = e.values.join(', ');
@@ -170,18 +171,20 @@
             return;
 
         viewDataObj.selectedSearchParams.forEach(p => {
-            var currParam = {
-                id: p.Key,
-                displayName: p.DisplayName, // TODO
-                paramType: p.FieldType,
-                allowMultipleValues: p.AllowMultipleValues, // TODO
-                values: p.Values
-            };
-
+            var currParam = Search.createSearchParam(p.Key, p.DisplayName, p.ParamType, p.AllowMultipleValues, p.Values);
             viewDataObj.currSearchParams.push(currParam);
         });
 
         Search.redrawSelectedParameters(viewDataObj);
     }
 
+    this.createSearchParam = function (id, displayName, paramType, allowMultipleValues, values) {
+        return {
+            id: id,
+            displayName: displayName,
+            paramType: paramType,
+            allowMultipleValues: allowMultipleValues,
+            values: values
+        };
+    }
 };

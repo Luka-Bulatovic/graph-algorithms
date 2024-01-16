@@ -1,19 +1,34 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.VisualBasic.FileIO;
+using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace GraphAlgorithms.Shared
 {
+    public enum SearchParamType { Text = 1, NumberRange = 2, Number = 3, DateRange = 4, MultiSelectList = 5, SelectList = 6 };
+
     public class SearchParameter
     {
         public string Key { get; set; }
         public string DisplayName { get; set; }
-        public SearchFieldType FieldType { get; set; }
-        public List<string> Values { get; set; } // Can store one or more values based on FieldType
+        public SearchParamType ParamType { get; set; }
         public bool AllowMultipleValues { get; set; }
+        public List<string> Values { get; set; } // Can store one or more values based on FieldType and AllowMultipleValues
         public bool IsValid => ValidateParameter();
 
         public SearchParameter()
         {
             Values = new();
+        }
+
+        public SearchParameter(string key, string displayName, SearchParamType paramType, bool allowMultipleValues = false) : this()
+        {
+            if (allowMultipleValues && (paramType != SearchParamType.Number && paramType != SearchParamType.Text))
+                throw new InvalidDataException("Multiple values are only allowed for Search Parameters of type Number or Text.");
+
+            Key = key;
+            DisplayName = displayName;
+            ParamType = paramType;
+            AllowMultipleValues = allowMultipleValues;
         }
 
         private bool ValidateParameter()
@@ -27,26 +42,26 @@ namespace GraphAlgorithms.Shared
             if(Values.Count == 0)
                 return false;
 
-            switch (FieldType)
+            switch (ParamType)
             {
-                case SearchFieldType.Text:
+                case SearchParamType.Text:
                     if (Values.All(v => !string.IsNullOrEmpty(v)))
                         return true;
                     return false;
-                case SearchFieldType.NumberRange:
+                case SearchParamType.NumberRange:
                     if (Values.Count == 2 && int.TryParse(Values[0], out _) && int.TryParse(Values[1], out _))
                         return true;
                     return false;
-                case SearchFieldType.Number:
+                case SearchParamType.Number:
                     if (Values.All(v => int.TryParse(v, out _)))
                         return true;
                     return false;
-                case SearchFieldType.DateRange:
+                case SearchParamType.DateRange:
                     if (Values.Count == 2 && DateTime.TryParse(Values[0], out _) && DateTime.TryParse(Values[1], out _))
                         return true;
                     return false;
-                case SearchFieldType.MultiSelectList:
-                case SearchFieldType.SelectList:
+                case SearchParamType.MultiSelectList:
+                case SearchParamType.SelectList:
                     return true;
                 default:
                     return false;

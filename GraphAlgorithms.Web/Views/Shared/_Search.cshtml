@@ -1,4 +1,4 @@
-﻿@model GraphLibrarySearchModel
+﻿@model SearchModel
 
 @{
     string ViewID = string.Format("SearchView_{0}", Guid.NewGuid().ToString().Replace("-", ""));
@@ -53,8 +53,8 @@
 <script type="text/javascript">
     var @(ViewDataObj) = {
         viewID: "@ViewID",
-        searchFieldsJSON: '@Html.Raw(Model.SearchFieldsJSON)',
-        searchFields: JSON.parse('@Html.Raw(Model.SearchFieldsJSON)'),
+        searchParamsJSON: '@Html.Raw(Model.SearchParamsJSON)',
+        searchParams: JSON.parse('@Html.Raw(Model.SearchParamsJSON)'),
         selectedSearchParamsJSON: '@Html.Raw(Model.SelectedSearchParamsJSON)',
         selectedSearchParams: JSON.parse('@Html.Raw(Model.SelectedSearchParamsJSON)'),
         slSearchBy: $("#@ViewID .sl-searchby"),
