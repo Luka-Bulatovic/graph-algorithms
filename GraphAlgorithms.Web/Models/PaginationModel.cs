@@ -13,14 +13,16 @@ namespace GraphAlgorithms.Web.Models
         public int PageSize { get; set; }
         public int TotalCount { get; set; }
         public int TotalPages => (int)Math.Ceiling((decimal)TotalCount / PageSize);
+        public string ActionName { get; set; }
         public List<SearchParameter> SearchParams { get; set; }
         public string SearchParamsJSON => JsonSerializer.Serialize(SearchParams);
 
-        public PaginationModel()
+        public PaginationModel(string actionName = "Index")
         {
             PageNumber = 1;
             PageSize = 10;
             SearchParams = new List<SearchParameter>();
+            ActionName = actionName;
         }
 
         public void SetData(int pageNumber, int pageSize, int totalCount, List<SearchParameter> searchParams = null)

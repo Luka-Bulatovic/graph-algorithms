@@ -43,7 +43,7 @@
     </div>
     
     <div class="w-1/2 flex flex-col border border-gray-300 p-2">
-        <h1 class="text-md font-semibold">Selected Parameters:</h1>
+        <h1 class="text-md font-semibold">Selected Parameters: <button type="button" class="btn-clear-search-params">Clear all</button></h1>
         <div class="selected-parameters-container grid grid-cols-3 gap-2">
 
         </div>
@@ -53,6 +53,8 @@
 <script type="text/javascript">
     var @(ViewDataObj) = {
         viewID: "@ViewID",
+        container: $("#@ViewID"),
+
         searchParamsJSON: '@Html.Raw(Model.SearchParamsJSON)',
         searchParams: JSON.parse('@Html.Raw(Model.SearchParamsJSON)'),
         selectedSearchParamsJSON: '@Html.Raw(Model.SelectedSearchParamsJSON)',
@@ -75,6 +77,7 @@
 
         btnSearch: $("#@ViewID .btn-search"),
         btnAddParam: $("#@ViewID .btn-add-param"),
+        btnClearParams: $("#@ViewID .btn-clear-search-params"),
 
         currSearchParams: [],
         selectedParamsContainer: $("#@ViewID .selected-parameters-container"),

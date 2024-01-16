@@ -24,6 +24,20 @@
             Search.onSearchByChanged(viewDataObj);
         });
 
+        // Clear all Search Params button
+        viewDataObj.btnClearParams.on('click', (e) => {
+            Search.clearSearchParams(viewDataObj);
+        });
+
+        viewDataObj.container.on(
+            'click',
+            '.selected-parameters-container .btn-delete-param',
+            { viewDataObj: viewDataObj },
+            (e) => {
+                Search.deleteSearchParam(e.data.viewDataObj, $(e.target).parent().attr("data-index"));
+            }
+        )
+
         Search.initializeSelectedSearchParams(viewDataObj);
     }
 
@@ -160,7 +174,7 @@
 
             let currElement = $(`
             <div><span class="font-semibold">${i + 1}. ${e.displayName}:</span> ${values}</div>
-            <div class="col-span-2"><i class="fa-solid fa-xmark text-red-500"></i></div>`);
+            <div class="col-span-2 btn-delete-param" data-index="${i}"><i class="fa-solid fa-xmark text-red-500"></i></div>`);
 
             viewDataObj.selectedParamsContainer.append(currElement);
         });
@@ -186,5 +200,15 @@
             allowMultipleValues: allowMultipleValues,
             values: values
         };
+    }
+
+    this.deleteSearchParam = function (viewDataObj, index) {
+        viewDataObj.currSearchParams.splice(index, 1);
+        Search.redrawSelectedParameters(viewDataObj);
+    }
+
+    this.clearSearchParams = function (viewDataObj) {
+        viewDataObj.currSearchParams = [];
+        Search.redrawSelectedParameters(viewDataObj);
     }
 };
