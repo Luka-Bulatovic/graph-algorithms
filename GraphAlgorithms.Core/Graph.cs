@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Core
 {
@@ -29,6 +30,9 @@ namespace GraphAlgorithms.Core
         private bool isUndirected;
         public bool IsUndirected => isUndirected;
 
+        private List<GraphClassEnum> graphClasses;
+        public List<GraphClassEnum> GraphClasses => graphClasses;
+
         public Graph(int id, int n, bool isUndirected = true)
         {
             ID = id;
@@ -40,6 +44,7 @@ namespace GraphAlgorithms.Core
             AdjList = new AdjacencyList(N);
 
             GraphProperties = new GraphProperties();
+            graphClasses = new List<GraphClassEnum>();
 
             this.isUndirected = isUndirected;
         }

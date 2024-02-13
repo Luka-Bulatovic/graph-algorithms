@@ -22,6 +22,8 @@ namespace GraphAlgorithms.Core.Algorithms
 
         public override void Run()
         {
+            _isExecuted = false;
+
             OutputDescription.AppendLine("------- Wiener Index Algorithm -------");
             foreach (Node fromNode in G.Nodes)
             {
@@ -57,6 +59,8 @@ namespace GraphAlgorithms.Core.Algorithms
             }
 
             OutputDescription.AppendLine("------- END Wiener Index Algorithm -------");
+            
+            _isExecuted = true;
         }
     }
 }

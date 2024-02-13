@@ -39,6 +39,8 @@ namespace GraphAlgorithms.Core.Algorithms
 
         public override void Run()
         {
+            _isExecuted = false;
+
             foreach (Node node in G.Nodes)
             {
                 if (!Visited[node])
@@ -51,6 +53,8 @@ namespace GraphAlgorithms.Core.Algorithms
                 OutputDescription.AppendLine(string.Format("{0}", node.Label));
 
             OutputDescription.AppendLine("------- END Topological Sort --------");
+
+            _isExecuted = true;
         }
     }
 }

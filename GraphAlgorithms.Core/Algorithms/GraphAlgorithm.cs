@@ -13,6 +13,15 @@ namespace GraphAlgorithms.Core.Algorithms
 
         public static int INF_DISTANCE = 1 << 30;
 
+        public enum BipartiteColors
+        {
+            Undefined = 0,
+            First = 1,
+            Second = 2
+        }
+
+        protected bool _isExecuted = false;
+
         public GraphAlgorithm(Graph g)
         {
             G = g;
@@ -22,6 +31,11 @@ namespace GraphAlgorithms.Core.Algorithms
         public abstract void InitializeValues();
 
         public abstract void Run();
+
+        public bool IsExecuted()
+        {
+            return _isExecuted;
+        }
 
         public override string ToString()
         {

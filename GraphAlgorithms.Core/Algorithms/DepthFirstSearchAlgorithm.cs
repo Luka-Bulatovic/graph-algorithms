@@ -13,9 +13,13 @@ namespace GraphAlgorithms.Core.Algorithms
         private NodePropertyArray<Node> _prev;
         private NodePropertyArray<int> _component;
         private Node _startNode;
+        private int _numberOfComponents;
+        private int _numberOfCycles;
 
         public DepthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
         {
+            _numberOfComponents = 0;
+            _numberOfCycles = 0;
             _visited = new NodeVisitedTracker(g.N);
             _prev = new NodePropertyArray<Node>(g.N);
             _component = new NodePropertyArray<int>(g.N);
@@ -26,6 +30,8 @@ namespace GraphAlgorithms.Core.Algorithms
 
         public override void InitializeValues()
         {
+            _numberOfComponents = 0;
+            _numberOfCycles = 0;
             _prev.InitializeValues(null);
         }
 
@@ -45,57 +51,80 @@ namespace GraphAlgorithms.Core.Algorithms
 
                 if (!_visited[destNode])
                     DFS(destNode, currNode);
+                else if (_visited[destNode] && _prev[currNode] != null && _prev[currNode].Index != destNode.Index)
+                    _numberOfCycles++;
             }
         }
 
         public override void Run()
         {
+            _isExecuted = false;
+            InitializeValues();
+
             OutputDescription.AppendLine("------- Depth-first Search -------");
             OutputDescription.Append("DFS order: ");
 
             // First, we DFS from StartNodeIndex node
+            _numberOfComponents++;
             DFS(_startNode, null);
 
             // We check if any other node is unvisited, so we run DFS from them too (case for disconnected graph)
             foreach (Node node in G.Nodes)
-                if (!_visited[node])
-                    DFS(node, null);
-
-            OutputDescription.AppendLine();
-
-            int currentComponent = 0;
-            while (true)
             {
-                bool isComponentEmpty = true;
-
-                foreach (Node node in G.Nodes)
+                if (!_visited[node])
                 {
-                    if (_component[node] == currentComponent)
-                    {
-                        isComponentEmpty = false;
-                        break;
-                    }
+                    _numberOfComponents++;
+                    DFS(node, null);
                 }
-
-                if (isComponentEmpty)
-                    break;
-
-                OutputDescription.Append(string.Format("Component {0}: ", currentComponent));
-
-                foreach (Node node in G.Nodes)
-                {
-                    if (_component[node] == currentComponent)
-                    {
-                        OutputDescription.Append(node.Index.ToString() + " ");
-                    }
-                }
-
-                OutputDescription.AppendLine();
-
-                currentComponent++;
             }
 
+            //OutputDescription.AppendLine();
+
+            //int currentComponent = 0;
+            //while (currentComponent < G.N)
+            //{
+            //    bool isComponentEmpty = true;
+
+            //    foreach (Node node in G.Nodes)
+            //    {
+            //        if (_component[node] == currentComponent)
+            //        {
+            //            isComponentEmpty = false;
+            //            break;
+            //        }
+            //    }
+
+            //    if (isComponentEmpty)
+            //        continue;
+
+            //    OutputDescription.Append(string.Format("Component {0}: ", currentComponent));
+
+            //    foreach (Node node in G.Nodes)
+            //    {
+            //        if (_component[node] == currentComponent)
+            //        {
+            //            OutputDescription.Append(node.Index.ToString() + " ");
+            //        }
+            //    }
+
+            //    OutputDescription.AppendLine();
+
+            //    currentComponent++;
+            //}
+
             OutputDescription.AppendLine("------- END Depth-first Search -------");
+
+            _isExecuted = true;
+        }
+
+        public int GetNumberOfComponents()
+        {
+            return _numberOfComponents;
+        }
+        
+        public int GetNumberOfCycles()
+        {
+            return _numberOfCycles;
         }
     }
 }
