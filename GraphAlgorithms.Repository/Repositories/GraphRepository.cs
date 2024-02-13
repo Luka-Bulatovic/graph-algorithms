@@ -40,6 +40,7 @@ namespace GraphAlgorithms.Repository.Repositories
                                 .ThenInclude(a => a.ActionType)
                             .Include(g => g.Action)
                                 .ThenInclude(a => a.ForGraphClass)
+                            .Include(g => g.GraphClasses)
                             .OrderByDescending(g => g.ID)
                             .Skip((pageNumber - 1) * pageSize)
                             .Take(pageSize)
@@ -120,6 +121,7 @@ namespace GraphAlgorithms.Repository.Repositories
                                             .ThenInclude(a => a.ActionType)
                                         .Include(g => g.Action)
                                             .ThenInclude(a => a.ForGraphClass)
+                                        .Include(g => g.GraphClasses)
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
                                         .ToListAsync();

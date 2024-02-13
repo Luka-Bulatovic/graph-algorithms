@@ -129,8 +129,19 @@ namespace GraphAlgorithms.Service.Converters
                 graph.ConnectNodes(graph.GetNode(sourceIndex), graph.GetNode(targetIndex));
             }
 
+
+
             // TODO: Here, we will add more stuff for mapping GraphProperties
             graph.GraphProperties.WienerIndex = graphEntity.WienerIndex;
+
+            // Graph Classes
+            if(graphEntity.GraphClasses != null)
+            {
+                foreach(GraphClassEntity graphClass in graphEntity.GraphClasses)
+                {
+                    graph.GraphClasses.Add((Shared.Shared.GraphClassEnum)graphClass.ID);
+                }
+            }
 
             return graph;
         }
@@ -170,6 +181,10 @@ namespace GraphAlgorithms.Service.Converters
             graphDTO.actionForGraphClassName = graphEntity.Action.ForGraphClass != null 
                                             ? graphEntity.Action.ForGraphClass.Name : "";
             graphDTO.createdDate = graphEntity.CreatedDate;
+
+            // Graph Classes
+            if(graphEntity.GraphClasses != null)
+                graphDTO.classNames = string.Join(", ", graphEntity.GraphClasses.Select(c => c.Name));
 
             return graphDTO;
         }

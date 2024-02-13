@@ -9,6 +9,7 @@ namespace GraphAlgorithms.Repository.Repositories
 {
     public interface IGraphClassRepository
     {
+        Task<GraphClassEntity> GetGraphClassByIdAsync(int id);
         Task<List<GraphClassEntity>> GetGraphClassesAsync();
         Task<List<GraphClassEntity>> GetGraphClassesForGeneratingRandomGraphsAsync();
     }

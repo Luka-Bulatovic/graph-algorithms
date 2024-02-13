@@ -18,6 +18,14 @@ namespace GraphAlgorithms.Repository.Repositories
             this._context = context;
         }
 
+        public async Task<GraphClassEntity> GetGraphClassByIdAsync(int id)
+        {
+            return await _context
+                .GraphClasses
+                .Where(gc => gc.ID == id)
+                .FirstOrDefaultAsync();
+        }
+
         public async Task<List<GraphClassEntity>> GetGraphClassesAsync()
         {
             List<GraphClassEntity> graphClasses = await _context.GraphClasses.ToListAsync();

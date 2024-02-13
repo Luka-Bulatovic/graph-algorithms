@@ -23,13 +23,34 @@ namespace GraphAlgorithms.Repository.Data
             base.OnModelCreating(modelBuilder);
 
             ConfigureEntityToTableMappings(modelBuilder);
-
-            modelBuilder.Entity<GraphEntity>()
-                .HasMany(g => g.GraphClasses)
-                .WithMany(gc => gc.Graphs);
-
+            ConfigureManyToManyMappings(modelBuilder);
+            
             // Seeders
             SeedTables(modelBuilder);
+        }
+
+        private void ConfigureManyToManyMappings(ModelBuilder modelBuilder)
+        {
+            //// Graph - GraphClass
+            modelBuilder.Entity<GraphEntity>()
+                .HasMany(g => g.GraphClasses)
+                .WithMany(gc => gc.Graphs)
+                .UsingEntity<Dictionary<string, object>>(
+                    "GraphClassGraphXRef", // Specify the join table name
+                    j => j.HasOne<GraphClassEntity>() // Configure the relationship to GraphClassEntity
+                        .WithMany()
+                        .HasForeignKey("GraphClassID") // Specify the foreign key column name in the join table
+                        .OnDelete(DeleteBehavior.Cascade), // Configure cascade delete as per your migration
+                    j => j.HasOne<GraphEntity>() // Configure the relationship to GraphEntity
+                        .WithMany()
+                        .HasForeignKey("GraphID") // Specify the foreign key column name in the join table
+                        .OnDelete(DeleteBehavior.Cascade), // Configure cascade delete as per your migration
+                    j =>
+                    {
+                        j.HasKey("GraphClassID", "GraphID"); // Configure the composite primary key for the join table
+                    });
+
+
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
