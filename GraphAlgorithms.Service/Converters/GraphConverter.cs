@@ -1,6 +1,7 @@
 ﻿using GraphAlgorithms.Core;
 using GraphAlgorithms.Core.Algorithms;
 using GraphAlgorithms.Repository.Entities;
+using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
 using System.Text;
@@ -12,6 +13,13 @@ namespace GraphAlgorithms.Service.Converters
     public class GraphConverter : IGraphConverter
     {
         public readonly XNamespace Namespace = "http://graphml.graphdrawing.org/xmlns";
+
+        public readonly IGraphClassRepository graphClassRepository;
+
+        public GraphConverter(IGraphClassRepository graphClassRepository)
+        {
+            this.graphClassRepository = graphClassRepository;
+        }
 
         public Graph GetGraphFromGraphDTO(GraphDTO graphDTO)
         {
@@ -32,10 +40,7 @@ namespace GraphAlgorithms.Service.Converters
             }
 
             // Calculate Graph properties
-            WienerIndexAlgorithm wienerAlg = new WienerIndexAlgorithm(graph);
-            wienerAlg.Run();
-
-            graph.GraphProperties.WienerIndex = wienerAlg.WienerIndexValue;
+            GraphEvaluator.CalculateGraphProperties(graph);
 
             return graph;
         }
@@ -146,9 +151,9 @@ namespace GraphAlgorithms.Service.Converters
             return graph;
         }
 
-        public GraphEntity GetGraphEntityFromGraph(Graph graph)
+        public async Task<GraphEntity> GetGraphEntityFromGraph(Graph graph)
         {
-            return new GraphEntity()
+            GraphEntity graphEntity = new GraphEntity()
             {
                 ID = graph.ID,
                 Name = "",
@@ -157,13 +162,26 @@ namespace GraphAlgorithms.Service.Converters
                 DataXML = GetGraphMLForGraph(graph),
                 WienerIndex = graph.GraphProperties.WienerIndex
             };
+            
+            // Fetch and link Graph Classes to entity
+            if(graph.GraphClasses.Count > 0)
+            {
+                List<int> graphClassIDs = graph.GraphClasses.Select(gc => (int)gc).ToList();
+                List<GraphClassEntity> graphClassEntities = await graphClassRepository.GetGraphClassesByIDsAsync(graphClassIDs);
+                graphEntity.GraphClasses = graphClassEntities;
+            }
+
+            return graphEntity;
         }
 
-        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
+        public async Task<GraphEntity> GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
         {
             Graph graph = GetGraphFromGraphDTO(graphDTO);
 
-            GraphEntity graphEntity = GetGraphEntityFromGraph(graph);
+            // Calculate classes
+            GraphEvaluator.CalculateGraphClasses(graph);
+
+            GraphEntity graphEntity = await GetGraphEntityFromGraph(graph);
 
             return graphEntity;
         }

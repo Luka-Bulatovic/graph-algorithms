@@ -15,7 +15,7 @@ namespace GraphAlgorithms.Service.Interfaces
         public Graph GetGraphFromGraphEntity(GraphEntity graphEntity);
         public GraphDTO GetGraphDTOFromGraph(Graph graph);
         public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity);
-        public GraphEntity GetGraphEntityFromGraphDTO(GraphDTO graphDTO);
-        public GraphEntity GetGraphEntityFromGraph(Graph graph);
+        public Task<GraphEntity> GetGraphEntityFromGraphDTO(GraphDTO graphDTO);
+        public Task<GraphEntity> GetGraphEntityFromGraph(Graph graph);
     }
 }

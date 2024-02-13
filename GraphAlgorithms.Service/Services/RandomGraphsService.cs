@@ -61,7 +61,7 @@ namespace GraphAlgorithms.Service.Services
             for (int i = 0; i < totalNumberOfRandomGraphs; i++)
             {
                 Graph graph = factory.CreateGraph();
-                CalculateGraphProperties(graph);
+                GraphEvaluator.CalculateGraphProperties(graph);
                 graphs.Add(graph);
             }
 
@@ -83,22 +83,12 @@ namespace GraphAlgorithms.Service.Services
             // Convert and store best Graphs to DB
             foreach (Graph graph in graphs)
             {
-                CalculateGraphClasses(graph);
+                GraphEvaluator.CalculateGraphClasses(graph);
 
-                GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraph(graph);
+                GraphEntity graphEntity = await graphConverter.GetGraphEntityFromGraph(graph);
 
                 // Associate the ActionEntity with the GraphEntity
                 graphEntity.Action = actionEntity;
-
-                //// TODO: Move this all to converter??
-                graphEntity.GraphClasses = new List<GraphClassEntity>();
-                foreach (GraphClassEnum graphClass in graph.GraphClasses)
-                {
-                    // First we must find GraphClassEntity with corresponding ID
-                    GraphClassEntity graphClassEntity = await graphClassRepository.GetGraphClassByIdAsync((int)graphClass);
-                    if(graphClassEntity != null)
-                        graphEntity.GraphClasses.Add(graphClassEntity);
-                }
 
                 await graphRepository.SaveAsync(graphEntity);
             }
@@ -106,37 +96,6 @@ namespace GraphAlgorithms.Service.Services
             // Convert actionEntity to ActionDTO and return
             actionEntity = await actionRepository.GetByIdAsync(actionEntity.ID);
             return actionConverter.GetActionDTOFromActionEntity(actionEntity);
-        }
-
-        private void CalculateGraphProperties(Graph graph)
-        {
-            WienerIndexAlgorithm wienerAlgorithm = new WienerIndexAlgorithm(graph);
-            wienerAlgorithm.Run();
-
-            graph.GraphProperties.WienerIndex = wienerAlgorithm.WienerIndexValue;
-        }
-
-        private void CalculateGraphClasses(Graph graph)
-        {
-            if (graph == null || graph.Nodes == null || graph.Nodes.Count == 0)
-                return;
-
-            graph.GraphClasses.Clear();
-
-            DepthFirstSearchAlgorithm dfsAlgorithm = new (graph, graph.Nodes[0]);
-            BreadthFirstSearchAlgorithm bfsAlgorithm = new (graph, graph.Nodes[0]);
-
-            List<IGraphClassifier> graphClassifiers = new List<IGraphClassifier>()
-            {
-                new ConnectedGraphClassifier(dfsAlgorithm),
-                new TreeGraphClassifier(dfsAlgorithm),
-                new BipartiteGraphClassifier(bfsAlgorithm),
-                new UnicyclicGraphClassifier(dfsAlgorithm),
-            };
-
-            foreach(IGraphClassifier graphClassifier in graphClassifiers)
-                if(graphClassifier.BelongsToClass())
-                    graph.GraphClasses.Add(graphClassifier.GetGraphClass());
         }
     }
 }

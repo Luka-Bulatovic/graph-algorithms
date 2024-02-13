@@ -93,6 +93,7 @@ namespace GraphAlgorithms.Repository.Repositories
                                                     .ThenInclude(a => a.ActionType)
                                                 .Include(g => g.Action)
                                                     .ThenInclude(a => a.ForGraphClass)
+                                                .Include(g => g.GraphClasses)
                                                 .FirstOrDefaultAsync(g => g.ID == id);
             return graph;
         }

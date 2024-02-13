@@ -33,7 +33,7 @@ namespace GraphAlgorithms.Service.Services
 
         public async Task<GraphDTO> StoreGraph(GraphDTO graphDTO/*, int ActionTypeID = 1*/)
         {
-            GraphEntity graphEntity = graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
+            GraphEntity graphEntity = await graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
 
             // We probably don't need ActionTypeID as this should always be for drawing, so enum value is enough
 
