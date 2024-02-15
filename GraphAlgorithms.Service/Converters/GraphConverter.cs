@@ -12,8 +12,6 @@ namespace GraphAlgorithms.Service.Converters
 {
     public class GraphConverter : IGraphConverter
     {
-        public readonly XNamespace Namespace = "http://graphml.graphdrawing.org/xmlns";
-
         public readonly IGraphClassRepository graphClassRepository;
 
         public GraphConverter(IGraphClassRepository graphClassRepository)
@@ -21,7 +19,8 @@ namespace GraphAlgorithms.Service.Converters
             this.graphClassRepository = graphClassRepository;
         }
 
-        public Graph GetGraphFromGraphDTO(GraphDTO graphDTO)
+        #region Conversion from GraphDrawingUpdateDTO
+        public Graph GetGraphFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO, bool calculateProperties = true, bool calculateClasses = false)
         {
             Graph graph = new Graph(graphDTO.id, graphDTO.nodes.Count);
 
@@ -40,12 +39,35 @@ namespace GraphAlgorithms.Service.Converters
             }
 
             // Calculate Graph properties
-            GraphEvaluator.CalculateGraphProperties(graph);
+            if (calculateProperties)
+                GraphEvaluator.CalculateGraphProperties(graph);
 
+            // Calculate classes
+            if(calculateClasses)
+                GraphEvaluator.CalculateGraphClasses(graph);
+            
             return graph;
         }
 
-        public GraphDTO GetGraphDTOFromGraph(Graph graph)
+        public async Task<GraphEntity> GetGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO)
+        {
+            Graph graph = GetGraphFromGraphDrawingUpdateDTO(graphDTO, calculateProperties: true, calculateClasses: true);
+
+            GraphEntity graphEntity = await GetGraphEntityFromGraph(graph);
+
+            return graphEntity;
+        }
+        #endregion
+
+        #region Conversion from GraphEntity to GraphDTO and its helpers
+        /// <summary>
+        /// Used for converting Graph object to GraphDTO object for displaying purposes.
+        /// It includes any graph Properties from Graph object, but NOT any Classes,
+        /// as these are copied from GraphEntity directly by their names.
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <returns>GraphDTO</returns>
+        private GraphDTO GetGraphDTOFromGraph(Graph graph)
         {
             GraphDTO graphDTO = new GraphDTO();
 
@@ -71,7 +93,14 @@ namespace GraphAlgorithms.Service.Converters
             return graphDTO;
         }
 
-        public Graph GetGraphFromGraphEntity(GraphEntity graphEntity)
+        /// <summary>
+        /// Used to convert GraphEntity object to Graph object. Will also include any Properties and Classes
+        /// that were previously persisted.
+        /// </summary>
+        /// <param name="graphEntity"></param>
+        /// <returns>Graph</returns>
+        /// <exception cref="InvalidDataException"></exception>
+        private Graph GetGraphFromGraphEntity(GraphEntity graphEntity)
         {
             string graphML = graphEntity.DataXML;
             var xdoc = XDocument.Parse(graphML);
@@ -80,7 +109,7 @@ namespace GraphAlgorithms.Service.Converters
             if (xdoc.Root == null)
                 throw new InvalidDataException(string.Format("Root node does not exist:\r\n{0}", graphML));
 
-            var graphElement = xdoc.Root.Element(Namespace + "graph");
+            var graphElement = xdoc.Root.Element(GraphEvaluator.GraphMLNamespace + "graph");
             if (graphElement == null)
                 throw new InvalidDataException(string.Format("Graph node not found:\r\n{0}", graphML));
 
@@ -89,8 +118,8 @@ namespace GraphAlgorithms.Service.Converters
             if (edgeDefaultAttr != null)
                 isUndirected = edgeDefaultAttr.Value == "undirected";
 
-            var nodeElements = graphElement.Elements(Namespace + "node");
-            var edgeElements = graphElement.Elements(Namespace + "edge");
+            var nodeElements = graphElement.Elements(GraphEvaluator.GraphMLNamespace + "node");
+            var edgeElements = graphElement.Elements(GraphEvaluator.GraphMLNamespace + "edge");
 
             // Check if nodes and Edges are in valid format
             if (nodeElements.Any(n => n.Attribute("id") == null))
@@ -104,11 +133,11 @@ namespace GraphAlgorithms.Service.Converters
             foreach (var nodeElement in nodeElements)
             {
                 var nodeIndex = nodeElement.Attribute("id").Value;
-                var nodeLabelElement = nodeElement.Elements(Namespace + "data")
+                var nodeLabelElement = nodeElement.Elements(GraphEvaluator.GraphMLNamespace + "data")
                                                     .Where(e => e.Attribute("key").Value == "d0")
                                                     .FirstOrDefault();
 
-                var nodeColorElement = nodeElement.Elements(Namespace + "data")
+                var nodeColorElement = nodeElement.Elements(GraphEvaluator.GraphMLNamespace + "data")
                                                     .Where(e => e.Attribute("key").Value == "d1")
                                                     .FirstOrDefault();
 
@@ -134,8 +163,6 @@ namespace GraphAlgorithms.Service.Converters
                 graph.ConnectNodes(graph.GetNode(sourceIndex), graph.GetNode(targetIndex));
             }
 
-
-
             // TODO: Here, we will add more stuff for mapping GraphProperties
             graph.GraphProperties.WienerIndex = graphEntity.WienerIndex;
 
@@ -151,6 +178,28 @@ namespace GraphAlgorithms.Service.Converters
             return graph;
         }
 
+        public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity)
+        {
+            // Transform Graph Repository model into actual Graph object
+            Graph graph = GetGraphFromGraphEntity(graphEntity);
+
+            // Transform Graph object into GraphDTO
+            GraphDTO graphDTO = GetGraphDTOFromGraph(graph);
+
+            // Add additional data to GraphDTO that are stored to DB and not contained in Graph object
+            graphDTO.actionTypeName = graphEntity.Action.ActionType.Name;
+            graphDTO.actionForGraphClassName = graphEntity.Action.ForGraphClass != null
+                                            ? graphEntity.Action.ForGraphClass.Name : "";
+            graphDTO.createdDate = graphEntity.CreatedDate;
+
+            // Graph Classes
+            if (graphEntity.GraphClasses != null)
+                graphDTO.classNames = string.Join(", ", graphEntity.GraphClasses.Select(c => c.Name));
+
+            return graphDTO;
+        }
+        #endregion
+
         public async Task<GraphEntity> GetGraphEntityFromGraph(Graph graph)
         {
             GraphEntity graphEntity = new GraphEntity()
@@ -159,7 +208,7 @@ namespace GraphAlgorithms.Service.Converters
                 Name = "",
                 Order = graph.Nodes.Count,
                 Size = graph.Edges.Count,
-                DataXML = GetGraphMLForGraph(graph),
+                DataXML = GraphEvaluator.GetGraphMLForGraph(graph),
                 WienerIndex = graph.GraphProperties.WienerIndex
             };
             
@@ -172,77 +221,6 @@ namespace GraphAlgorithms.Service.Converters
             }
 
             return graphEntity;
-        }
-
-        public async Task<GraphEntity> GetGraphEntityFromGraphDTO(GraphDTO graphDTO)
-        {
-            Graph graph = GetGraphFromGraphDTO(graphDTO);
-
-            // Calculate classes
-            GraphEvaluator.CalculateGraphClasses(graph);
-
-            GraphEntity graphEntity = await GetGraphEntityFromGraph(graph);
-
-            return graphEntity;
-        }
-
-        public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity)
-        {
-            // Transform Graph Repository model into actual Graph object
-            Graph graph = GetGraphFromGraphEntity(graphEntity);
-
-            // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = GetGraphDTOFromGraph(graph);
-
-            // Add additional data to GraphDTO that are stored to DB and not contained in Graph object
-            graphDTO.actionTypeName = graphEntity.Action.ActionType.Name;
-            graphDTO.actionForGraphClassName = graphEntity.Action.ForGraphClass != null 
-                                            ? graphEntity.Action.ForGraphClass.Name : "";
-            graphDTO.createdDate = graphEntity.CreatedDate;
-
-            // Graph Classes
-            if(graphEntity.GraphClasses != null)
-                graphDTO.classNames = string.Join(", ", graphEntity.GraphClasses.Select(c => c.Name));
-
-            return graphDTO;
-        }
-
-        private string GetGraphMLForGraph(Graph g)
-        {
-            var xdoc = new XDocument();
-            var root = new XElement(Namespace + "graphml");
-
-            root.Add(new XElement(Namespace + "key", new XAttribute("id", "d0"), new XAttribute("for", "node"), new XAttribute("attr.name", "label"), new XAttribute("attr.type", "string")));
-            root.Add(new XElement(Namespace + "key", new XAttribute("id", "d1"), new XAttribute("for", "node"), new XAttribute("attr.name", "color"), new XAttribute("attr.type", "string")));
-            //root.Add(new XElement("key", new XAttribute("id", "d2"), new XAttribute("for", "edge"), new XAttribute("attr.name", "weight"), new XAttribute("attr.type", "double")));
-
-            var graphElement = new XElement(Namespace + "graph",
-                new XAttribute("id", "G"),
-                new XAttribute("edgedefault", g.IsUndirected ? "undirected" : "directed"));
-
-            foreach (Node node in g.Nodes)
-            {
-                var nodeElement = new XElement(Namespace + "node", new XAttribute("id", node.Index));
-                nodeElement.Add(new XElement(Namespace + "data", new XAttribute("key", "d0"), node.Label));
-                nodeElement.Add(new XElement(Namespace + "data", new XAttribute("key", "d1"), node.NodeProperties.Color));
-                graphElement.Add(nodeElement);
-            }
-
-            foreach (Edge edge in g.Edges)
-            {
-                var edgeElement = new XElement(Namespace + "edge",
-                    new XAttribute("source", edge.GetSrcNodeIndex()),
-                    new XAttribute("target", edge.GetDestNodeIndex()));
-                //edgeElement.Add(new XElement("data", new XAttribute("key", "d2"), edge.Weight));
-                graphElement.Add(edgeElement);
-            }
-
-            root.Add(graphElement);
-            xdoc.Add(root);
-
-            var sb = new StringBuilder();
-            xdoc.Save(new StringWriter(sb));
-            return sb.ToString();
         }
     }
 }

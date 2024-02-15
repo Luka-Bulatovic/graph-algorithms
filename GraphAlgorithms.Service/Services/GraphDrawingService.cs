@@ -31,9 +31,9 @@ namespace GraphAlgorithms.Service.Services
             return graphDTO;
         }
 
-        public async Task<GraphDTO> StoreGraph(GraphDTO graphDTO/*, int ActionTypeID = 1*/)
+        public async Task<GraphDTO> StoreGraph(GraphDrawingUpdateDTO graphDTO/*, int ActionTypeID = 1*/)
         {
-            GraphEntity graphEntity = await graphConverter.GetGraphEntityFromGraphDTO(graphDTO);
+            GraphEntity graphEntity = await graphConverter.GetGraphEntityFromGraphDrawingUpdateDTO(graphDTO);
 
             // We probably don't need ActionTypeID as this should always be for drawing, so enum value is enough
 
@@ -57,9 +57,9 @@ namespace GraphAlgorithms.Service.Services
             return graphConverter.GetGraphDTOFromGraphEntity(storedGraphEntity);
         }
 
-        public int CalculateWienerIndex(GraphDTO graphDTO)
+        public int CalculateWienerIndex(GraphDrawingUpdateDTO graphDTO)
         {
-            Graph graph = graphConverter.GetGraphFromGraphDTO(graphDTO);
+            Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO, calculateProperties: true, calculateClasses: false);
 
             return graph.GraphProperties.WienerIndex;
         }

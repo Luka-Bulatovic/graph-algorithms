@@ -11,11 +11,42 @@ namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IGraphConverter
     {
-        public Graph GetGraphFromGraphDTO(GraphDTO graphDTO);
-        public Graph GetGraphFromGraphEntity(GraphEntity graphEntity);
-        public GraphDTO GetGraphDTOFromGraph(Graph graph);
+        /// <summary>
+        /// Used to convert GraphDrawingUpdateDTO object to Graph object. Has optional parameters
+        /// that allow it to either calculate or not Properties and Classes for Graph object.
+        /// Used when calculating graph properties during drawing, or
+        /// as helper when persisting drawn graphs.
+        /// </summary>
+        /// <param name="graphDTO"></param>
+        /// <param name="calculateProperties"></param>
+        /// <param name="calculateClasses"></param>
+        /// <returns>Graph</returns>
+        public Graph GetGraphFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO, bool calculateProperties, bool calculateClasses);
+
+        /// <summary>
+        /// Used for converting persisted GraphEntity object to GraphDTO object for displaying purposes.
+        /// Will include any graph Properties or Classes that were persisted.
+        /// </summary>
+        /// <param name="graphEntity"></param>
+        /// <returns>GraphDTO</returns>
         public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity);
-        public Task<GraphEntity> GetGraphEntityFromGraphDTO(GraphDTO graphDTO);
+
+        /// <summary>
+        /// Used to convert GraphDrawingUpdateDTO object to GraphEntity object for persisting in database.
+        /// </summary>
+        /// <param name="graphDTO"></param>
+        /// <returns>GraphEntity</returns>
+        public Task<GraphEntity> GetGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO);
+
+        /// <summary>
+        /// This function is used when converting Graph object to GraphEntity object,
+        /// in order to be able to persist it in database. The Graph object is expected to have
+        /// its properties and classes already calculated.
+        /// Used when persisting randomly generated Graph objects, or drawn graphs (that were previously
+        /// converted to Graph objects).
+        /// </summary>
+        /// <param name="graph"></param>
+        /// <returns>GraphEntity</returns>
         public Task<GraphEntity> GetGraphEntityFromGraph(Graph graph);
     }
 }
