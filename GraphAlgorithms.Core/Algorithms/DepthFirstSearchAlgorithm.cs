@@ -14,12 +14,10 @@ namespace GraphAlgorithms.Core.Algorithms
         private NodePropertyArray<int> _component;
         private Node _startNode;
         private int _numberOfComponents;
-        private int _numberOfCycles;
 
         public DepthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
         {
             _numberOfComponents = 0;
-            _numberOfCycles = 0;
             _visited = new NodeVisitedTracker(g.N);
             _prev = new NodePropertyArray<Node>(g.N);
             _component = new NodePropertyArray<int>(g.N);
@@ -31,8 +29,9 @@ namespace GraphAlgorithms.Core.Algorithms
         public override void InitializeValues()
         {
             _numberOfComponents = 0;
-            _numberOfCycles = 0;
+            _visited.Reset();
             _prev.InitializeValues(null);
+            _component.InitializeValues(0);
         }
 
         private void DFS(Node currNode, Node parentNode)
@@ -51,8 +50,6 @@ namespace GraphAlgorithms.Core.Algorithms
 
                 if (!_visited[destNode])
                     DFS(destNode, currNode);
-                else if (_visited[destNode] && _prev[currNode] != null && _prev[currNode].Index != destNode.Index)
-                    _numberOfCycles++;
             }
         }
 
@@ -120,11 +117,6 @@ namespace GraphAlgorithms.Core.Algorithms
         public int GetNumberOfComponents()
         {
             return _numberOfComponents;
-        }
-        
-        public int GetNumberOfCycles()
-        {
-            return _numberOfCycles;
         }
     }
 }

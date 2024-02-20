@@ -20,8 +20,7 @@ namespace GraphAlgorithms.Core.Classifiers
 
             return
                 _dfsAlgorithm.GetNumberOfComponents() == 1
-                && _dfsAlgorithm.G.N == _dfsAlgorithm.G.M
-                && _dfsAlgorithm.GetNumberOfCycles() == 1;
+                && _dfsAlgorithm.G.N == _dfsAlgorithm.G.M;
         }
 
         public GraphClassEnum GetGraphClass()
