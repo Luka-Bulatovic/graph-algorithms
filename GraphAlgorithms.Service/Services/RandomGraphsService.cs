@@ -52,6 +52,13 @@ namespace GraphAlgorithms.Service.Services
             return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
         }
 
+        public async Task<ActionDTO> GenerateRandomAcyclicGraphsWithFixedDiameter(int numberOfNodes, int diameter, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
+        {
+            RandomAcyclicGraphWithFixedDiameterFactory factory = new(numberOfNodes, diameter);
+
+            return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+        }
+
         private async Task<ActionDTO> GenerateRandomGraphs(IGraphFactory factory, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
         {
             List<Graph> graphs = new();

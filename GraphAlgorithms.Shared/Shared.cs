@@ -7,7 +7,8 @@
             UnicyclicBipartiteGraph = 2, 
             Tree = 3, 
             UnicyclicGraph = 4,
-            BipartiteGraph = 5
+            BipartiteGraph = 5,
+            AcyclicGraphWithFixedDiameter = 6
         };
     }
 }

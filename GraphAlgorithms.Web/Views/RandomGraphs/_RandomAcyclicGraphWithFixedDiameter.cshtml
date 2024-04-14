@@ -1,0 +1,18 @@
+﻿@model RandomAcyclicGraphWithFixedDiameterModel
+
+<div class="container w-full grid grid-cols-1 gap-y-4">
+    <div class="col-span-full">
+        <label asp-for="Nodes" class="form-label"></label>
+        <div class="mt-2">
+            <input asp-for="Nodes" type="number" name="@(Model.PropertyNamePrefix)Nodes" step="1" class="form-input-field">
+        </div>
+        <span data-valmsg-for="@(Model.PropertyNamePrefix)Nodes" class="text-danger field-validation-valid" data-valmsg-replace="true"></span>
+    </div>
+    <div class="col-span-full">
+        <label asp-for="Diameter" class="form-label"></label>
+        <div class="mt-2">
+            <input asp-for="Diameter" type="number" name="@(Model.PropertyNamePrefix)Diameter" step="1" class="form-input-field">
+        </div>
+        <span data-valmsg-for="@(Model.PropertyNamePrefix)Diameter" class="text-danger field-validation-valid" data-valmsg-replace="true"></span>
+    </div>
+</div>

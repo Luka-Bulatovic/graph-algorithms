@@ -24,6 +24,9 @@
             <div class="random-graph-params-container random-unicyclic-bipartite-graph-params-container hidden">
                 @Html.Partial("_RandomUnicyclicBipartiteGraph", Model.RandomUnicyclicBipartiteGraphModel)
             </div>
+            <div class="random-graph-params-container random-acyclic-graph-with-fixed-diameter-params-container hidden">
+                @Html.Partial("_RandomAcyclicGraphWithFixedDiameter", Model.RandomAcyclicGraphWithFixedDiameterModel)
+            </div>
 
             <div class="number-of-graphs-container hidden">
                 <div class="col-span-full">
@@ -58,6 +61,7 @@
         paramsContainers: $("#random-graphs-container .random-graph-params-container"),
         connectedGraphParamsContainer: $("#random-graphs-container .random-connected-graph-params-container"),
         unicyclicBipartiteGraphParamsContainer: $("#random-graphs-container .random-unicyclic-bipartite-graph-params-container"),
+        randomAcyclicGraphWithFixedDiameterParamsContainer: $("#random-graphs-container .random-acyclic-graph-with-fixed-diameter-params-container"),
     };
 
     $(document).ready(() => {

@@ -4,6 +4,8 @@ var RandomGraphs = new function () {
         UnicyclicBipartiteGraph: 2,
         Tree: 3,
         UnicyclicGraph: 4,
+        BipartiteGraph: 5,
+        RandomAcyclicGraphWithFixedDiameter: 6
     }
 
     this.Initialize = function (viewDataObj) {
@@ -28,6 +30,10 @@ var RandomGraphs = new function () {
         else if (e.target.value == RandomGraphs.classes.UnicyclicBipartiteGraph) {
             viewDataObj.unicyclicBipartiteGraphParamsContainer.removeClass("hidden");
         }
+        else if (e.target.value == RandomGraphs.classes.RandomAcyclicGraphWithFixedDiameter) {
+            viewDataObj.randomAcyclicGraphWithFixedDiameterParamsContainer.removeClass("hidden");
+        }
+
 
         this.toggleValidationForClass(viewDataObj, e.target.value, false);
 
@@ -53,6 +59,8 @@ var RandomGraphs = new function () {
             paramsContainer = viewDataObj.connectedGraphParamsContainer;
         else if (graphClassID == RandomGraphs.classes.UnicyclicBipartiteGraph)
             paramsContainer = viewDataObj.unicyclicBipartiteGraphParamsContainer;
+        else if (graphClassID == RandomGraphs.classes.RandomAcyclicGraphWithFixedDiameter)
+            paramsContainer = viewDataObj.randomAcyclicGraphWithFixedDiameterParamsContainer;
 
         if (paramsContainer != null) {
             if (validationDisabled) {

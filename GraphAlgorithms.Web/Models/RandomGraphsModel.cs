@@ -11,7 +11,7 @@ namespace GraphAlgorithms.Web.Models
         public SelectList GraphClassList { get; set; }
 
         [DisplayName("Total number of generated Random Graphs")]
-        [Range(1, 30000)]
+        [Range(1, 300000)]
         public int TotalNumberOfRandomGraphs { get; set; }
 
         [DisplayName("Number of top Graphs to store")]
@@ -20,11 +20,13 @@ namespace GraphAlgorithms.Web.Models
 
         public RandomConnectedGraphModel RandomConnectedGraphModel { get; set; }
         public RandomUnicyclicBipartiteGraphModel RandomUnicyclicBipartiteGraphModel { get; set; }
+        public RandomAcyclicGraphWithFixedDiameterModel RandomAcyclicGraphWithFixedDiameterModel { get; set; }
 
         public RandomGraphsModel()
         {
             RandomConnectedGraphModel = new RandomConnectedGraphModel("RandomConnectedGraphModel");
             RandomUnicyclicBipartiteGraphModel = new RandomUnicyclicBipartiteGraphModel("RandomUnicyclicBipartiteGraphModel");
+            RandomAcyclicGraphWithFixedDiameterModel = new RandomAcyclicGraphWithFixedDiameterModel("RandomAcyclicGraphWithFixedDiameterModel");
 
             TotalNumberOfRandomGraphs = 10000;
             StoreTopNumberOfGraphs = 6;

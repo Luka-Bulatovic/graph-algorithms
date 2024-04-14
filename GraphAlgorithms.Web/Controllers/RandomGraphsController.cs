@@ -43,6 +43,9 @@ namespace GraphAlgorithms.Web.Controllers
                 case (int)GraphClassEnum.UnicyclicBipartiteGraph:
                     actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.RandomUnicyclicBipartiteGraphModel.FirstPartitionSize, model.RandomUnicyclicBipartiteGraphModel.SecondPartitionSize, model.RandomUnicyclicBipartiteGraphModel.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
                     break;
+                case (int)GraphClassEnum.AcyclicGraphWithFixedDiameter:
+                    actionDTO = await randomGraphsService.GenerateRandomAcyclicGraphsWithFixedDiameter(model.RandomAcyclicGraphWithFixedDiameterModel.Nodes, model.RandomAcyclicGraphWithFixedDiameterModel.Diameter, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                    break;
                 default:
                     break;
             }
