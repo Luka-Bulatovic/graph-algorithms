@@ -11,7 +11,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Repository"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Service", "GraphAlgorithms.Service\GraphAlgorithms.Service.csproj", "{C04995DE-A876-4C37-828F-E374CAA0BA5F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.Shared", "GraphAlgorithms.Shared\GraphAlgorithms.Shared.csproj", "{5EEC48C0-AA61-4C26-A598-AC578E1C2635}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GraphAlgorithms.Shared", "GraphAlgorithms.Shared\GraphAlgorithms.Shared.csproj", "{5EEC48C0-AA61-4C26-A598-AC578E1C2635}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraphAlgorithms.RandomGeneratorWorker", "GraphAlgorithms.RandomGeneratorWorker\GraphAlgorithms.RandomGeneratorWorker.csproj", "{F3B9ABE8-547F-4546-B785-E34FE0AB1A1E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{5EEC48C0-AA61-4C26-A598-AC578E1C2635}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5EEC48C0-AA61-4C26-A598-AC578E1C2635}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5EEC48C0-AA61-4C26-A598-AC578E1C2635}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3B9ABE8-547F-4546-B785-E34FE0AB1A1E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3B9ABE8-547F-4546-B785-E34FE0AB1A1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3B9ABE8-547F-4546-B785-E34FE0AB1A1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3B9ABE8-547F-4546-B785-E34FE0AB1A1E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

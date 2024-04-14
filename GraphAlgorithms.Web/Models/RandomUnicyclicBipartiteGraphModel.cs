@@ -1,6 +1,8 @@
-﻿using GraphAlgorithms.Web.Attributes;
+﻿using GraphAlgorithms.Shared.DTO;
+using GraphAlgorithms.Web.Attributes;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
 
 namespace GraphAlgorithms.Web.Models
 {
@@ -34,6 +36,16 @@ namespace GraphAlgorithms.Web.Models
 
             if (!string.IsNullOrEmpty(PropertyNamePrefix) && !PropertyNamePrefix.EndsWith('.'))
                 PropertyNamePrefix = PropertyNamePrefix + '.';
+        }
+
+        public RandomGraphDataDTO GetDataDTO()
+        {
+            return new RandomGraphDataDTO
+            {
+                FirstPartitionSize = FirstPartitionSize,
+                SecondPartitionSize = SecondPartitionSize,
+                CycleLength = CycleLength
+            };
         }
     }
 }

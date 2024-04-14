@@ -34,8 +34,17 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task<IActionResult> Save(RandomGraphsModel model)
         {
             ActionDTO actionDTO = null;
+            /*
+             * JSON structure:
+            {
+                GraphClassID: model.GraphClassID,
+                TotalNumberOfRandomGraphs: ?,
+                ReturnNumberOfGraphs: model.StoreTopNumberOfGraphs,
+                Data: {...} // specific data for class
+            }
+            */
 
-            switch(model.GraphClassID)
+            switch (model.GraphClassID)
             {
                 case (int)GraphClassEnum.ConnectedGraph:
                     actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor / 100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);

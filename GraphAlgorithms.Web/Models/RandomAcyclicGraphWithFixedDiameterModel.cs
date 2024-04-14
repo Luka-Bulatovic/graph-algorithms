@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel;
+using System.Text.Json;
+using GraphAlgorithms.Shared.DTO;
 
 namespace GraphAlgorithms.Web.Models
 {
@@ -23,6 +25,15 @@ namespace GraphAlgorithms.Web.Models
 
             if (!string.IsNullOrEmpty(PropertyNamePrefix) && !PropertyNamePrefix.EndsWith('.'))
                 PropertyNamePrefix = PropertyNamePrefix + '.';
+        }
+
+        public RandomGraphDataDTO GetDataDTO()
+        {
+            return new RandomGraphDataDTO
+            {
+                Nodes = Nodes,
+                Diameter = Diameter
+            };
         }
     }
 }
