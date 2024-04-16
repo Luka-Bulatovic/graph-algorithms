@@ -16,7 +16,7 @@ namespace GraphAlgorithms.Service.Services
         private readonly EventingBasicConsumer consumer;
         private readonly ConcurrentDictionary<string, TaskCompletionSource<string>> callbackMapper = new ConcurrentDictionary<string, TaskCompletionSource<string>>();
 
-        public static string RandomGraphsQueueName = "random_graphs_queue_reply";
+        public static string RandomGraphsQueueName = "random_graphs_queue";
 
         public RabbitMQService(string hostName)
         {

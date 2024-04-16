@@ -25,9 +25,25 @@ namespace GraphAlgorithms.RandomGeneratorWorker
 
         private void InitializeRabbitMQ()
         {
-            var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
-            _connection = factory.CreateConnection();
-            _channel = _connection.CreateModel();
+            var rabbitMQHost = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? "localhost";
+            var factory = new ConnectionFactory() { HostName = rabbitMQHost, UserName = "guest", Password = "guest" };
+            bool connected = false;
+
+            while(!connected)
+            {
+                try
+                {
+                    _connection = factory.CreateConnection();
+                    _channel = _connection.CreateModel();
+                    connected = true;
+                }
+                catch(Exception ex)
+                {
+                    _logger.LogInformation(string.Format("Failed to connect to RabbitMQ: {0}", ex.Message));
+                    Thread.Sleep(5000);
+                }
+            }
+
 
             _channel.QueueDeclare(queue: RandomGraphsQueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
             _channel.BasicQos(0, 1, false);
@@ -77,7 +93,7 @@ namespace GraphAlgorithms.RandomGeneratorWorker
                         throw new InvalidOperationException("Invalid Graph Class detected.");
                 }
 
-                List<Graph> graphs = GenerateRandomGraphs(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
+                List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
                 List<string> graphsMLData = new();
                 foreach (Graph graph in graphs)
                 {
@@ -105,25 +121,6 @@ namespace GraphAlgorithms.RandomGeneratorWorker
                 _logger.LogInformation($"Error while handling response: {ex.Message}");
                 _channel.BasicNack(deliveryTag, false, true); // requeue the message for retry or further handling
             }
-        }
-
-        private List<Graph> GenerateRandomGraphs(IGraphFactory factory, int totalNumberOfRandomGraphs, int returnNumberOfGraphs)
-        {
-            List<Graph> graphs = new();
-
-            // Generate totalNumberOfGraphs Random Graphs
-            for (int i = 0; i < totalNumberOfRandomGraphs; i++)
-            {
-                Graph graph = factory.CreateGraph();
-                GraphEvaluator.CalculateGraphProperties(graph);
-                graphs.Add(graph);
-            }
-
-            // Take and return top returnNumberOfGraphs Graphs with largest Wiener index value
-            graphs = graphs.OrderByDescending(graph => graph.GraphProperties.WienerIndex).ToList();
-            graphs = graphs.GetRange(0, returnNumberOfGraphs);
-            
-            return graphs;
         }
 
         private void RabbitMQ_ConnectionShutdown(object sender, ShutdownEventArgs e)

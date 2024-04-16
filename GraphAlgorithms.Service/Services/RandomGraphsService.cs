@@ -42,47 +42,37 @@ namespace GraphAlgorithms.Service.Services
         {
             RandomConnectedUndirectedGraphFactory factory = new(numberOfNodes, minEdgeFactor);
 
-            return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+            List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+
+            return await StoreGeneratedGraphs(graphs, GraphClassEnum.ConnectedGraph);
         }
 
         public async Task<ActionDTO> GenerateRandomUnicyclicBipartiteGraphs(int firstPartitionSize, int secondPartitionSize, int cycleLength, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
         {
             RandomUnicyclicBipartiteGraphFactory factory = new(firstPartitionSize, secondPartitionSize, cycleLength);
 
-            return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+            List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+
+            return await StoreGeneratedGraphs(graphs, GraphClassEnum.UnicyclicBipartiteGraph);
         }
 
         public async Task<ActionDTO> GenerateRandomAcyclicGraphsWithFixedDiameter(int numberOfNodes, int diameter, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
         {
             RandomAcyclicGraphWithFixedDiameterFactory factory = new(numberOfNodes, diameter);
 
-            return await GenerateRandomGraphs(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+            List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+
+            return await StoreGeneratedGraphs(graphs, GraphClassEnum.AcyclicGraphWithFixedDiameter);
         }
 
-        private async Task<ActionDTO> GenerateRandomGraphs(IGraphFactory factory, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
+        public async Task<ActionDTO> StoreGeneratedGraphs(List<Graph> graphs, GraphClassEnum graphClass)
         {
-            List<Graph> graphs = new();
-
-            //      Generating graphs
-            // Generate totalNumberOfGraphs Random Graphs
-            for (int i = 0; i < totalNumberOfRandomGraphs; i++)
-            {
-                Graph graph = factory.CreateGraph();
-                GraphEvaluator.CalculateGraphProperties(graph);
-                graphs.Add(graph);
-            }
-
-            // Take top storeNumberOfGraphs Graphs with largest Wiener index value
-            graphs = graphs.OrderByDescending(graph => graph.GraphProperties.WienerIndex).ToList();
-            graphs = graphs.GetRange(0, storeTopNumberOfGraphs);
-
-
             //      Persisting data
             // Create an ActionEntity and set its properties
             var actionEntity = new ActionEntity
             {
                 ActionTypeID = (int)ActionTypeEnum.GenerateRandom,
-                ForGraphClassID = (int)factory.GetGraphClass(),
+                ForGraphClassID = (int)graphClass,
                 CreatedByID = 0, // Set the creator's ID,
                 CreatedDate = DateTime.UtcNow
             };

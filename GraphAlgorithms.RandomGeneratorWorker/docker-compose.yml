@@ -1,0 +1,26 @@
+﻿version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"  # Application port
+      - "15672:15672"  # Management UI
+    networks:
+      - app-network
+
+  worker:
+    image: neosknight/graph-generator-worker
+    build:
+      context: .  # Docker context set to the current directory (assuming Dockerfile is here)
+    environment:
+      - RABBITMQ_HOST=rabbitmq  # Use the service name as the host
+    depends_on:
+      - rabbitmq
+    networks:
+      - app-network
+    deploy:
+      replicas: 1  # Number of instances of this service to run
+
+networks:
+  app-network:
+    driver: bridge

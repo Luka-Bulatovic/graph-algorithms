@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
@@ -11,7 +12,7 @@ namespace GraphAlgorithms.Web.Models
         public SelectList GraphClassList { get; set; }
 
         [DisplayName("Total number of generated Random Graphs")]
-        [Range(1, 300000)]
+        [Range(1, 1000000)]
         public int TotalNumberOfRandomGraphs { get; set; }
 
         [DisplayName("Number of top Graphs to store")]
@@ -30,6 +31,24 @@ namespace GraphAlgorithms.Web.Models
 
             TotalNumberOfRandomGraphs = 10000;
             StoreTopNumberOfGraphs = 6;
+        }
+
+        public IRandomGraphParamsModel GetParamsModel()
+        {
+            List<IRandomGraphParamsModel> models = new List<IRandomGraphParamsModel>()
+            {
+                RandomConnectedGraphModel,
+                RandomUnicyclicBipartiteGraphModel,
+                RandomAcyclicGraphWithFixedDiameterModel
+            };
+
+            foreach(IRandomGraphParamsModel model in models)
+            {
+                if (model.GetGraphClass() == (Shared.Shared.GraphClassEnum)GraphClassID)
+                    return model;
+            }
+
+            return null;
         }
     }
 }

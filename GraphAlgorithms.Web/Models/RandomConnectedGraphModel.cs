@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace GraphAlgorithms.Web.Models
 {
-    public class RandomConnectedGraphModel
+    public class RandomConnectedGraphModel : IRandomGraphParamsModel
     {
         [DisplayName("Nodes")]
         [Required]
@@ -34,6 +34,11 @@ namespace GraphAlgorithms.Web.Models
                 Nodes = Nodes,
                 MinEdgesFactor = MinEdgesFactor
             };
+        }
+
+        public Shared.Shared.GraphClassEnum GetGraphClass()
+        {
+            return Shared.Shared.GraphClassEnum.ConnectedGraph;
         }
     }
 }

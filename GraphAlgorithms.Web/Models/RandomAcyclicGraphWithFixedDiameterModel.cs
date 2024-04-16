@@ -5,7 +5,7 @@ using GraphAlgorithms.Shared.DTO;
 
 namespace GraphAlgorithms.Web.Models
 {
-    public class RandomAcyclicGraphWithFixedDiameterModel
+    public class RandomAcyclicGraphWithFixedDiameterModel : IRandomGraphParamsModel
     {
         [DisplayName("Nodes")]
         [Required]
@@ -34,6 +34,11 @@ namespace GraphAlgorithms.Web.Models
                 Nodes = Nodes,
                 Diameter = Diameter
             };
+        }
+
+        public Shared.Shared.GraphClassEnum GetGraphClass()
+        {
+            return Shared.Shared.GraphClassEnum.AcyclicGraphWithFixedDiameter;
         }
     }
 }

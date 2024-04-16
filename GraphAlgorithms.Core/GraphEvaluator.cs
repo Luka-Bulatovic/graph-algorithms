@@ -65,6 +65,7 @@ namespace GraphAlgorithms.Core
                     graph.GraphClasses.Add(graphClassifier.GetGraphClass());
         }
 
+        // TODO: We should map properties from and to graphML ?
         public static string GetGraphMLForGraph(Graph g)
         {
             var xdoc = new XDocument();

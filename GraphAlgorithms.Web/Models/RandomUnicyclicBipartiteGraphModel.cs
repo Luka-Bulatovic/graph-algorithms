@@ -6,7 +6,7 @@ using System.Text.Json;
 
 namespace GraphAlgorithms.Web.Models
 {
-    public class RandomUnicyclicBipartiteGraphModel
+    public class RandomUnicyclicBipartiteGraphModel : IRandomGraphParamsModel
     {
         [Required]
         [Range(1, int.MaxValue)]
@@ -46,6 +46,11 @@ namespace GraphAlgorithms.Web.Models
                 SecondPartitionSize = SecondPartitionSize,
                 CycleLength = CycleLength
             };
+        }
+
+        public Shared.Shared.GraphClassEnum GetGraphClass()
+        {
+            return Shared.Shared.GraphClassEnum.UnicyclicBipartiteGraph;
         }
     }
 }
