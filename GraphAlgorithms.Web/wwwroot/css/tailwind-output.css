@@ -896,6 +896,24 @@ select {
   background-color: rgb(161 98 7 / var(--tw-bg-opacity));
 }
 
+.btn-add-to-custom-set, .btn-save-as-custom-set {
+  border-radius: 0.25rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  font-weight: 400;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.btn-add-to-custom-set:hover, .btn-save-as-custom-set:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(161 98 7 / var(--tw-bg-opacity));
+}
+
 .btn-edit {
   border-radius: 0.25rem;
   --tw-bg-opacity: 1;
@@ -1119,6 +1137,10 @@ select {
 
 .col-span-full {
   grid-column: 1 / -1;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 
 .mb-4 {

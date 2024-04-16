@@ -21,6 +21,7 @@ namespace GraphAlgorithms.Repository.Entities
         public DateTime? UpdatedDate { get; set; }
 
         public ICollection<GraphClassEntity> GraphClasses { get; set; }
+        public ICollection<CustomGraphSetEntity> CustomGraphSets { get; set; }
         public ActionEntity Action { get; set; }
     }
 }

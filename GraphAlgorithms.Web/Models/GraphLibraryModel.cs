@@ -13,12 +13,14 @@ namespace GraphAlgorithms.Web.Models
 
         public PaginationModel PaginationInfo { get; set; }
         public SearchModel SearchModel { get; set; }
+        public bool AllowAddingToCustomGraphSets { get; set; }
 
         public GraphLibraryModel()
         {
             ForActionID = 0;
             PaginationInfo = new();
-            
+            AllowAddingToCustomGraphSets = false;
+
             SearchModel = new SearchModel(new List<SearchParameter>()
             {
                 new SearchParameter("id", "ID", SearchParamType.Number, allowMultipleValues: true),

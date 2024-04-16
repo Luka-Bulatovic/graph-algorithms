@@ -16,6 +16,7 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<ActionTypeEntity> ActionTypes { get; set; }
         public DbSet<GraphClassEntity> GraphClasses { get; set; }
         public DbSet<ActionEntity> Actions { get; set; }
+        public DbSet<CustomGraphSetEntity> CustomGraphSets { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -50,7 +51,24 @@ namespace GraphAlgorithms.Repository.Data
                         j.HasKey("GraphClassID", "GraphID"); // Configure the composite primary key for the join table
                     });
 
-
+            //// Graph - CustomGraphSet
+            modelBuilder.Entity<GraphEntity>()
+                .HasMany(g => g.CustomGraphSets)
+                .WithMany(cgs => cgs.Graphs)
+                .UsingEntity<Dictionary<string, object>>(
+                    "CustomGraphSetGraphXRef", // Specify the join table name
+                    j => j.HasOne<CustomGraphSetEntity>() // Configure the relationship to CustomGraphSetEntity
+                        .WithMany()
+                        .HasForeignKey("CustomGraphSetID") // Specify the foreign key column name in the join table
+                        .OnDelete(DeleteBehavior.Cascade), // Configure cascade delete as per your migration
+                    j => j.HasOne<GraphEntity>() // Configure the relationship to GraphEntity
+                        .WithMany()
+                        .HasForeignKey("GraphID") // Specify the foreign key column name in the join table
+                        .OnDelete(DeleteBehavior.Cascade), // Configure cascade delete as per your migration
+                    j =>
+                    {
+                        j.HasKey("CustomGraphSetID", "GraphID"); // Configure the composite primary key for the join table
+                    });
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

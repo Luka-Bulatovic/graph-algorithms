@@ -64,6 +64,10 @@
         @apply bg-yellow-500 hover:bg-yellow-700 text-white font-normal py-1 px-2 rounded;
     }
 
+    .btn-add-to-custom-set, .btn-save-as-custom-set {
+        @apply bg-yellow-500 hover:bg-yellow-700 text-white font-normal py-1 px-2 rounded;
+    }
+
     .btn-edit {
         @apply bg-blue-500 hover:bg-blue-700 text-white font-normal py-1 px-2 rounded;
     }

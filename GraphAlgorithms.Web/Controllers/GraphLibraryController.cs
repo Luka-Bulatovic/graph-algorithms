@@ -39,6 +39,7 @@ namespace GraphAlgorithms.Web.Controllers
             model.ForActionID = actionID;
             model.Graphs = graphs;
             model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
+            model.AllowAddingToCustomGraphSets = true;
 
             return View("Index", model);
         }

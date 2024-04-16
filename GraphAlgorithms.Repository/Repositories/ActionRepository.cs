@@ -24,9 +24,9 @@ namespace GraphAlgorithms.Repository.Repositories
             var actions = await _context.Actions
                                         .Include(g => g.ActionType)
                                         .Include(g => g.ForGraphClass)
+                                        .OrderByDescending(a => a.ID)
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
-                                        .OrderByDescending(a => a.ID)
                                         .ToListAsync();
             return (actions, totalCount);
         }

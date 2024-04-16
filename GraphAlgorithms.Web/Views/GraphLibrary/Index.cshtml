@@ -8,7 +8,9 @@
 <div class="container">
     @if(Model.ForActionID > 0)
     {
-        <h1 class="font-semibold text-2xl mb-8">Action# @Model.ForActionID</h1>
+        <h1 class="font-semibold text-2xl mb-8">
+            Action# @Model.ForActionID
+        </h1>
     }
 
     <!-- Search -->
@@ -16,6 +18,20 @@
         @Html.Partial("_Search", Model.SearchModel)
     </div>
 
+    @if (Model.AllowAddingToCustomGraphSets)
+    {
+        <form id="save-to-custom-set-form" action="@Url.Action("SaveToCustomSet", "GraphLibrary")" method="post">
+            <!-- TODO: Model za formu koja ovo cuva u set, setuje u neka hidden polja itd? Ili model od ovog viewa ima objekat toga modela? -->
+            <div class="w-full mb-2">
+                <button type="button" class="btn-add-to-custom-set">
+                    <i class="fas fa-add"></i> Add to Custom Set
+                </button>
+                <button type="button" class="btn-save-as-custom-set">
+                    <i class="fas fa-save"></i> Save as new Custom Set
+                </button>
+            </div>
+        </form>
+    }
     @for(int i = 0; i < numberOfRows; i++)
     {
         <div class="library-row w-full flex flex-row">
