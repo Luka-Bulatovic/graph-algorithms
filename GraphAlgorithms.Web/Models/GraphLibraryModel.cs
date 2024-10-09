@@ -1,7 +1,9 @@
 ﻿using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Shared;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using static GraphAlgorithms.Shared.SearchParameter;
 
 namespace GraphAlgorithms.Web.Models
@@ -13,7 +15,10 @@ namespace GraphAlgorithms.Web.Models
 
         public PaginationModel PaginationInfo { get; set; }
         public SearchModel SearchModel { get; set; }
+
         public bool AllowAddingToCustomGraphSets { get; set; }
+
+        public SaveActionGraphsToCustomSetModel CustomSetModel { get; set; }
 
         public GraphLibraryModel()
         {
@@ -27,6 +32,8 @@ namespace GraphAlgorithms.Web.Models
                 new SearchParameter("order", "Order", SearchParamType.NumberRange),
                 new SearchParameter("size", "Size", SearchParamType.NumberRange)
             });
+
+            CustomSetModel = new SaveActionGraphsToCustomSetModel();
         }
     }
 }

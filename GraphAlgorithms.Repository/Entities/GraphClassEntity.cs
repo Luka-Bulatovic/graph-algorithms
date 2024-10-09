@@ -13,5 +13,6 @@ namespace GraphAlgorithms.Repository.Entities
         public bool CanGenerateRandomGraphs { get; set; } = false;
 
         public ICollection<GraphEntity> Graphs { get; set; }
+        public ICollection<GraphPropertyEntity> RandomGenerationGraphProperties { get; set; }
     }
 }

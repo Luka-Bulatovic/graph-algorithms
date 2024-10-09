@@ -4,6 +4,7 @@ using GraphAlgorithms.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GraphAlgorithms.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241008104732_AddGraphPropertiesAndRelationshipWithRandomGraphClasses")]
+    partial class AddGraphPropertiesAndRelationshipWithRandomGraphClasses
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -329,43 +332,6 @@ namespace GraphAlgorithms.Repository.Migrations
                     b.HasIndex("GraphPropertyID");
 
                     b.ToTable("RandomGenerationGraphClassPropertyXRef");
-
-                    b.HasData(
-                        new
-                        {
-                            GraphClassID = 1,
-                            GraphPropertyID = 1
-                        },
-                        new
-                        {
-                            GraphClassID = 1,
-                            GraphPropertyID = 2
-                        },
-                        new
-                        {
-                            GraphClassID = 2,
-                            GraphPropertyID = 5
-                        },
-                        new
-                        {
-                            GraphClassID = 2,
-                            GraphPropertyID = 6
-                        },
-                        new
-                        {
-                            GraphClassID = 2,
-                            GraphPropertyID = 4
-                        },
-                        new
-                        {
-                            GraphClassID = 6,
-                            GraphPropertyID = 1
-                        },
-                        new
-                        {
-                            GraphClassID = 6,
-                            GraphPropertyID = 3
-                        });
                 });
 
             modelBuilder.Entity("CustomGraphSetGraphXRef", b =>

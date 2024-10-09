@@ -13,7 +13,8 @@ module.exports = {
               '192': '48rem'
           },
           spacing: {
-              '16': '4rem'
+              '16': '4rem',
+              '96': '24rem'
           }
     }
   },

@@ -20,18 +20,41 @@
 
     @if (Model.AllowAddingToCustomGraphSets)
     {
-        <form id="save-to-custom-set-form" action="@Url.Action("SaveToCustomSet", "GraphLibrary")" method="post">
-            <!-- TODO: Model za formu koja ovo cuva u set, setuje u neka hidden polja itd? Ili model od ovog viewa ima objekat toga modela? -->
-            <div class="w-full mb-2">
-                <button type="button" class="btn-add-to-custom-set">
-                    <i class="fas fa-add"></i> Add to Custom Set
-                </button>
-                <button type="button" class="btn-save-as-custom-set">
-                    <i class="fas fa-save"></i> Save as new Custom Set
-                </button>
+        <div class="w-full mb-2">
+            <button type="button" class="btn-add-to-custom-set">
+                <i class="fas fa-add"></i> Add to Custom Set
+            </button>
+            <button type="button" class="btn-save-as-custom-set">
+                <i class="fas fa-save"></i> Save as new Custom Set
+            </button>
+        </div>
+
+        <!-- Modal for Custom Graph Set -->
+        <div id="custom-set-modal" class="hidden modal">
+            <div class="modal-content">
+                <div class="modal-title">Modal Title</div>
+                <form action="@Url.Action("SaveToCustomSet", "GraphLibrary")" method="post">
+                    <div class="modal-body">
+                        <input type="hidden" asp-for="ForActionID" />
+                        <input type="hidden" asp-for="CustomSetModel.CustomGraphClassSaveType" id="CustomGraphClassSaveType" name="CustomGraphClassSaveType" />
+
+                        <label asp-for="CustomSetModel.NewCustomSetName" class="hidden form-label new-custom-set-fields"></label>
+                        <input type="text" asp-for="CustomSetModel.NewCustomSetName" name="NewCustomSetName" class="hidden form-input-field new-custom-set-fields" />
+
+                        <label asp-for="CustomSetModel.ExistingCustomSet" class="hidden form-label existing-custom-set-fields"></label>
+                        <select asp-for="CustomSetModel.ExistingCustomSetID" name="ExistingCustomSetID" asp-items="Model.CustomSetModel.ExistingCustomSet" class="hidden existing-custom-set-fields sl-searchby mr-2 form-input-field">
+                            <option value="-1">- Please select -</option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn-confirm-modal">Accept</button>
+                        <button class="btn-close-modal">Close</button>
+                    </div>
+                </form>
             </div>
-        </form>
+        </div>
     }
+
     @for(int i = 0; i < numberOfRows; i++)
     {
         <div class="library-row w-full flex flex-row">
@@ -55,4 +78,32 @@
 
     <!-- Pagination -->
     @Html.Partial("_Pagination", Model.PaginationInfo)
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".btn-add-to-custom-set").on('click', (e) => {
+                $(".modal-title").html("Add to Existing Custom Graph Set");
+                $("#CustomGraphClassSaveType").val(1);
+
+                $(".existing-custom-set-fields").removeClass("hidden");
+                $(".new-custom-set-fields").addClass("hidden");
+
+                $("#custom-set-modal").removeClass("hidden");
+            });
+
+            $(".btn-save-as-custom-set").on('click', (e) => {
+                $(".modal-title").html("Save as New Custom Graph Set");
+                $("#CustomGraphClassSaveType").val(2);
+
+                $(".new-custom-set-fields").removeClass("hidden");
+                $(".existing-custom-set-fields").addClass("hidden");
+
+                $("#custom-set-modal").removeClass("hidden");
+            });
+
+            $(".btn-close-modal").on('click', (e) => {
+                $("#custom-set-modal").addClass("hidden");
+            });
+        });
+    </script>
 </div>

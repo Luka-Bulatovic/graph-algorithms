@@ -43,5 +43,10 @@ namespace GraphAlgorithms.Web.Controllers
 
             return View("Index", model);
         }
+
+        public async Task<IActionResult> SaveToCustomSet(SaveActionGraphsToCustomSetModel model)
+        {
+            return Ok();
+        }
     }
 }

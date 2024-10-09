@@ -1,5 +1,6 @@
 ﻿using GraphAlgorithms.Repository.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
 using System.Text;
 using static GraphAlgorithms.Shared.Shared;
@@ -17,17 +18,110 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<GraphClassEntity> GraphClasses { get; set; }
         public DbSet<ActionEntity> Actions { get; set; }
         public DbSet<CustomGraphSetEntity> CustomGraphSets { get; set; }
+        public DbSet<GraphPropertyEntity> GraphProperties { get; set; }
 
+        #region Seeders
+        private void SeedGraphClasses(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GraphClassEntity>().HasData(
+                Enum.GetValues(typeof(GraphClassEnum))
+                    .Cast<GraphClassEnum>()
+                    .Select(e => new GraphClassEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
+            );
+        }
+        private void SeedActionTypes(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<ActionTypeEntity>().HasData(
+                Enum.GetValues(typeof(ActionTypeEnum))
+                    .Cast<ActionTypeEnum>()
+                    .Select(e => new ActionTypeEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
+            );
+        }
+        private void SeedGraphProperties(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<GraphPropertyEntity>().HasData(
+                new List<GraphPropertyEntity>
+                {
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.Order,
+                        Name = "Order",
+                        Description = "",
+                        IsGeneralDisplayProperty = true
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.MinSizeCoef,
+                        Name = "Min. Edges Coefficient",
+                        Description = "Minimum percentage of all possible edges",
+                        IsGeneralDisplayProperty = false
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.Diameter,
+                        Name = "Diameter",
+                        Description = "",
+                        IsGeneralDisplayProperty = true
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.CycleLength,
+                        Name = "Cycle Length",
+                        Description = "Length of cycle in unicyclic graph",
+                        IsGeneralDisplayProperty = false
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.FirstBipartitionSize,
+                        Name = "First Partition Size",
+                        Description = "",
+                        IsGeneralDisplayProperty = false
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.SecondBipartitionSize,
+                        Name = "Second Partition Size",
+                        Description = "",
+                        IsGeneralDisplayProperty = false
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.Radius,
+                        Name = "Radius",
+                        Description = "",
+                        IsGeneralDisplayProperty = true
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.SizeToOrderRatio,
+                        Name = "Size/Order Ratio",
+                        Description = "",
+                        IsGeneralDisplayProperty = true
+                    },
+                }
+            );
+        }
+        
+        private void SeedRandomGenerationGraphClassPropertyRelationship(EntityTypeBuilder j)
+        {
+            j.HasData(
+                // Random Connected Graph
+                new { GraphPropertyID = (int)GraphPropertyEnum.Order, GraphClassID = (int)GraphClassEnum.ConnectedGraph },
+                new { GraphPropertyID = (int)GraphPropertyEnum.MinSizeCoef, GraphClassID = (int)GraphClassEnum.ConnectedGraph },
+
+                // Random Unicyclic Bipartite Graph
+                new { GraphPropertyID = (int)GraphPropertyEnum.FirstBipartitionSize, GraphClassID = (int)GraphClassEnum.UnicyclicBipartiteGraph },
+                new { GraphPropertyID = (int)GraphPropertyEnum.SecondBipartitionSize, GraphClassID = (int)GraphClassEnum.UnicyclicBipartiteGraph },
+                new { GraphPropertyID = (int)GraphPropertyEnum.CycleLength, GraphClassID = (int)GraphClassEnum.UnicyclicBipartiteGraph },
+
+                // Random Acyclic Graph with fixed diameter
+                new { GraphPropertyID = (int)GraphPropertyEnum.Order, GraphClassID = (int)GraphClassEnum.AcyclicGraphWithFixedDiameter },
+                new { GraphPropertyID = (int)GraphPropertyEnum.Diameter, GraphClassID = (int)GraphClassEnum.AcyclicGraphWithFixedDiameter }
+            );
+        }
+        #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             ConfigureEntityToTableMappings(modelBuilder);
-            ConfigureManyToManyMappings(modelBuilder);
             
-            // Seeders
             SeedTables(modelBuilder);
+
+            ConfigureManyToManyMappings(modelBuilder);
         }
 
         private void ConfigureManyToManyMappings(ModelBuilder modelBuilder)
@@ -69,6 +163,27 @@ namespace GraphAlgorithms.Repository.Data
                     {
                         j.HasKey("CustomGraphSetID", "GraphID"); // Configure the composite primary key for the join table
                     });
+
+            //// GraphProperty - GraphClass (Properties whose entry is required for Random Graph Generation)
+            modelBuilder.Entity<GraphPropertyEntity>()
+                .HasMany(g => g.RandomGenerationGraphClasses)
+                .WithMany(gc => gc.RandomGenerationGraphProperties)
+                .UsingEntity<Dictionary<string, object>>(
+                    "RandomGenerationGraphClassPropertyXRef", // Specify the join table name
+                    j => j.HasOne<GraphClassEntity>() // Configure the relationship to GraphClassEntity
+                        .WithMany()
+                        .HasForeignKey("GraphClassID")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j => j.HasOne<GraphPropertyEntity>() // Configure the relationship to GraphPropertyEntity
+                        .WithMany()
+                        .HasForeignKey("GraphPropertyID")
+                        .OnDelete(DeleteBehavior.Cascade),
+                    j =>
+                    {
+                        j.HasKey("GraphClassID", "GraphPropertyID"); // Configure the composite primary key for the join table
+
+                        SeedRandomGenerationGraphClassPropertyRelationship(j);
+                    });
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -108,19 +223,9 @@ namespace GraphAlgorithms.Repository.Data
 
         private void SeedTables(ModelBuilder modelBuilder)
         {
-            // Seed for GraphClass
-            modelBuilder.Entity<GraphClassEntity>().HasData(
-                Enum.GetValues(typeof(GraphClassEnum))
-                    .Cast<GraphClassEnum>()
-                    .Select(e => new GraphClassEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
-            );
-
-            // Seed for ActionType
-            modelBuilder.Entity<ActionTypeEntity>().HasData(
-                Enum.GetValues(typeof(ActionTypeEnum))
-                    .Cast<ActionTypeEnum>()
-                    .Select(e => new ActionTypeEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
-            );
+            SeedGraphClasses(modelBuilder);
+            SeedActionTypes(modelBuilder);
+            SeedGraphProperties(modelBuilder);
         }
 
         private string AddSpacesToEnumName(string enumName)
