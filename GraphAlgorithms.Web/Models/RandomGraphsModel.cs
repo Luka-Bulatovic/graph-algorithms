@@ -1,8 +1,12 @@
-﻿using GraphAlgorithms.Shared.DTO;
+﻿using GraphAlgorithms.Core;
+using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Shared.DTO;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Web.Models
 {
@@ -20,6 +24,8 @@ namespace GraphAlgorithms.Web.Models
         [Range(1, 10)]
         public int StoreTopNumberOfGraphs { get; set; }
 
+        public Dictionary<GraphPropertyEnum, FieldMetadata> PropertiesMetadata { get; set; }
+
         //public RandomConnectedGraphModel RandomConnectedGraphModel { get; set; }
         //public RandomUnicyclicBipartiteGraphModel RandomUnicyclicBipartiteGraphModel { get; set; }
         //public RandomAcyclicGraphWithFixedDiameterModel RandomAcyclicGraphWithFixedDiameterModel { get; set; }
@@ -34,6 +40,30 @@ namespace GraphAlgorithms.Web.Models
 
             TotalNumberOfRandomGraphs = 10000;
             StoreTopNumberOfGraphs = 6;
+            Data = new RandomGraphDataDTO();
+        }
+
+        private Dictionary<GraphPropertyEnum, FieldMetadata> GetAllPropertiesMetadata()
+        {
+            return new Dictionary<GraphPropertyEnum, FieldMetadata>()
+            {
+                { GraphPropertyEnum.Order, new FieldMetadata("Nodes", () => Data.Nodes, value => Data.Nodes = (int)value, typeof(int)) },
+                { GraphPropertyEnum.MinSizeCoef, new FieldMetadata("MinEdgesFactor", () => Data.MinEdgesFactor, value => Data.MinEdgesFactor = (int)value, typeof(int)) },
+
+                // TODO: Add more here as more are defined
+            };
+        }
+
+        public void InitializeMetadataForProperties(List<GraphPropertyDTO> properties)
+        {
+            this.PropertiesMetadata = new Dictionary<GraphPropertyEnum, FieldMetadata>();
+            Dictionary<GraphPropertyEnum, FieldMetadata> allPropertiesMetadata = GetAllPropertiesMetadata();
+
+            foreach(var property in properties)
+            {
+                if(allPropertiesMetadata.ContainsKey((GraphPropertyEnum)property.ID))
+                    this.PropertiesMetadata[(GraphPropertyEnum)property.ID] = allPropertiesMetadata[(GraphPropertyEnum)property.ID];
+            }
         }
 
         //public IRandomGraphParamsModel GetParamsModel()

@@ -28,6 +28,16 @@
                 @Html.Partial("_RandomAcyclicGraphWithFixedDiameter", Model.RandomAcyclicGraphWithFixedDiameterModel)
             </div> *@
 
+            @foreach(var property in Model.PropertiesMetadata)
+            {
+                <label class="form-label">@property.Key.ToString()</label>
+
+                @if(property.Value.Type == typeof(int))
+                {
+                    <input type="number" class="form-input-field" name="Data.@(property.Value.FieldName)" value="@(property.Value.Getter())" />
+                }
+            }
+
             <div class="number-of-graphs-container hidden">
                 <div class="col-span-full">
                     <label asp-for="TotalNumberOfRandomGraphs" class="form-label"></label>
@@ -73,5 +83,7 @@
         settngs.ignore = ".ignore-val";
 
         RandomGraphs.Initialize(viewDataObj);
+
+        // TODO: Fix initialization and remove these partial views we don't need anymore
     });
 </script>

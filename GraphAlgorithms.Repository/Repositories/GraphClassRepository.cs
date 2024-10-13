@@ -49,5 +49,19 @@ namespace GraphAlgorithms.Repository.Repositories
 
             return graphClasses;
         }
+
+        public async Task<List<GraphPropertyEntity>> GetRandomGenerationPropertiesForGraphClassAsync(int id)
+        {
+            GraphClassEntity? graphClass = await _context
+                .GraphClasses
+                .Where(gc => gc.ID == id)
+                .Include(gc => gc.RandomGenerationGraphProperties)
+                .FirstOrDefaultAsync();
+
+            if (graphClass == null)
+                return new List<GraphPropertyEntity>();
+
+            return graphClass.RandomGenerationGraphProperties.ToList();
+        }
     }
 }

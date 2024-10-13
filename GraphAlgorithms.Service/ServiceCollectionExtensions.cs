@@ -24,6 +24,7 @@ namespace GraphAlgorithms.Service
             services.AddScoped<IGraphConverter, GraphConverter>();
             services.AddScoped<IActionConverter, ActionConverter>();
             services.AddScoped<IGraphClassConverter, GraphClassConverter>();
+            services.AddScoped<IGraphPropertyConverter, GraphPropertyConverter>();
 
             return services;
         }

@@ -23,19 +23,32 @@ namespace GraphAlgorithms.Service.Services
         public readonly IGraphRepository graphRepository;
         public readonly IActionRepository actionRepository;
         public readonly IGraphClassRepository graphClassRepository;
+        public readonly IGraphPropertyConverter graphPropertyConverter;
 
         public RandomGraphsService(
             IGraphConverter graphConverter,
             IGraphRepository graphRepository,
             IActionConverter actionConverter,
             IActionRepository actionRepository,
-            IGraphClassRepository graphClassRepository)
+            IGraphClassRepository graphClassRepository,
+            IGraphPropertyConverter graphPropertyConverter)
         {
             this.graphConverter = graphConverter;
             this.graphRepository = graphRepository;
             this.actionConverter = actionConverter;
             this.actionRepository = actionRepository;
             this.graphClassRepository = graphClassRepository;
+            this.graphPropertyConverter = graphPropertyConverter;
+        }
+
+        public async Task<List<GraphPropertyDTO>> GetGraphClassProperties(GraphClassEnum graphClass)
+        {
+            List<GraphPropertyEntity> propertyEntities = 
+                await graphClassRepository.GetRandomGenerationPropertiesForGraphClassAsync((int)graphClass);
+
+            return propertyEntities
+                .Select(pe => graphPropertyConverter.GetGraphPropertyDTOFromGraphPropertyEntity(pe))
+                .ToList();
         }
 
         public async Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)

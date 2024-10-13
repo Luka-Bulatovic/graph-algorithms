@@ -29,10 +29,21 @@ namespace GraphAlgorithms.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            RandomGraphsModel model = new();
+            // TO-DO: Change this so it's dynamic
+            GraphClassEnum graphClass = GraphClassEnum.ConnectedGraph;
 
-            List<GraphClassDTO> graphClasses = await graphClassService.GetGraphClassesForGeneratingRandomGraphs();
-            model.GraphClassList = new SelectList(graphClasses, "ID", "Name");
+            List<GraphClassDTO> graphClasses = 
+                await graphClassService.GetGraphClassesForGeneratingRandomGraphs();
+            
+            List<GraphPropertyDTO> graphProperties = 
+                await randomGraphsService.GetGraphClassProperties(graphClass);
+
+            RandomGraphsModel model = new RandomGraphsModel()
+            {
+                GraphClassList = new SelectList(graphClasses, "ID", "Name"),
+            };
+
+            model.InitializeMetadataForProperties(graphProperties);
 
             return View(model);
         }
