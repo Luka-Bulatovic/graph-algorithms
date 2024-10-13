@@ -68,7 +68,7 @@ namespace GraphAlgorithms.Web.Controllers
                             (i == numberOfMessages - 1 && model.TotalNumberOfRandomGraphs % numberOfGraphsPerWorker > 0) ?
                                 model.TotalNumberOfRandomGraphs % numberOfGraphsPerWorker :
                                 numberOfGraphsPerWorker,
-                        Data = model.GetParamsModel().GetDataDTO()
+                        Data = model.Data
                     });
                     
                     tasks.Add(mqService.CallAsync(message));
@@ -92,7 +92,7 @@ namespace GraphAlgorithms.Web.Controllers
                 graphs = graphs.OrderByDescending(graph => graph.GraphProperties.WienerIndex).ToList();
                 graphs = graphs.GetRange(0, model.StoreTopNumberOfGraphs);
 
-                actionDTO = await randomGraphsService.StoreGeneratedGraphs(graphs, model.GetParamsModel().GetGraphClass());
+                actionDTO = await randomGraphsService.StoreGeneratedGraphs(graphs, (GraphClassEnum)model.GraphClassID);
             }
             catch(Exception ex)
             {
@@ -100,13 +100,13 @@ namespace GraphAlgorithms.Web.Controllers
                 switch (model.GraphClassID)
                 {
                     case (int)GraphClassEnum.ConnectedGraph:
-                        actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.RandomConnectedGraphModel.Nodes, (double)model.RandomConnectedGraphModel.MinEdgesFactor / 100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                        actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.Data.Nodes, (double)model.Data.MinEdgesFactor / 100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
                         break;
                     case (int)GraphClassEnum.UnicyclicBipartiteGraph:
-                        actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.RandomUnicyclicBipartiteGraphModel.FirstPartitionSize, model.RandomUnicyclicBipartiteGraphModel.SecondPartitionSize, model.RandomUnicyclicBipartiteGraphModel.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                        actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.Data.FirstPartitionSize, model.Data.SecondPartitionSize, model.Data.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
                         break;
                     case (int)GraphClassEnum.AcyclicGraphWithFixedDiameter:
-                        actionDTO = await randomGraphsService.GenerateRandomAcyclicGraphsWithFixedDiameter(model.RandomAcyclicGraphWithFixedDiameterModel.Nodes, model.RandomAcyclicGraphWithFixedDiameterModel.Diameter, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                        actionDTO = await randomGraphsService.GenerateRandomAcyclicGraphsWithFixedDiameter(model.Data.Nodes, model.Data.Diameter, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
                         break;
                     default:
                         break;

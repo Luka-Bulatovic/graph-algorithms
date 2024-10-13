@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using GraphAlgorithms.Shared.DTO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
@@ -19,36 +20,38 @@ namespace GraphAlgorithms.Web.Models
         [Range(1, 10)]
         public int StoreTopNumberOfGraphs { get; set; }
 
-        public RandomConnectedGraphModel RandomConnectedGraphModel { get; set; }
-        public RandomUnicyclicBipartiteGraphModel RandomUnicyclicBipartiteGraphModel { get; set; }
-        public RandomAcyclicGraphWithFixedDiameterModel RandomAcyclicGraphWithFixedDiameterModel { get; set; }
+        //public RandomConnectedGraphModel RandomConnectedGraphModel { get; set; }
+        //public RandomUnicyclicBipartiteGraphModel RandomUnicyclicBipartiteGraphModel { get; set; }
+        //public RandomAcyclicGraphWithFixedDiameterModel RandomAcyclicGraphWithFixedDiameterModel { get; set; }
+
+        public RandomGraphDataDTO Data { get; set; }
 
         public RandomGraphsModel()
         {
-            RandomConnectedGraphModel = new RandomConnectedGraphModel("RandomConnectedGraphModel");
-            RandomUnicyclicBipartiteGraphModel = new RandomUnicyclicBipartiteGraphModel("RandomUnicyclicBipartiteGraphModel");
-            RandomAcyclicGraphWithFixedDiameterModel = new RandomAcyclicGraphWithFixedDiameterModel("RandomAcyclicGraphWithFixedDiameterModel");
+            //RandomConnectedGraphModel = new RandomConnectedGraphModel("RandomConnectedGraphModel");
+            //RandomUnicyclicBipartiteGraphModel = new RandomUnicyclicBipartiteGraphModel("RandomUnicyclicBipartiteGraphModel");
+            //RandomAcyclicGraphWithFixedDiameterModel = new RandomAcyclicGraphWithFixedDiameterModel("RandomAcyclicGraphWithFixedDiameterModel");
 
             TotalNumberOfRandomGraphs = 10000;
             StoreTopNumberOfGraphs = 6;
         }
 
-        public IRandomGraphParamsModel GetParamsModel()
-        {
-            List<IRandomGraphParamsModel> models = new List<IRandomGraphParamsModel>()
-            {
-                RandomConnectedGraphModel,
-                RandomUnicyclicBipartiteGraphModel,
-                RandomAcyclicGraphWithFixedDiameterModel
-            };
+        //public IRandomGraphParamsModel GetParamsModel()
+        //{
+        //    List<IRandomGraphParamsModel> models = new List<IRandomGraphParamsModel>()
+        //    {
+        //        RandomConnectedGraphModel,
+        //        RandomUnicyclicBipartiteGraphModel,
+        //        RandomAcyclicGraphWithFixedDiameterModel
+        //    };
 
-            foreach(IRandomGraphParamsModel model in models)
-            {
-                if (model.GetGraphClass() == (Shared.Shared.GraphClassEnum)GraphClassID)
-                    return model;
-            }
+        //    foreach(IRandomGraphParamsModel model in models)
+        //    {
+        //        if (model.GetGraphClass() == (Shared.Shared.GraphClassEnum)GraphClassID)
+        //            return model;
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
     }
 }
