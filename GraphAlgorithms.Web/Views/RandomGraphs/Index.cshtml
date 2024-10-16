@@ -18,27 +18,64 @@
                 </div>
             </div>
 
-@*             <div class="random-graph-params-container random-connected-graph-params-container hidden">
-                @Html.Partial("_RandomConnectedGraph", Model.RandomConnectedGraphModel)
-            </div>
-            <div class="random-graph-params-container random-unicyclic-bipartite-graph-params-container hidden">
-                @Html.Partial("_RandomUnicyclicBipartiteGraph", Model.RandomUnicyclicBipartiteGraphModel)
-            </div>
-            <div class="random-graph-params-container random-acyclic-graph-with-fixed-diameter-params-container hidden">
-                @Html.Partial("_RandomAcyclicGraphWithFixedDiameter", Model.RandomAcyclicGraphWithFixedDiameterModel)
-            </div> *@
-
             @foreach(var property in Model.PropertiesMetadata)
             {
+                // Set correct field type
+                string fieldType = "";
+                if (property.Value.Type == typeof(int))
+                    fieldType = "number";
+                // TODO: Add more types here as needed
+                else
+                    fieldType = "text";
+
+
+
+
                 <label class="form-label">@property.Key.ToString()</label>
 
-                @if(property.Value.Type == typeof(int))
-                {
-                    <input type="number" class="form-input-field" name="Data.@(property.Value.FieldName)" value="@(property.Value.Getter())" />
-                }
+                <input
+                    type="@(fieldType)"
+                    class="form-input-field"
+                    name="Data.@(property.Value.FieldName)"
+                    id="@(property.Value.FieldName)"
+                    value="@(property.Value.Getter())"
+                    data-val="true"
+
+                    @* Validation attributes *@
+                    @if(property.Value.IsRequired)
+                    {
+                        @:data-val="true" 
+                        @:data-val-required="@property.Value.RequiredErrorMessage"
+                    }
+                    @if (property.Value.MinValue.HasValue)
+                    {
+                        @:data-val-range-min="@property.Value.MinValue"
+                        @:min="@property.Value.MinValue"
+                    }
+                    @if (property.Value.MaxValue.HasValue)
+                    {
+                        @:data-val-range-max="@property.Value.MaxValue"
+                        @:max="@property.Value.MaxValue"
+                    }
+                    @if (property.Value.MinValue.HasValue || property.Value.MaxValue.HasValue)
+                    {
+                        @:data-val-range="@property.Value.RangeErrorMessage"
+                    }
+                    @if (property.Value.IsEven)
+                    {
+                        @:data-val-evenvalue="@property.Value.EvenErrorMessage"
+                    }
+                    @if(property.Value.LessThanOrEqualToPropertyNames != null && property.Value.LessThanOrEqualToPropertyNames.Length > 0)
+                    {
+                        @:data-val-lessthanorequaltoproperty="@property.Value.LessThanOrEqualToErrorMessage"
+                        @:data-val-lessthanorequaltoproperty-otherpropertynames="@string.Join("##", property.Value.LessThanOrEqualToPropertyNames)"
+                    }
+                />
+
+                <span data-valmsg-for="Data.@(property.Value.FieldName)" class="text-danger field-validation-valid" data-valmsg-replace="true"></span>
             }
 
-            <div class="number-of-graphs-container hidden">
+            <div class="number-of-graphs-container @(Model.GraphClassID > 0 ? "" : "hidden")">
                 <div class="col-span-full">
                     <label asp-for="TotalNumberOfRandomGraphs" class="form-label"></label>
                     <div class="mt-2">
@@ -56,7 +93,7 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-submit mt-4 hidden">Generate</button>
+        <button type="submit" class="btn btn-submit mt-4 @(Model.GraphClassID > 0 ? "" : "hidden")">Generate</button>
     </form>
 </div>
 
@@ -68,10 +105,7 @@
         btnGenerate: $("#random-graphs-container button.btn-submit"),
         numberOfGraphsContainer: $("#random-graphs-container .number-of-graphs-container"),
         graphClassList: $("#random-graphs-container .sl-graph-class"),
-        paramsContainers: $("#random-graphs-container .random-graph-params-container"),
-        connectedGraphParamsContainer: $("#random-graphs-container .random-connected-graph-params-container"),
-        unicyclicBipartiteGraphParamsContainer: $("#random-graphs-container .random-unicyclic-bipartite-graph-params-container"),
-        randomAcyclicGraphWithFixedDiameterParamsContainer: $("#random-graphs-container .random-acyclic-graph-with-fixed-diameter-params-container"),
+        indexAction: '@Url.Action("Index", "RandomGraphs")',
     };
 
     $(document).ready(() => {
@@ -79,11 +113,9 @@
         viewDataObj.form.validate(); // Initialize jQuery Validation on your form
 
         // Ignore validation of elements with ignore-val
-        var settngs = $.data(viewDataObj.form[0], 'validator').settings;
-        settngs.ignore = ".ignore-val";
+        /*var settngs = $.data(viewDataObj.form[0], 'validator').settings;
+        settngs.ignore = ".ignore-val";*/
 
         RandomGraphs.Initialize(viewDataObj);
-
-        // TODO: Fix initialization and remove these partial views we don't need anymore
     });
 </script>

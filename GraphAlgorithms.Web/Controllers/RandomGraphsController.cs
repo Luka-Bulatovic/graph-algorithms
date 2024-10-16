@@ -27,19 +27,18 @@ namespace GraphAlgorithms.Web.Controllers
         }
 
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            // TO-DO: Change this so it's dynamic
-            GraphClassEnum graphClass = GraphClassEnum.ConnectedGraph;
-
             List<GraphClassDTO> graphClasses = 
                 await graphClassService.GetGraphClassesForGeneratingRandomGraphs();
-            
-            List<GraphPropertyDTO> graphProperties = 
-                await randomGraphsService.GetGraphClassProperties(graphClass);
+
+            List<GraphPropertyDTO> graphProperties = new();
+            if(id.HasValue)
+                graphProperties = await randomGraphsService.GetGraphClassProperties((GraphClassEnum)id.Value);
 
             RandomGraphsModel model = new RandomGraphsModel()
             {
+                GraphClassID = id.HasValue ? id.Value : 0,
                 GraphClassList = new SelectList(graphClasses, "ID", "Name"),
             };
 

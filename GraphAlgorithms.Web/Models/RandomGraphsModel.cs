@@ -26,18 +26,10 @@ namespace GraphAlgorithms.Web.Models
 
         public Dictionary<GraphPropertyEnum, FieldMetadata> PropertiesMetadata { get; set; }
 
-        //public RandomConnectedGraphModel RandomConnectedGraphModel { get; set; }
-        //public RandomUnicyclicBipartiteGraphModel RandomUnicyclicBipartiteGraphModel { get; set; }
-        //public RandomAcyclicGraphWithFixedDiameterModel RandomAcyclicGraphWithFixedDiameterModel { get; set; }
-
         public RandomGraphDataDTO Data { get; set; }
 
         public RandomGraphsModel()
         {
-            //RandomConnectedGraphModel = new RandomConnectedGraphModel("RandomConnectedGraphModel");
-            //RandomUnicyclicBipartiteGraphModel = new RandomUnicyclicBipartiteGraphModel("RandomUnicyclicBipartiteGraphModel");
-            //RandomAcyclicGraphWithFixedDiameterModel = new RandomAcyclicGraphWithFixedDiameterModel("RandomAcyclicGraphWithFixedDiameterModel");
-
             TotalNumberOfRandomGraphs = 10000;
             StoreTopNumberOfGraphs = 6;
             Data = new RandomGraphDataDTO();
@@ -47,8 +39,82 @@ namespace GraphAlgorithms.Web.Models
         {
             return new Dictionary<GraphPropertyEnum, FieldMetadata>()
             {
-                { GraphPropertyEnum.Order, new FieldMetadata("Nodes", () => Data.Nodes, value => Data.Nodes = (int)value, typeof(int)) },
-                { GraphPropertyEnum.MinSizeCoef, new FieldMetadata("MinEdgesFactor", () => Data.MinEdgesFactor, value => Data.MinEdgesFactor = (int)value, typeof(int)) },
+                { 
+                    GraphPropertyEnum.Order, 
+                    new FieldMetadata(
+                        "Nodes", 
+                        () => Data.Nodes, 
+                        value => Data.Nodes = (int)value, 
+                        typeof(int),
+                        isRequired: true,
+                        minValue: 1,
+                        maxValue: 200
+                        ) 
+                },
+                { 
+                    GraphPropertyEnum.MinSizeCoef, 
+                    new FieldMetadata(
+                        "MinEdgesFactor", 
+                        () => Data.MinEdgesFactor, 
+                        value => Data.MinEdgesFactor = (int)value, 
+                        typeof(int),
+                        isRequired: true,
+                        minValue: 1,
+                        maxValue: 100
+                        ) 
+                },
+                
+                { 
+                    GraphPropertyEnum.FirstBipartitionSize, 
+                    new FieldMetadata(
+                        "FirstPartitionSize", 
+                        () => Data.FirstPartitionSize, 
+                        value => Data.FirstPartitionSize = (int)value, 
+                        typeof(int),
+                        isRequired: true,
+                        minValue: 1,
+                        maxValue: 100
+                        ) 
+                },
+                { 
+                    GraphPropertyEnum.SecondBipartitionSize, 
+                    new FieldMetadata(
+                        "SecondPartitionSize", 
+                        () => Data.SecondPartitionSize, 
+                        value => Data.SecondPartitionSize = (int)value, 
+                        typeof(int),
+                        isRequired: true,
+                        minValue: 1,
+                        maxValue: 100
+                        ) 
+                },
+                { 
+                    GraphPropertyEnum.CycleLength, 
+                    new FieldMetadata(
+                        "CycleLength", 
+                        () => Data.CycleLength, 
+                        value => Data.CycleLength = (int)value, 
+                        typeof(int),
+                        isRequired: true,
+                        minValue: 3,
+                        maxValue: 100,
+                        isEven: true,
+                        lessThanOrEqualToPropertyNames: new string[] { "FirstPartitionSize", "SecondPartitionSize" }
+                        ) 
+                },
+
+                { 
+                    GraphPropertyEnum.Diameter, 
+                    new FieldMetadata(
+                        "Diameter", 
+                        () => Data.Diameter, 
+                        value => Data.Diameter = (int)value, 
+                        typeof(int),
+                        isRequired: true,
+                        minValue: 1,
+                        maxValue: 100
+                        ) 
+                },
 
                 // TODO: Add more here as more are defined
             };
@@ -65,23 +131,5 @@ namespace GraphAlgorithms.Web.Models
                     this.PropertiesMetadata[(GraphPropertyEnum)property.ID] = allPropertiesMetadata[(GraphPropertyEnum)property.ID];
             }
         }
-
-        //public IRandomGraphParamsModel GetParamsModel()
-        //{
-        //    List<IRandomGraphParamsModel> models = new List<IRandomGraphParamsModel>()
-        //    {
-        //        RandomConnectedGraphModel,
-        //        RandomUnicyclicBipartiteGraphModel,
-        //        RandomAcyclicGraphWithFixedDiameterModel
-        //    };
-
-        //    foreach(IRandomGraphParamsModel model in models)
-        //    {
-        //        if (model.GetGraphClass() == (Shared.Shared.GraphClassEnum)GraphClassID)
-        //            return model;
-        //    }
-
-        //    return null;
-        //}
     }
 }
