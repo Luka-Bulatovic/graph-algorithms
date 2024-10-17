@@ -21,7 +21,7 @@ namespace GraphAlgorithms.Service.Interfaces
         /// <param name="calculateProperties"></param>
         /// <param name="calculateClasses"></param>
         /// <returns>Graph</returns>
-        public Graph GetGraphFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO, bool calculateProperties, bool calculateClasses);
+        public Graph GetGraphFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO, bool calculateWienerIndexOnly = false);
 
         /// <summary>
         /// Used for converting persisted GraphEntity object to GraphDTO object for displaying purposes.

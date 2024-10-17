@@ -91,7 +91,15 @@ namespace GraphAlgorithms.Core.Factories
                 }
             }
 
+            StoreInitialGraphProperties(g);
+
             return g;
+        }
+
+        private void StoreInitialGraphProperties(Graph g)
+        {
+            g.GraphProperties.Order = this.n;
+            g.GraphProperties.Diameter = this.d;
         }
 
         public Shared.Shared.GraphClassEnum GetGraphClass()

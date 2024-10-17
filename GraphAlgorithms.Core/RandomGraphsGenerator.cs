@@ -17,7 +17,7 @@ namespace GraphAlgorithms.Core
             for (int i = 0; i < totalNumberOfRandomGraphs; i++)
             {
                 Graph graph = factory.CreateGraph();
-                GraphEvaluator.CalculateGraphProperties(graph);
+                GraphEvaluator.CalculateWienerIndex(graph);
                 graphs.Add(graph);
             }
 

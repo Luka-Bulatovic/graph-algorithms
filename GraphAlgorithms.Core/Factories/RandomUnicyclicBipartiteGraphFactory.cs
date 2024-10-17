@@ -153,12 +153,21 @@ namespace GraphAlgorithms.Core.Factories
 
             Console.WriteLine("Cycle Length = " + cycleLength);
 
+            StoreInitialGraphProperties(g);
+
             return g;
         }
 
         public GraphClassEnum GetGraphClass()
         {
             return GraphClassEnum.UnicyclicBipartiteGraph;
+        }
+
+        private void StoreInitialGraphProperties(Graph g)
+        {
+            g.GraphProperties.FirstPartitionSize = this.p;
+            g.GraphProperties.SecondPartitionSize = this.q;
+            g.GraphProperties.CycleLength = this.cycleLength;
         }
     }
 }

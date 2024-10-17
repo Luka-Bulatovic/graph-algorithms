@@ -20,7 +20,7 @@ namespace GraphAlgorithms.Service.Converters
         }
 
         #region Conversion from GraphDrawingUpdateDTO
-        public Graph GetGraphFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO, bool calculateProperties = true, bool calculateClasses = false)
+        public Graph GetGraphFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO, bool calculateWienerIndexOnly = false)
         {
             Graph graph = new Graph(graphDTO.id, graphDTO.nodes.Count);
 
@@ -38,20 +38,17 @@ namespace GraphAlgorithms.Service.Converters
                 graph.ConnectNodes(fromNode, toNode);
             }
 
-            // Calculate Graph properties
-            if (calculateProperties)
-                GraphEvaluator.CalculateGraphProperties(graph);
-
-            // Calculate classes
-            if(calculateClasses)
-                GraphEvaluator.CalculateGraphClasses(graph);
+            if (calculateWienerIndexOnly)
+                GraphEvaluator.CalculateWienerIndex(graph);
+            else
+                GraphEvaluator.CalculateGraphPropertiesAndClasses(graph);
             
             return graph;
         }
 
         public async Task<GraphEntity> GetGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO)
         {
-            Graph graph = GetGraphFromGraphDrawingUpdateDTO(graphDTO, calculateProperties: true, calculateClasses: true);
+            Graph graph = GetGraphFromGraphDrawingUpdateDTO(graphDTO);
 
             GraphEntity graphEntity = await GetGraphEntityFromGraph(graph);
 
@@ -161,6 +158,9 @@ namespace GraphAlgorithms.Service.Converters
                 List<GraphClassEntity> graphClassEntities = await graphClassRepository.GetGraphClassesByIDsAsync(graphClassIDs);
                 graphEntity.GraphClasses = graphClassEntities;
             }
+
+            // TODO: Here, we also need to take GraphProperties from Graph and store them
+            // graph.GraphProperties.Diameter
 
             return graphEntity;
         }

@@ -57,7 +57,7 @@ namespace GraphAlgorithms.Service.Services
             {
                 graphEntity = await graphRepository.GetByIdAsync(graphDTO.id);
 
-                Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO, calculateProperties: true, calculateClasses: true);
+                Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO);
 
                 // Update GraphEntity object
                 graphEntity.Order = graph.Nodes.Count;
@@ -83,7 +83,7 @@ namespace GraphAlgorithms.Service.Services
 
         public int CalculateWienerIndex(GraphDrawingUpdateDTO graphDTO)
         {
-            Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO, calculateProperties: true, calculateClasses: false);
+            Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO, calculateWienerIndexOnly: true);
 
             return graph.GraphProperties.WienerIndex;
         }

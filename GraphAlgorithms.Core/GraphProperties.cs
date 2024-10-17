@@ -10,5 +10,14 @@ namespace GraphAlgorithms.Core
     {
         public int WienerIndex { get; set; }
         /* Other indices in future */
+
+        public int Order { get; set; }
+        public int Diameter { get; set; }
+        public int FirstPartitionSize { get; set; }
+        public int SecondPartitionSize { get; set; }
+        public int CycleLength { get; set; }
+        public int MinEdgesFactor { get; set; }
+
+        // private Dictionary<GraphPropertyEnum, FieldMetadata> 
     }
 }

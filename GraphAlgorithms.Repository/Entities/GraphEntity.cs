@@ -23,5 +23,8 @@ namespace GraphAlgorithms.Repository.Entities
         public ICollection<GraphClassEntity> GraphClasses { get; set; }
         public ICollection<CustomGraphSetEntity> CustomGraphSets { get; set; }
         public ActionEntity Action { get; set; }
+
+        // Navigation property for the many-to-many relationship with properties
+        public ICollection<GraphPropertyValueEntity> GraphPropertyValues { get; set; }
     }
 }

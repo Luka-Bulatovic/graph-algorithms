@@ -19,6 +19,7 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<ActionEntity> Actions { get; set; }
         public DbSet<CustomGraphSetEntity> CustomGraphSets { get; set; }
         public DbSet<GraphPropertyEntity> GraphProperties { get; set; }
+        public DbSet<GraphPropertyValueEntity> GraphPropertyValues { get; set; }
 
         #region Seeders
         private void SeedGraphClasses(ModelBuilder modelBuilder)
@@ -184,6 +185,21 @@ namespace GraphAlgorithms.Repository.Data
 
                         SeedRandomGenerationGraphClassPropertyRelationship(j);
                     });
+
+
+            //// Graph - GraphProperty (GraphPropertyValues table)
+            modelBuilder.Entity<GraphPropertyValueEntity>(entity =>
+            {
+                entity.HasKey(gpv => new { gpv.GraphID, gpv.GraphPropertyID});
+
+                entity.HasOne(gpv => gpv.Graph)
+                      .WithMany(g => g.GraphPropertyValues)
+                      .HasForeignKey(gpv => gpv.GraphID);
+
+                entity.HasOne(gpv => gpv.GraphProperty)
+                      .WithMany(gp => gp.GraphPropertyValues)
+                      .HasForeignKey(gpv => gpv.GraphPropertyID);
+            });
         }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

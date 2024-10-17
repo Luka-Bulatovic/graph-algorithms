@@ -11,7 +11,7 @@ namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IRandomGraphsService
     {
-        Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs);
+        Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, int minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs);
         Task<ActionDTO> GenerateRandomUnicyclicBipartiteGraphs(int firstPartitionSize, int secondPartitionSize, int cycleLength, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs);
         Task<ActionDTO> GenerateRandomAcyclicGraphsWithFixedDiameter(int numberOfNodes, int diameter, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs);
         Task<ActionDTO> StoreGeneratedGraphs(List<Graph> graphs, GraphClassEnum graphClass);

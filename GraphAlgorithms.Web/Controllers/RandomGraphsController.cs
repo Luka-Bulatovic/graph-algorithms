@@ -94,7 +94,7 @@ namespace GraphAlgorithms.Web.Controllers
                     foreach(var graphML in currGraphsML)
                     {
                         Graph graph = GraphEvaluator.GetGraphFromGraphML(0, graphML);
-                        GraphEvaluator.CalculateGraphProperties(graph);
+                        GraphEvaluator.CalculateWienerIndex(graph);
                         graphs.Add(graph);
                     }
                 }
@@ -110,7 +110,7 @@ namespace GraphAlgorithms.Web.Controllers
                 switch (model.GraphClassID)
                 {
                     case (int)GraphClassEnum.ConnectedGraph:
-                        actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.Data.Nodes, (double)model.Data.MinEdgesFactor / 100, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
+                        actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.Data.Nodes, model.Data.MinEdgesFactor, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
                         break;
                     case (int)GraphClassEnum.UnicyclicBipartiteGraph:
                         actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.Data.FirstPartitionSize, model.Data.SecondPartitionSize, model.Data.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);

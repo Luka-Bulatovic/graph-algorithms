@@ -12,13 +12,15 @@ namespace GraphAlgorithms.Core.Factories
     public class RandomConnectedUndirectedGraphFactory : IGraphFactory
     {
         int n;
-        double minEdgesFactor;
+        int minEdgesFactor;
+        double minEdgesFactorPerc;
         Random rnd;
 
-        public RandomConnectedUndirectedGraphFactory(int n, double minEdgesFactor = 0.2)
+        public RandomConnectedUndirectedGraphFactory(int n, int minEdgesFactor = 20)
         {
             this.n = n;    
             this.minEdgesFactor = minEdgesFactor;
+            this.minEdgesFactorPerc = (double)minEdgesFactor / 100;
             this.rnd = new Random();
         }
 
@@ -32,7 +34,7 @@ namespace GraphAlgorithms.Core.Factories
                 g.AddNode(new Node(i, "v" + i.ToString()));
 
             // Generate edges until the Graph is connected and the minNumberOfEdges is reached, using Union-Find data structure
-            int minNumberOfEdges = (int)((double)(n * (n - 1) / 2) * minEdgesFactor);
+            int minNumberOfEdges = (int)((double)(n * (n - 1) / 2) * minEdgesFactorPerc);
             int m = 0;
             
             while (uf.GetSetsCount() > 1 || m < minNumberOfEdges)
@@ -41,6 +43,8 @@ namespace GraphAlgorithms.Core.Factories
 
                 m += isEdgeCreated ? 1 : 0;
             }
+
+            StoreInitialGraphProperties(g);
 
             return g;
         }
@@ -68,6 +72,12 @@ namespace GraphAlgorithms.Core.Factories
             }
             
             return false;
+        }
+
+        private void StoreInitialGraphProperties(Graph g)
+        {
+            g.GraphProperties.Order = this.n;
+            g.GraphProperties.MinEdgesFactor = this.minEdgesFactor;
         }
     }
 }

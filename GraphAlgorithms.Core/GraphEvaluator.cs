@@ -40,10 +40,8 @@ namespace GraphAlgorithms.Core
             };
             return graphClassifiers;
         }
-        #endregion
 
-        #region Main Methods
-        public static void CalculateGraphProperties(Graph graph)
+        private static void CalculateGraphProperties(Graph graph)
         {
             if (graph == null)
                 return;
@@ -51,7 +49,7 @@ namespace GraphAlgorithms.Core
             CalculateWienerIndex(graph);
         }
 
-        public static void CalculateGraphClasses(Graph graph)
+        private static void CalculateGraphClasses(Graph graph)
         {
             if (graph == null || graph.Nodes == null || graph.Nodes.Count == 0)
                 return;
@@ -63,6 +61,14 @@ namespace GraphAlgorithms.Core
             foreach (IGraphClassifier graphClassifier in graphClassifiers)
                 if (graphClassifier.BelongsToClass())
                     graph.GraphClasses.Add(graphClassifier.GetGraphClass());
+        }
+        #endregion
+
+        #region Main Methods
+        public static void CalculateGraphPropertiesAndClasses(Graph graph)
+        {
+            CalculateGraphClasses(graph);
+            CalculateGraphProperties(graph);
         }
 
         // TODO: We should map properties from and to graphML ?

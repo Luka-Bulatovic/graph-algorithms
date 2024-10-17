@@ -51,7 +51,7 @@ namespace GraphAlgorithms.Service.Services
                 .ToList();
         }
 
-        public async Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, double minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
+        public async Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, int minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
         {
             RandomConnectedUndirectedGraphFactory factory = new(numberOfNodes, minEdgeFactor);
 
@@ -93,7 +93,7 @@ namespace GraphAlgorithms.Service.Services
             // Convert and store best Graphs to DB
             foreach (Graph graph in graphs)
             {
-                GraphEvaluator.CalculateGraphClasses(graph);
+                GraphEvaluator.CalculateGraphPropertiesAndClasses(graph);
 
                 GraphEntity graphEntity = await graphConverter.GetGraphEntityFromGraph(graph);
 
