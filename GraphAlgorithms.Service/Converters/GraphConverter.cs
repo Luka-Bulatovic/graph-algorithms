@@ -1,6 +1,7 @@
 ﻿using GraphAlgorithms.Core;
 using GraphAlgorithms.Core.Algorithms;
 using GraphAlgorithms.Repository.Entities;
+using GraphAlgorithms.Repository.Migrations;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
@@ -148,7 +149,8 @@ namespace GraphAlgorithms.Service.Converters
                 Order = graph.Nodes.Count,
                 Size = graph.Edges.Count,
                 DataXML = GraphEvaluator.GetGraphMLForGraph(graph),
-                WienerIndex = graph.GraphProperties.WienerIndex
+                WienerIndex = graph.GraphProperties.WienerIndex,
+                GraphPropertyValues = new List<GraphPropertyValueEntity>()
             };
             
             // Fetch and link Graph Classes to entity
@@ -159,8 +161,32 @@ namespace GraphAlgorithms.Service.Converters
                 graphEntity.GraphClasses = graphClassEntities;
             }
 
-            // TODO: Here, we also need to take GraphProperties from Graph and store them
-            // graph.GraphProperties.Diameter
+            // Link Graph Properties with corresponding values to entity
+            var propertyMappings = graph.GraphProperties.PropertyMappings;
+            foreach (var propertyMapping in propertyMappings)
+            {
+                string propertyValueStr = "";
+                if (propertyMapping.Value.Type == typeof(int) 
+                    && (int)propertyMapping.Value.Getter() != 0)
+                {
+                    propertyValueStr = ((int)propertyMapping.Value.Getter()).ToString();
+                }
+                // TODO: Add cases for some more data types here as needed
+
+
+                // If there is a value, link GraphPropertyValueEntity to Graph
+                if (propertyValueStr.Length > 0) 
+                {
+                    GraphPropertyValueEntity newPropertyValue = new()
+                    {
+                        Graph = graphEntity,
+                        GraphPropertyID = (int)propertyMapping.Key,
+                        PropertyValue = ((int)propertyMapping.Value.Getter()).ToString()
+                    };
+
+                    graphEntity.GraphPropertyValues.Add(newPropertyValue);
+                }
+            }
 
             return graphEntity;
         }
