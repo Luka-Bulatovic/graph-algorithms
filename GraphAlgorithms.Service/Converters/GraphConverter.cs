@@ -165,6 +165,9 @@ namespace GraphAlgorithms.Service.Converters
             var propertyMappings = graph.GraphProperties.PropertyMappings;
             foreach (var propertyMapping in propertyMappings)
             {
+                if (propertyMapping.Value.Getter() == null)
+                    continue;
+
                 string propertyValueStr = "";
                 if (propertyMapping.Value.Type == typeof(int) 
                     && (int)propertyMapping.Value.Getter() != 0)

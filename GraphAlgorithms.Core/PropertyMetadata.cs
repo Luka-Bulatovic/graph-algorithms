@@ -8,12 +8,16 @@ namespace GraphAlgorithms.Core
 {
     public class PropertyMetadata
     {
-        public Func<object> Getter { get; set; }
-        public Type Type { get; set; }
+        public string Name;
+        public Func<object> Getter;
+        public Action<object> Setter;
+        public Type Type;
 
-        public PropertyMetadata(Func<object> getter, Type type)
+        public PropertyMetadata(string name, Func<object> getter, Action<object> setter, Type type)
         {
+            Name = name;
             Getter = getter;
+            Setter = setter;
             Type = type;
         }
     }

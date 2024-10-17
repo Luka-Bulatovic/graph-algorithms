@@ -12,12 +12,12 @@ namespace GraphAlgorithms.Core
         public int WienerIndex { get; set; }
         /* Other indices in future */
 
-        public int Order { get; set; }
-        public int Diameter { get; set; }
-        public int FirstPartitionSize { get; set; }
-        public int SecondPartitionSize { get; set; }
-        public int CycleLength { get; set; }
-        public int MinEdgesFactor { get; set; }
+        public int? Order { get; set; }
+        public int? Diameter { get; set; }
+        public int? FirstPartitionSize { get; set; }
+        public int? SecondPartitionSize { get; set; }
+        public int? CycleLength { get; set; }
+        public int? MinEdgesFactor { get; set; }
 
         private Dictionary<GraphPropertyEnum, PropertyMetadata> propertyMappings;
         public Dictionary<GraphPropertyEnum, PropertyMetadata> PropertyMappings
@@ -36,12 +36,12 @@ namespace GraphAlgorithms.Core
         {
             propertyMappings = new Dictionary<GraphPropertyEnum, PropertyMetadata>()
             {
-                { GraphPropertyEnum.Order, new PropertyMetadata(() => this.Order, typeof(int)) },
-                { GraphPropertyEnum.Diameter, new PropertyMetadata(() => this.Diameter, typeof(int)) },
-                { GraphPropertyEnum.FirstBipartitionSize, new PropertyMetadata(() => this.FirstPartitionSize, typeof(int)) },
-                { GraphPropertyEnum.SecondBipartitionSize, new PropertyMetadata(() => this.SecondPartitionSize, typeof(int)) },
-                { GraphPropertyEnum.CycleLength, new PropertyMetadata(() => this.CycleLength, typeof(int)) },
-                { GraphPropertyEnum.MinSizeCoef, new PropertyMetadata(() => this.MinEdgesFactor, typeof(int)) },
+                { GraphPropertyEnum.Order, new PropertyMetadata("Order", () => this.Order, value => this.Order = (int)value, typeof(int)) },
+                { GraphPropertyEnum.Diameter, new PropertyMetadata("Diameter", () => this.Diameter, value => this.Diameter = (int)value, typeof(int)) },
+                { GraphPropertyEnum.FirstBipartitionSize, new PropertyMetadata("FirstPartitionSize", () => this.FirstPartitionSize, value => this.FirstPartitionSize = (int)value, typeof(int)) },
+                { GraphPropertyEnum.SecondBipartitionSize, new PropertyMetadata("SecondPartitionSize", () => this.SecondPartitionSize, value => this.SecondPartitionSize = (int)value, typeof(int)) },
+                { GraphPropertyEnum.CycleLength, new PropertyMetadata("CycleLength", () => this.CycleLength, value => this.CycleLength = (int)value, typeof(int)) },
+                { GraphPropertyEnum.MinSizeCoef, new PropertyMetadata("MinEdgesFactor", () => this.MinEdgesFactor, value => this.MinEdgesFactor = (int)value, typeof(int)) },
             };
         }
     }

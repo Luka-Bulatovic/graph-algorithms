@@ -4,9 +4,11 @@ using GraphAlgorithms.Core.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Core
 {
@@ -71,7 +73,7 @@ namespace GraphAlgorithms.Core
             CalculateGraphProperties(graph);
         }
 
-        // TODO: We should map properties from and to graphML ?
+        // TODO: We should map properties from and to graphML? => UPD 2024-10-17: In progress
         public static string GetGraphMLForGraph(Graph g)
         {
             var xdoc = new XDocument();
@@ -79,11 +81,25 @@ namespace GraphAlgorithms.Core
 
             root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "d0"), new XAttribute("for", "node"), new XAttribute("attr.name", "label"), new XAttribute("attr.type", "string")));
             root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "d1"), new XAttribute("for", "node"), new XAttribute("attr.name", "color"), new XAttribute("attr.type", "string")));
-            //root.Add(new XElement("key", new XAttribute("id", "d2"), new XAttribute("for", "edge"), new XAttribute("attr.name", "weight"), new XAttribute("attr.type", "double")));
+
+            // Define graph properties
+            var propertyMappings = g.GraphProperties.PropertyMappings;
+            foreach (var propertyMapping in propertyMappings)
+            {
+                if (propertyMapping.Value.Getter() != null)
+                    root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "g" + (int)propertyMapping.Key), new XAttribute("for", "graph"), new XAttribute("attr.name", propertyMapping.Value.Name.ToLower()), new XAttribute("attr.type", propertyMapping.Value.Type.ToString())));
+            }
 
             var graphElement = new XElement(GraphMLNamespace + "graph",
                 new XAttribute("id", "G"),
                 new XAttribute("edgedefault", g.IsUndirected ? "undirected" : "directed"));
+
+            // Map graph property values
+            foreach (var propertyMapping in propertyMappings)
+            {
+                if (propertyMapping.Value.Getter() != null)
+                    graphElement.Add(new XElement(GraphMLNamespace + "data", new XAttribute("key", "g" + (int)propertyMapping.Key), propertyMapping.Value.Getter().ToString()));
+            }
 
             foreach (Node node in g.Nodes)
             {
@@ -134,6 +150,7 @@ namespace GraphAlgorithms.Core
 
             var nodeElements = graphElement.Elements(GraphEvaluator.GraphMLNamespace + "node");
             var edgeElements = graphElement.Elements(GraphEvaluator.GraphMLNamespace + "edge");
+            var graphPropertyElements = graphElement.Elements(GraphEvaluator.GraphMLNamespace + "data");
 
             // Check if nodes and Edges are in valid format
             if (nodeElements.Any(n => n.Attribute("id") == null))
@@ -175,6 +192,45 @@ namespace GraphAlgorithms.Core
                 // double weight = Convert.ToDouble(edgeElement.Element("data")?.Value); // Edge weights
 
                 graph.ConnectNodes(graph.GetNode(sourceIndex), graph.GetNode(targetIndex));
+            }
+
+            foreach(var graphPropertyElement in graphPropertyElements)
+            {
+                string propertyKey = graphPropertyElement.Attribute("key").Value;
+                if (!propertyKey.StartsWith('g'))
+                    continue;
+
+                int propertyID;
+                if (!Int32.TryParse(propertyKey.Substring(1), out propertyID))
+                    continue;
+
+                var propertyDefinitionElement = xdoc.Root.Elements(GraphEvaluator.GraphMLNamespace + "key")
+                                                    .Where(e => e.Attribute("id").Value == propertyKey)
+                                                    .FirstOrDefault();
+                if (propertyDefinitionElement == null)
+                    continue;
+
+                string propertyValueStr = graphPropertyElement.Value;
+                string propertyTypeName = propertyDefinitionElement.Attribute("attr.type").Value;
+
+                var propertyMappings = graph.GraphProperties.PropertyMappings;
+                var propertyMapping = propertyMappings.Where(pm => (int)pm.Key == propertyID).FirstOrDefault();
+                if(!propertyMapping.Equals(default(KeyValuePair<GraphPropertyEnum, PropertyMetadata>)))
+                {
+                    Type targetType = Type.GetType(propertyTypeName);
+                    if (targetType == null)
+                        continue;
+
+                    try
+                    {
+                        object convertedValue = Convert.ChangeType(propertyValueStr, targetType);
+                        propertyMapping.Value.Setter(convertedValue);
+                    }
+                    catch (Exception exc)
+                    {
+
+                    }
+                }
             }
 
             return graph;
