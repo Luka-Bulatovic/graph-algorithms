@@ -14,10 +14,12 @@ namespace GraphAlgorithms.Service.Converters
     public class GraphConverter : IGraphConverter
     {
         public readonly IGraphClassRepository graphClassRepository;
+        public readonly GraphEvaluator graphEvaluator;
 
-        public GraphConverter(IGraphClassRepository graphClassRepository)
+        public GraphConverter(IGraphClassRepository graphClassRepository, GraphEvaluator graphEvaluator)
         {
             this.graphClassRepository = graphClassRepository;
+            this.graphEvaluator = graphEvaluator;
         }
 
         #region Conversion from GraphDrawingUpdateDTO
@@ -40,9 +42,9 @@ namespace GraphAlgorithms.Service.Converters
             }
 
             if (calculateWienerIndexOnly)
-                GraphEvaluator.CalculateWienerIndex(graph);
+                graphEvaluator.CalculateWienerIndex(graph);
             else
-                GraphEvaluator.CalculateGraphPropertiesAndClasses(graph);
+                graphEvaluator.CalculateGraphPropertiesAndClasses(graph);
             
             return graph;
         }
@@ -101,7 +103,7 @@ namespace GraphAlgorithms.Service.Converters
         private Graph GetGraphFromGraphEntity(GraphEntity graphEntity)
         {
             string graphML = graphEntity.DataXML;
-            Graph graph = GraphEvaluator.GetGraphFromGraphML(graphEntity.ID, graphML);
+            Graph graph = graphEvaluator.GetGraphFromGraphML(graphEntity.ID, graphML);
 
             // TODO: Here, we will add more stuff for mapping GraphProperties
             graph.GraphProperties.WienerIndex = graphEntity.WienerIndex;
@@ -148,7 +150,7 @@ namespace GraphAlgorithms.Service.Converters
                 Name = "",
                 Order = graph.Nodes.Count,
                 Size = graph.Edges.Count,
-                DataXML = GraphEvaluator.GetGraphMLForGraph(graph),
+                DataXML = graphEvaluator.GetGraphMLForGraph(graph),
                 WienerIndex = graph.GraphProperties.WienerIndex,
                 GraphPropertyValues = new List<GraphPropertyValueEntity>()
             };

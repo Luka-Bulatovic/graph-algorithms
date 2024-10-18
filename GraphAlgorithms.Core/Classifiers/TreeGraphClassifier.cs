@@ -6,20 +6,20 @@ namespace GraphAlgorithms.Core.Classifiers
 {
     public class TreeGraphClassifier : IGraphClassifier
     {
-        DepthFirstSearchAlgorithm _dfsAlgorithm;
+        private readonly GraphAlgorithmManager graphAlgorithmManager;
 
-        public TreeGraphClassifier(DepthFirstSearchAlgorithm dfsAlgorithm) 
+        public TreeGraphClassifier(GraphAlgorithmManager graphAlgorithmManager) 
         {
-            this._dfsAlgorithm = dfsAlgorithm;
+            this.graphAlgorithmManager = graphAlgorithmManager;
         }
 
-        public bool BelongsToClass()
+        public bool BelongsToClass(Graph graph)
         {
-            if (!_dfsAlgorithm.IsExecuted())
-                _dfsAlgorithm.Run();
+            DepthFirstSearchAlgorithm dfsAlgorithm =
+                graphAlgorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new DepthFirstSearchAlgorithm(g, n));
 
-            return _dfsAlgorithm.GetNumberOfComponents() == 1
-                && _dfsAlgorithm.G.M == _dfsAlgorithm.G.N - 1;
+            return dfsAlgorithm.GetNumberOfComponents() == 1
+                && dfsAlgorithm.G.M == dfsAlgorithm.G.N - 1;
         }
 
         public GraphClassEnum GetGraphClass()

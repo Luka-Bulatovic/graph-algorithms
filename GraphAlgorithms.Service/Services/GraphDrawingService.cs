@@ -16,12 +16,14 @@ namespace GraphAlgorithms.Service.Services
         private readonly IGraphRepository graphRepository;
         private readonly IGraphClassRepository graphClassRepository;
         private readonly IGraphConverter graphConverter;
+        private readonly GraphEvaluator graphEvaluator;
 
-        public GraphDrawingService(IGraphRepository graphRepository, IGraphClassRepository graphClassRepository, IGraphConverter graphConverter)
+        public GraphDrawingService(IGraphRepository graphRepository, IGraphClassRepository graphClassRepository, IGraphConverter graphConverter, GraphEvaluator graphEvaluator)
         {
             this.graphRepository = graphRepository;
             this.graphClassRepository = graphClassRepository;
             this.graphConverter = graphConverter;
+            this.graphEvaluator = graphEvaluator;
         }
 
         public async Task<GraphDTO> GetGraphDTOByIDAsync(int id)
@@ -62,7 +64,7 @@ namespace GraphAlgorithms.Service.Services
                 // Update GraphEntity object
                 graphEntity.Order = graph.Nodes.Count;
                 graphEntity.Size = graph.Edges.Count;
-                graphEntity.DataXML = GraphEvaluator.GetGraphMLForGraph(graph);
+                graphEntity.DataXML = graphEvaluator.GetGraphMLForGraph(graph);
                 graphEntity.WienerIndex = graph.GraphProperties.WienerIndex;
 
                 // Update its GraphClasses

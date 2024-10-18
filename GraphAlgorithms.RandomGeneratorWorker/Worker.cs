@@ -93,11 +93,17 @@ namespace GraphAlgorithms.RandomGeneratorWorker
                         throw new InvalidOperationException("Invalid Graph Class detected.");
                 }
 
-                List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
+
+                GraphAlgorithmManager graphAlgorithmManager = new GraphAlgorithmManager();
+                GraphEvaluator graphEvaluator = new GraphEvaluator(graphAlgorithmManager);
+                RandomGraphsGenerator randomGraphsGenerator = new RandomGraphsGenerator(graphEvaluator);
+                List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
                 List<string> graphsMLData = new();
+
                 foreach (Graph graph in graphs)
                 {
-                    string graphML = GraphEvaluator.GetGraphMLForGraph(graph);
+                    graphEvaluator.CalculateGraphPropertiesAndClasses(graph);
+                    string graphML = graphEvaluator.GetGraphMLForGraph(graph);
                     graphsMLData.Add(graphML);
                 }
 

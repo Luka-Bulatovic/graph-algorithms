@@ -9,7 +9,13 @@ namespace GraphAlgorithms.Core
 {
     public class RandomGraphsGenerator
     {
-        public static List<Graph> GenerateRandomGraphsWithLargestWienerIndex(IGraphFactory factory, int totalNumberOfRandomGraphs, int returnNumberOfGraphs)
+        private readonly GraphEvaluator graphEvaluator;
+        public RandomGraphsGenerator(GraphEvaluator graphEvaluator)
+        {
+            this.graphEvaluator = graphEvaluator;
+        }
+
+        public List<Graph> GenerateRandomGraphsWithLargestWienerIndex(IGraphFactory factory, int totalNumberOfRandomGraphs, int returnNumberOfGraphs)
         {
             List<Graph> graphs = new();
 
@@ -17,7 +23,7 @@ namespace GraphAlgorithms.Core
             for (int i = 0; i < totalNumberOfRandomGraphs; i++)
             {
                 Graph graph = factory.CreateGraph();
-                GraphEvaluator.CalculateWienerIndex(graph);
+                graphEvaluator.CalculateWienerIndex(graph);
                 graphs.Add(graph);
             }
 

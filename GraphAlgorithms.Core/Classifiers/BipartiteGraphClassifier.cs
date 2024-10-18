@@ -11,19 +11,19 @@ namespace GraphAlgorithms.Core.Classifiers
 {
     public class BipartiteGraphClassifier : IGraphClassifier
     {
-        private BreadthFirstSearchAlgorithm _bfsAlgorithm;
+        private readonly GraphAlgorithmManager graphAlgorithmManager;
 
-        public BipartiteGraphClassifier(BreadthFirstSearchAlgorithm bfsAlgorithm)
+        public BipartiteGraphClassifier(GraphAlgorithmManager graphAlgorithmManager)
         {
-            this._bfsAlgorithm = bfsAlgorithm;
+            this.graphAlgorithmManager = graphAlgorithmManager;
         }
 
-        public bool BelongsToClass()
+        public bool BelongsToClass(Graph graph)
         {
-            if (!_bfsAlgorithm.IsExecuted())
-                _bfsAlgorithm.Run();
+            BreadthFirstSearchAlgorithm bfsAlgorithm =
+                graphAlgorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new BreadthFirstSearchAlgorithm(g, n));
 
-            return _bfsAlgorithm.IsBipartiteGraph();
+            return bfsAlgorithm.IsBipartiteGraph();
         }
 
         public GraphClassEnum GetGraphClass()

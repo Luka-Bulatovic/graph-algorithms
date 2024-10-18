@@ -9,7 +9,7 @@ namespace GraphAlgorithms.Core.Interfaces
 {
     public interface IGraphClassifier
     {
-        public bool BelongsToClass();
+        public bool BelongsToClass(Graph graph);
         public GraphClassEnum GetGraphClass();
     }
 }

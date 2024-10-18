@@ -6,21 +6,21 @@ namespace GraphAlgorithms.Core.Classifiers
 {
     public class UnicyclicGraphClassifier : IGraphClassifier
     {
-        private DepthFirstSearchAlgorithm _dfsAlgorithm;
+        private readonly GraphAlgorithmManager graphAlgorithmManager;
 
-        public UnicyclicGraphClassifier(DepthFirstSearchAlgorithm dfsAlgorithm)
+        public UnicyclicGraphClassifier(GraphAlgorithmManager graphAlgorithmManager)
         {
-            _dfsAlgorithm = dfsAlgorithm;
+            this.graphAlgorithmManager = graphAlgorithmManager;
         }
         
-        public bool BelongsToClass()
+        public bool BelongsToClass(Graph graph)
         {
-            if(!_dfsAlgorithm.IsExecuted())
-                _dfsAlgorithm.Run();
+            DepthFirstSearchAlgorithm dfsAlgorithm =
+                graphAlgorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new DepthFirstSearchAlgorithm(g, n));
 
             return
-                _dfsAlgorithm.GetNumberOfComponents() == 1
-                && _dfsAlgorithm.G.N == _dfsAlgorithm.G.M;
+                dfsAlgorithm.GetNumberOfComponents() == 1
+                && dfsAlgorithm.G.N == dfsAlgorithm.G.M;
         }
 
         public GraphClassEnum GetGraphClass()

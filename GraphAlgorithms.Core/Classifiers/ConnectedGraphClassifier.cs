@@ -6,19 +6,19 @@ namespace GraphAlgorithms.Core.Classifiers
 {
     public class ConnectedGraphClassifier : IGraphClassifier
     {
-        private DepthFirstSearchAlgorithm _dfsAlgorithm;
+        private readonly GraphAlgorithmManager graphAlgorithmManager;
 
-        public ConnectedGraphClassifier(DepthFirstSearchAlgorithm dfsAlgorithm)
+        public ConnectedGraphClassifier(GraphAlgorithmManager graphAlgorithmManager)
         {
-            this._dfsAlgorithm = dfsAlgorithm;
+            this.graphAlgorithmManager = graphAlgorithmManager;
         }
 
-        public bool BelongsToClass()
+        public bool BelongsToClass(Graph graph)
         {
-            if (!_dfsAlgorithm.IsExecuted())
-                _dfsAlgorithm.Run();
+            DepthFirstSearchAlgorithm dfsAlgorithm =
+                graphAlgorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new DepthFirstSearchAlgorithm(g, n));
 
-            return _dfsAlgorithm.GetNumberOfComponents() == 1;
+            return dfsAlgorithm.GetNumberOfComponents() == 1;
         }
 
         public GraphClassEnum GetGraphClass()

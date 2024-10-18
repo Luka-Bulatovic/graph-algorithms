@@ -19,11 +19,13 @@ namespace GraphAlgorithms.Web.Controllers
     {
         public readonly IGraphClassService graphClassService;
         public readonly IRandomGraphsService randomGraphsService;
+        public readonly GraphEvaluator graphEvaluator;
 
-        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService)
+        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService, GraphEvaluator graphEvaluator)
         {
             this.graphClassService = graphClassService;
             this.randomGraphsService = randomGraphsService;
+            this.graphEvaluator = graphEvaluator;
         }
 
 
@@ -93,8 +95,8 @@ namespace GraphAlgorithms.Web.Controllers
                     List<string> currGraphsML = JsonSerializer.Deserialize<List<string>>(response);
                     foreach(var graphML in currGraphsML)
                     {
-                        Graph graph = GraphEvaluator.GetGraphFromGraphML(0, graphML);
-                        GraphEvaluator.CalculateWienerIndex(graph);
+                        Graph graph = graphEvaluator.GetGraphFromGraphML(0, graphML);
+                        graphEvaluator.CalculateWienerIndex(graph);
                         graphs.Add(graph);
                     }
                 }

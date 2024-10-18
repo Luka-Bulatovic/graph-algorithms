@@ -16,8 +16,15 @@ namespace GraphAlgorithms.Core
     {
         public static XNamespace GraphMLNamespace = "http://graphml.graphdrawing.org/xmlns";
 
+        private readonly GraphAlgorithmManager algorithmManager;
+
+        public GraphEvaluator(GraphAlgorithmManager algorithmManager)
+        {
+            this.algorithmManager = algorithmManager;
+        }
+
         #region Utils
-        public static void CalculateWienerIndex(Graph graph)
+        public void CalculateWienerIndex(Graph graph)
         {
             if (graph == null)
                 return;
@@ -28,22 +35,20 @@ namespace GraphAlgorithms.Core
             graph.GraphProperties.WienerIndex = wienerAlg.WienerIndexValue;
         }
 
-        private static List<IGraphClassifier> GetGraphClassifiersList(Graph graph)
+        private List<IGraphClassifier> GetGraphClassifiersList()
         {
-            DepthFirstSearchAlgorithm dfsAlgorithm = new(graph, graph.Nodes[0]);
-            BreadthFirstSearchAlgorithm bfsAlgorithm = new(graph, graph.Nodes[0]);
-
             List<IGraphClassifier> graphClassifiers = new List<IGraphClassifier>()
             {
-                new ConnectedGraphClassifier(dfsAlgorithm),
-                new TreeGraphClassifier(dfsAlgorithm),
-                new BipartiteGraphClassifier(bfsAlgorithm),
-                new UnicyclicGraphClassifier(dfsAlgorithm),
+                new ConnectedGraphClassifier(algorithmManager),
+                new TreeGraphClassifier(algorithmManager),
+                new BipartiteGraphClassifier(algorithmManager),
+                new UnicyclicGraphClassifier(algorithmManager),
             };
+
             return graphClassifiers;
         }
 
-        private static void CalculateGraphProperties(Graph graph)
+        private void CalculateGraphProperties(Graph graph)
         {
             if (graph == null)
                 return;
@@ -51,30 +56,30 @@ namespace GraphAlgorithms.Core
             CalculateWienerIndex(graph);
         }
 
-        private static void CalculateGraphClasses(Graph graph)
+        private void CalculateGraphClasses(Graph graph)
         {
             if (graph == null || graph.Nodes == null || graph.Nodes.Count == 0)
                 return;
 
             graph.GraphClasses.Clear();
 
-            List<IGraphClassifier> graphClassifiers = GetGraphClassifiersList(graph);
+            List<IGraphClassifier> graphClassifiers = GetGraphClassifiersList();
 
             foreach (IGraphClassifier graphClassifier in graphClassifiers)
-                if (graphClassifier.BelongsToClass())
+                if (graphClassifier.BelongsToClass(graph))
                     graph.GraphClasses.Add(graphClassifier.GetGraphClass());
         }
         #endregion
 
         #region Main Methods
-        public static void CalculateGraphPropertiesAndClasses(Graph graph)
+        public void CalculateGraphPropertiesAndClasses(Graph graph)
         {
             CalculateGraphClasses(graph);
             CalculateGraphProperties(graph);
         }
 
         // TODO: We should map properties from and to graphML? => UPD 2024-10-17: In progress
-        public static string GetGraphMLForGraph(Graph g)
+        public string GetGraphMLForGraph(Graph g)
         {
             var xdoc = new XDocument();
             var root = new XElement(GraphMLNamespace + "graphml");
@@ -131,7 +136,7 @@ namespace GraphAlgorithms.Core
         /// We should move this somewhere, should not be in evaluator. Maybe move this and above to some GraphMLConverter?
         /// </summary>
         /// <returns></returns>
-        public static Graph GetGraphFromGraphML(int graphID, string graphML)
+        public Graph GetGraphFromGraphML(int graphID, string graphML)
         {
             var xdoc = XDocument.Parse(graphML);
 

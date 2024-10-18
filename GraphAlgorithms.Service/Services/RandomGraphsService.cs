@@ -24,6 +24,8 @@ namespace GraphAlgorithms.Service.Services
         public readonly IActionRepository actionRepository;
         public readonly IGraphClassRepository graphClassRepository;
         public readonly IGraphPropertyConverter graphPropertyConverter;
+        public readonly GraphEvaluator graphEvaluator;
+        public readonly RandomGraphsGenerator randomGraphsGenerator;
 
         public RandomGraphsService(
             IGraphConverter graphConverter,
@@ -31,7 +33,9 @@ namespace GraphAlgorithms.Service.Services
             IActionConverter actionConverter,
             IActionRepository actionRepository,
             IGraphClassRepository graphClassRepository,
-            IGraphPropertyConverter graphPropertyConverter)
+            IGraphPropertyConverter graphPropertyConverter,
+            GraphEvaluator graphEvaluator,
+            RandomGraphsGenerator randomGraphsGenerator)
         {
             this.graphConverter = graphConverter;
             this.graphRepository = graphRepository;
@@ -39,6 +43,8 @@ namespace GraphAlgorithms.Service.Services
             this.actionRepository = actionRepository;
             this.graphClassRepository = graphClassRepository;
             this.graphPropertyConverter = graphPropertyConverter;
+            this.graphEvaluator = graphEvaluator;
+            this.randomGraphsGenerator = randomGraphsGenerator;
         }
 
         public async Task<List<GraphPropertyDTO>> GetGraphClassProperties(GraphClassEnum graphClass)
@@ -55,7 +61,7 @@ namespace GraphAlgorithms.Service.Services
         {
             RandomConnectedUndirectedGraphFactory factory = new(numberOfNodes, minEdgeFactor);
 
-            List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+            List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
 
             return await StoreGeneratedGraphs(graphs, GraphClassEnum.ConnectedGraph);
         }
@@ -64,7 +70,7 @@ namespace GraphAlgorithms.Service.Services
         {
             RandomUnicyclicBipartiteGraphFactory factory = new(firstPartitionSize, secondPartitionSize, cycleLength);
 
-            List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+            List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
 
             return await StoreGeneratedGraphs(graphs, GraphClassEnum.UnicyclicBipartiteGraph);
         }
@@ -73,7 +79,7 @@ namespace GraphAlgorithms.Service.Services
         {
             RandomAcyclicGraphWithFixedDiameterFactory factory = new(numberOfNodes, diameter);
 
-            List<Graph> graphs = RandomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
+            List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
 
             return await StoreGeneratedGraphs(graphs, GraphClassEnum.AcyclicGraphWithFixedDiameter);
         }
@@ -93,7 +99,7 @@ namespace GraphAlgorithms.Service.Services
             // Convert and store best Graphs to DB
             foreach (Graph graph in graphs)
             {
-                GraphEvaluator.CalculateGraphPropertiesAndClasses(graph);
+                graphEvaluator.CalculateGraphPropertiesAndClasses(graph);
 
                 GraphEntity graphEntity = await graphConverter.GetGraphEntityFromGraph(graph);
 

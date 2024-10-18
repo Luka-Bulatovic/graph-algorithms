@@ -1,4 +1,5 @@
-﻿using GraphAlgorithms.Repository.Repositories;
+﻿using GraphAlgorithms.Core;
+using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.Converters;
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Service.Services;
@@ -25,6 +26,10 @@ namespace GraphAlgorithms.Service
             services.AddScoped<IActionConverter, ActionConverter>();
             services.AddScoped<IGraphClassConverter, GraphClassConverter>();
             services.AddScoped<IGraphPropertyConverter, GraphPropertyConverter>();
+
+            services.AddScoped<GraphEvaluator>();
+            services.AddScoped<RandomGraphsGenerator>();
+            services.AddScoped<GraphAlgorithmManager>();
 
             return services;
         }
