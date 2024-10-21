@@ -9,7 +9,8 @@ namespace GraphAlgorithms.Core
 {
     public class Graph
     {
-        public int ID { get; set; }
+        public int ID { get; set; } // ID persisted in DB
+        public Guid GUID { get; private set; }  // The GUID for diferentiating between objects
         public int N { get; set; } // Number of Nodes
         public int M // Number of Edges
         {
@@ -36,6 +37,7 @@ namespace GraphAlgorithms.Core
         public Graph(int id, int n, bool isUndirected = true)
         {
             ID = id;
+            GUID = Guid.NewGuid();
             N = n;
             nodes = new List<Node>();
             edges = new List<Edge>();
