@@ -32,5 +32,10 @@ namespace GraphAlgorithms.Core
             for (int i = 0; i < _values.Length; i++)
                 _values[i] = value;
         }
+
+        public List<T> ToList()
+        {
+            return _values.ToList();
+        }
     }
 }

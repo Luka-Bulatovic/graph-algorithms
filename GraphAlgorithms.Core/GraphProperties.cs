@@ -18,6 +18,8 @@ namespace GraphAlgorithms.Core
         public int? SecondPartitionSize { get; set; }
         public int? CycleLength { get; set; }
         public int? MinEdgesFactor { get; set; }
+        public int? Radius { get; set; }
+        public decimal? SizeToOrderRatio { get; set; }
 
         private Dictionary<GraphPropertyEnum, PropertyMetadata> propertyMappings;
         public Dictionary<GraphPropertyEnum, PropertyMetadata> PropertyMappings
@@ -42,6 +44,8 @@ namespace GraphAlgorithms.Core
                 { GraphPropertyEnum.SecondBipartitionSize, new PropertyMetadata("SecondPartitionSize", () => this.SecondPartitionSize, value => this.SecondPartitionSize = (int)value, typeof(int)) },
                 { GraphPropertyEnum.CycleLength, new PropertyMetadata("CycleLength", () => this.CycleLength, value => this.CycleLength = (int)value, typeof(int)) },
                 { GraphPropertyEnum.MinSizeCoef, new PropertyMetadata("MinEdgesFactor", () => this.MinEdgesFactor, value => this.MinEdgesFactor = (int)value, typeof(int)) },
+                { GraphPropertyEnum.Radius, new PropertyMetadata("Radius", () => this.Radius, value => this.Radius = (int)value, typeof(int)) },
+                { GraphPropertyEnum.SizeToOrderRatio, new PropertyMetadata("SizeToOrderRatio", () => this.SizeToOrderRatio, value => this.SizeToOrderRatio = (decimal)value, typeof(decimal)) },
             };
         }
     }

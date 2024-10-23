@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms.Core.Algorithms;
+using GraphAlgorithms.Shared;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,61 +19,95 @@ namespace GraphAlgorithms.Core
         }
 
         // Method to run an algorithm with a factory delegate that creates the algorithm instance
-        public T RunAlgorithm<T>(Graph graph, Func<Graph, T> algorithmFactory) where T : GraphAlgorithm
+        public T RunAlgorithm<T>(Graph graph, Func<Graph, T> algorithmFactory, bool cacheResult = true) where T : GraphAlgorithm
         {
-            // Ensure a cache exists for the given graph
-            if (!algorithmCache.ContainsKey(graph.GUID))
-            {
-                algorithmCache[graph.GUID] = new Dictionary<Type, GraphAlgorithm>();
-            }
+            Guid graphKey = graph.GUID;
 
-            // Get the type of the algorithm to be run
             Type algorithmType = typeof(T);
 
             // Check if the algorithm is already cached
-            if (!algorithmCache[graph.GUID].ContainsKey(algorithmType))
+            if (algorithmCache.ContainsKey(graphKey) && algorithmCache[graphKey].ContainsKey(algorithmType))
             {
-                // Use the factory to create the algorithm instance
-                var algorithmInstance = algorithmFactory(graph);
-
-                // Run the algorithm
-                algorithmInstance.Run();
-
-                // Cache the instance
-                algorithmCache[graph.GUID][algorithmType] = algorithmInstance;
+                return (T)algorithmCache[graphKey][algorithmType];
             }
 
-            // Return the cached instance
-            return algorithmCache[graph.GUID][algorithmType] as T;
+            // Instantiate and run the algorithm
+            var algorithmInstance = algorithmFactory(graph);
+            algorithmInstance.Run();
+
+            // Cache the result only if needed
+            if (cacheResult)
+            {
+                if (!algorithmCache.ContainsKey(graphKey))
+                {
+                    algorithmCache[graphKey] = new Dictionary<Type, GraphAlgorithm>();
+                }
+
+                algorithmCache[graphKey][algorithmType] = algorithmInstance;
+            }
+
+            return algorithmInstance;
+        }
+
+        public T RunAlgorithm<T>(Graph graph, Func<Graph, GraphAlgorithmManager, T> algorithmFactory, bool cacheResult = true) where T : GraphAlgorithm
+        {
+            Guid graphKey = graph.GUID;
+
+            Type algorithmType = typeof(T);
+
+            // Check if the algorithm is already cached
+            if (algorithmCache.ContainsKey(graphKey) && algorithmCache[graphKey].ContainsKey(algorithmType))
+            {
+                return (T)algorithmCache[graphKey][algorithmType];
+            }
+
+            // Instantiate and run the algorithm
+            var algorithmInstance = algorithmFactory(graph, this);
+            algorithmInstance.Run();
+
+            // Cache the result only if needed
+            if (cacheResult)
+            {
+                if (!algorithmCache.ContainsKey(graphKey))
+                {
+                    algorithmCache[graphKey] = new Dictionary<Type, GraphAlgorithm>();
+                }
+
+                algorithmCache[graphKey][algorithmType] = algorithmInstance;
+            }
+
+            return algorithmInstance;
         }
 
         // Method to run an algorithm that requires two parameters, Graph and startNode
-        public T RunAlgorithm<T>(Graph graph, Node startNode, Func<Graph, Node, T> algorithmFactory) where T : GraphAlgorithm
+        public T RunAlgorithm<T>(Graph graph, Node startNode, Func<Graph, Node, T> algorithmFactory, bool cacheResult = true) where T : GraphAlgorithm
         {
-            // Ensure a cache exists for the given graph
-            if (!algorithmCache.ContainsKey(graph.GUID))
-            {
-                algorithmCache[graph.GUID] = new Dictionary<Type, GraphAlgorithm>();
-            }
+            Guid graphKey = GuidCombiner.GenerateCombinedGuid(graph.GUID, startNode.Index);
 
-            // Get the type of the algorithm to be run
             Type algorithmType = typeof(T);
 
             // Check if the algorithm is already cached
-            if (!algorithmCache[graph.GUID].ContainsKey(algorithmType))
+            if (algorithmCache.ContainsKey(graphKey) && algorithmCache[graphKey].ContainsKey(algorithmType))
             {
-                // Use the factory to create the algorithm instance
-                var algorithmInstance = algorithmFactory(graph, startNode);
-
-                // Run the algorithm
-                algorithmInstance.Run();
-
-                // Cache the instance
-                algorithmCache[graph.GUID][algorithmType] = algorithmInstance;
+                return (T)algorithmCache[graphKey][algorithmType];
             }
 
-            // Return the cached instance
-            return algorithmCache[graph.GUID][algorithmType] as T;
+            // Instantiate and run the algorithm
+            var algorithmInstance = algorithmFactory(graph, startNode);
+            algorithmInstance.Run();
+
+            // Cache the result only if needed
+            if (cacheResult)
+            {
+                if (!algorithmCache.ContainsKey(graphKey))
+                {
+                    algorithmCache[graphKey] = new Dictionary<Type, GraphAlgorithm>();
+                }
+
+                algorithmCache[graphKey][algorithmType] = algorithmInstance;
+            }
+
+            return algorithmInstance;
         }
     }
 }

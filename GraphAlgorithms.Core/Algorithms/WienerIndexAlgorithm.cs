@@ -8,12 +8,28 @@ namespace GraphAlgorithms.Core.Algorithms
 {
     public class WienerIndexAlgorithm : GraphAlgorithm
     {
+        private readonly GraphAlgorithmManager graphAlgorithmManager;
+
         public int[,] Distances;
         public int WienerIndexValue = 0;
+        
+        private int diameter = 0;
+        public int Diameter 
+        {
+            get { return diameter; }
+        }
 
-        public WienerIndexAlgorithm(Graph g) : base(g)
+        private int radius = INF_DISTANCE;
+        public int Radius
+        {
+            get { return radius; }
+        }
+
+        public WienerIndexAlgorithm(Graph g, GraphAlgorithmManager graphAlgorithmManager) : base(g)
         {
             Distances = new int[g.N, g.N];
+
+            this.graphAlgorithmManager = graphAlgorithmManager;
         }
 
         public override void InitializeValues()
@@ -23,15 +39,26 @@ namespace GraphAlgorithms.Core.Algorithms
         public override void Run()
         {
             _isExecuted = false;
+            int currDistance = 0;
 
             OutputDescription.AppendLine("------- Wiener Index Algorithm -------");
             foreach (Node fromNode in G.Nodes)
             {
-                BreadthFirstSearchAlgorithm currNodeBFS = new BreadthFirstSearchAlgorithm(G, fromNode);
-                currNodeBFS.Run();
+                BreadthFirstSearchAlgorithm currNodeBFS =
+                    graphAlgorithmManager.RunAlgorithm(G, fromNode, (g, n) => new BreadthFirstSearchAlgorithm(g, n), cacheResult: false);
+
+                int currNodeEccentricity = 0;
 
                 foreach (Node toNode in G.Nodes)
-                    Distances[fromNode.Index, toNode.Index] = currNodeBFS.GetDistanceToNode(toNode);
+                {
+                    currDistance = currNodeBFS.GetDistanceToNode(toNode);
+                    diameter = Math.Max(diameter, currDistance);
+                    currNodeEccentricity = Math.Max(currNodeEccentricity, currDistance);
+
+                    Distances[fromNode.Index, toNode.Index] = currDistance;
+                }
+
+                radius = Math.Min(radius, currNodeEccentricity);
             }
 
             WienerIndexValue = 0;

@@ -176,6 +176,11 @@ namespace GraphAlgorithms.Service.Converters
                 {
                     propertyValueStr = ((int)propertyMapping.Value.Getter()).ToString();
                 }
+                else if(propertyMapping.Value.Type == typeof(decimal)
+                    && (decimal)propertyMapping.Value.Getter() != 0)
+                {
+                    propertyValueStr = ((decimal)propertyMapping.Value.Getter()).ToString();
+                }
                 // TODO: Add cases for some more data types here as needed
 
 
@@ -186,7 +191,7 @@ namespace GraphAlgorithms.Service.Converters
                     {
                         Graph = graphEntity,
                         GraphPropertyID = (int)propertyMapping.Key,
-                        PropertyValue = ((int)propertyMapping.Value.Getter()).ToString()
+                        PropertyValue = propertyValueStr
                     };
 
                     graphEntity.GraphPropertyValues.Add(newPropertyValue);

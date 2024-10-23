@@ -15,12 +15,20 @@ namespace GraphAlgorithms.Core.Algorithms
         private Node _startNode;
         private int _numberOfComponents;
 
+        private NodePropertyArray<int> _coloring; // (0,1,2) Used for detecting cycles
+        private int _firstCycleLength = 0;
+        public int FirstCycleLength
+        {
+            get { return _firstCycleLength; }
+        }
+
         public DepthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
         {
             _numberOfComponents = 0;
             _visited = new NodeVisitedTracker(g.N);
             _prev = new NodePropertyArray<Node>(g.N);
             _component = new NodePropertyArray<int>(g.N);
+            _coloring = new NodePropertyArray<int>(g.N);
             _startNode = startNode;
 
             InitializeValues();
@@ -32,6 +40,7 @@ namespace GraphAlgorithms.Core.Algorithms
             _visited.Reset();
             _prev.InitializeValues(null);
             _component.InitializeValues(0);
+            _coloring.InitializeValues(0);
         }
 
         private void DFS(Node currNode, Node parentNode)
@@ -39,6 +48,7 @@ namespace GraphAlgorithms.Core.Algorithms
             OutputDescription.Append(currNode.Label + " ");
 
             _visited[currNode] = true;
+            _coloring[currNode] = 1;
             _prev[currNode] = parentNode;
             _component[currNode] = parentNode == null ? currNode.Index : _component[parentNode];
 
@@ -50,7 +60,28 @@ namespace GraphAlgorithms.Core.Algorithms
 
                 if (!_visited[destNode])
                     DFS(destNode, currNode);
+                else if (_coloring[destNode] == 1 && destNode.Index != _prev[currNode].Index) // First Cycle detected
+                {
+                    if (_firstCycleLength == 0)
+                        _firstCycleLength = CalculateCycleLength(destNode, currNode);
+                }
             }
+
+            _coloring[currNode] = 2;
+        }
+
+        private int CalculateCycleLength(Node firstNode, Node lastNode)
+        {
+            Node currNode = lastNode;
+            int length = 1;
+            
+            while(currNode.Index != firstNode.Index)
+            {
+                length++;
+                currNode = _prev[currNode];
+            }
+
+            return length;
         }
 
         public override void Run()
@@ -117,6 +148,11 @@ namespace GraphAlgorithms.Core.Algorithms
         public int GetNumberOfComponents()
         {
             return _numberOfComponents;
+        }
+
+        public bool ContainsCycle()
+        {
+            return _firstCycleLength > 0;
         }
     }
 }

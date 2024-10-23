@@ -26,6 +26,30 @@ namespace GraphAlgorithms.Core.Classifiers
             return bfsAlgorithm.IsBipartiteGraph();
         }
 
+        public (int, int) GetNodeCountInPartitions(Graph graph)
+        {
+            if(!BelongsToClass(graph))
+                return (0, 0);
+            
+            BreadthFirstSearchAlgorithm bfsAlgorithm =
+                graphAlgorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new BreadthFirstSearchAlgorithm(g, n));
+
+            var bipartiteColoring = bfsAlgorithm.BipartiteColoring;
+            if (bipartiteColoring == null)
+                return (0, 0);
+
+            List<GraphAlgorithm.BipartiteColors> bipartiteColorsList = bipartiteColoring.ToList();
+            
+            int firstPartition = bipartiteColorsList
+                                    .Where(c => c == GraphAlgorithm.BipartiteColors.First)
+                                    .Count();
+            int secondPartition = bipartiteColorsList
+                                    .Where(c => c == GraphAlgorithm.BipartiteColors.Second)
+                                    .Count();
+
+            return (firstPartition, secondPartition);
+        }
+
         public GraphClassEnum GetGraphClass()
         {
             return GraphClassEnum.BipartiteGraph;

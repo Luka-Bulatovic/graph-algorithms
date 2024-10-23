@@ -24,15 +24,17 @@ namespace GraphAlgorithms.Core
         }
 
         #region Utils
-        public void CalculateWienerIndex(Graph graph)
+        public WienerIndexAlgorithm CalculateWienerIndex(Graph graph, bool cacheResult = true)
         {
             if (graph == null)
-                return;
-
-            WienerIndexAlgorithm wienerAlg = new WienerIndexAlgorithm(graph);
-            wienerAlg.Run();
+                return null;
+            
+            WienerIndexAlgorithm wienerAlg
+                = algorithmManager.RunAlgorithm(graph, (g, gam) => new WienerIndexAlgorithm(g, gam), cacheResult: cacheResult);
 
             graph.GraphProperties.WienerIndex = wienerAlg.WienerIndexValue;
+
+            return wienerAlg;
         }
 
         private List<IGraphClassifier> GetGraphClassifiersList()
@@ -53,7 +55,41 @@ namespace GraphAlgorithms.Core
             if (graph == null)
                 return;
 
-            CalculateWienerIndex(graph);
+            WienerIndexAlgorithm wienerAlgorithm = CalculateWienerIndex(graph);
+
+
+
+            //// Calculate other properties
+            
+            // 1. Instantiate some utils for this
+            DepthFirstSearchAlgorithm dfsAlgorithm = algorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new DepthFirstSearchAlgorithm(g, n));
+            BipartiteGraphClassifier bipartiteClassifier = new BipartiteGraphClassifier(algorithmManager);
+            UnicyclicGraphClassifier unicyclicGraphClassifier = new UnicyclicGraphClassifier(algorithmManager);
+
+            // 2. Assign property values
+            if(graph.GraphProperties.Order == null)
+                graph.GraphProperties.Order = graph.N;
+            
+            if(graph.GraphProperties.Diameter == null)
+                graph.GraphProperties.Diameter = wienerAlgorithm.Diameter;
+
+            if(graph.GraphProperties.FirstPartitionSize == null
+                && graph.GraphProperties.SecondPartitionSize == null
+                && bipartiteClassifier.BelongsToClass(graph))
+            {
+                (int firstPartitionCount, int secondPartitionCount) = bipartiteClassifier.GetNodeCountInPartitions(graph);
+                graph.GraphProperties.FirstPartitionSize = firstPartitionCount;
+                graph.GraphProperties.SecondPartitionSize = secondPartitionCount;
+            }
+
+            if(graph.GraphProperties.Radius == null)
+                graph.GraphProperties.Radius = wienerAlgorithm.Radius;
+
+            if (graph.GraphProperties.SizeToOrderRatio == null && graph.Edges.Count > 0)
+                graph.GraphProperties.SizeToOrderRatio = (decimal)graph.GraphProperties.Order / graph.Edges.Count;
+
+            if(unicyclicGraphClassifier.BelongsToClass(graph))
+                graph.GraphProperties.CycleLength = dfsAlgorithm.FirstCycleLength;
         }
 
         private void CalculateGraphClasses(Graph graph)

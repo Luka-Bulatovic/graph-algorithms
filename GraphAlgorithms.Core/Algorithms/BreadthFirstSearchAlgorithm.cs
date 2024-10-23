@@ -16,6 +16,17 @@ namespace GraphAlgorithms.Core.Algorithms
         private int _numberOfComponents = 0;
         private bool _isBipartiteGraph = true;
 
+        public NodePropertyArray<BipartiteColors> BipartiteColoring
+        {
+            get
+            {
+                if (!_isBipartiteGraph)
+                    return null;
+                
+                return _bipartiteColoring;
+            }
+        }
+
         public BreadthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
         {
             _visited = new NodeVisitedTracker(g.N);
