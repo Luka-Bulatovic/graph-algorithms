@@ -20,7 +20,9 @@
             FirstBipartitionSize = 5,
             SecondBipartitionSize = 6,
             Radius = 7,
-            SizeToOrderRatio = 8
+            SizeToOrderRatio = 8,
+            Size = 9,
+            WienerIndex = 10
         }
     }
 }

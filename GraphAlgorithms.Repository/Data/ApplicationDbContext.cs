@@ -91,6 +91,18 @@ namespace GraphAlgorithms.Repository.Data
                         Description = "",
                         IsGeneralDisplayProperty = true
                     },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.Size,
+                        Name = "Size",
+                        Description = "Number of edges in graph",
+                        IsGeneralDisplayProperty = true
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.WienerIndex,
+                        Name = "Wiener Index",
+                        Description = "Wiener Index of a graph",
+                        IsGeneralDisplayProperty = true
+                    },
                 }
             );
         }

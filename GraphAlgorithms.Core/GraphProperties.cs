@@ -13,6 +13,7 @@ namespace GraphAlgorithms.Core
         /* Other indices in future */
 
         public int? Order { get; set; }
+        public int? Size { get; set; }
         public int? Diameter { get; set; }
         public int? FirstPartitionSize { get; set; }
         public int? SecondPartitionSize { get; set; }
@@ -46,6 +47,8 @@ namespace GraphAlgorithms.Core
                 { GraphPropertyEnum.MinSizeCoef, new PropertyMetadata("MinEdgesFactor", () => this.MinEdgesFactor, value => this.MinEdgesFactor = (int)value, typeof(int)) },
                 { GraphPropertyEnum.Radius, new PropertyMetadata("Radius", () => this.Radius, value => this.Radius = (int)value, typeof(int)) },
                 { GraphPropertyEnum.SizeToOrderRatio, new PropertyMetadata("SizeToOrderRatio", () => this.SizeToOrderRatio, value => this.SizeToOrderRatio = (decimal)value, typeof(decimal)) },
+                { GraphPropertyEnum.WienerIndex, new PropertyMetadata("WienerIndex", () => this.WienerIndex, value => this.WienerIndex = (int)value, typeof(int)) },
+                { GraphPropertyEnum.Size, new PropertyMetadata("Size", () => this.Size, value => this.Size = (int)value, typeof(int)) },
             };
         }
     }

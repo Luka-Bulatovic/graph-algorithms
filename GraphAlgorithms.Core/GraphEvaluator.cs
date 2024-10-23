@@ -69,8 +69,11 @@ namespace GraphAlgorithms.Core
             // 2. Assign property values
             if(graph.GraphProperties.Order == null)
                 graph.GraphProperties.Order = graph.N;
-            
-            if(graph.GraphProperties.Diameter == null)
+
+            if (graph.GraphProperties.Size == null)
+                graph.GraphProperties.Size = graph.M;
+
+            if (graph.GraphProperties.Diameter == null)
                 graph.GraphProperties.Diameter = wienerAlgorithm.Diameter;
 
             if(graph.GraphProperties.FirstPartitionSize == null
@@ -85,8 +88,8 @@ namespace GraphAlgorithms.Core
             if(graph.GraphProperties.Radius == null)
                 graph.GraphProperties.Radius = wienerAlgorithm.Radius;
 
-            if (graph.GraphProperties.SizeToOrderRatio == null && graph.Edges.Count > 0)
-                graph.GraphProperties.SizeToOrderRatio = (decimal)graph.GraphProperties.Order / graph.Edges.Count;
+            if (graph.GraphProperties.SizeToOrderRatio == null && graph.GraphProperties.Order != 0)
+                graph.GraphProperties.SizeToOrderRatio = (decimal)graph.GraphProperties.Size / graph.GraphProperties.Order;
 
             if(unicyclicGraphClassifier.BelongsToClass(graph))
                 graph.GraphProperties.CycleLength = dfsAlgorithm.FirstCycleLength;
