@@ -41,6 +41,7 @@ namespace GraphAlgorithms.Repository.Repositories
                             .Include(g => g.Action)
                                 .ThenInclude(a => a.ForGraphClass)
                             .Include(g => g.GraphClasses)
+                            .Include(g => g.GraphPropertyValues)
                             .OrderByDescending(g => g.ID)
                             .Skip((pageNumber - 1) * pageSize)
                             .Take(pageSize)
@@ -94,6 +95,7 @@ namespace GraphAlgorithms.Repository.Repositories
                                                 .Include(g => g.Action)
                                                     .ThenInclude(a => a.ForGraphClass)
                                                 .Include(g => g.GraphClasses)
+                                                .Include(g => g.GraphPropertyValues)
                                                 .FirstOrDefaultAsync(g => g.ID == id);
             return graph;
         }
@@ -123,6 +125,7 @@ namespace GraphAlgorithms.Repository.Repositories
                                         .Include(g => g.Action)
                                             .ThenInclude(a => a.ForGraphClass)
                                         .Include(g => g.GraphClasses)
+                                        .Include(g => g.GraphPropertyValues)
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
                                         .ToListAsync();

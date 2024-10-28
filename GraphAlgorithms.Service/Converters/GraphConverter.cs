@@ -5,6 +5,7 @@ using GraphAlgorithms.Repository.Migrations;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System.Text;
 using System.Xml.Linq;
 using static System.Formats.Asn1.AsnWriter;
@@ -105,10 +106,19 @@ namespace GraphAlgorithms.Service.Converters
             string graphML = graphEntity.DataXML;
             Graph graph = graphEvaluator.GetGraphFromGraphML(graphEntity.ID, graphML);
 
-            // TODO: Here, we will add more stuff for mapping GraphProperties
-            graph.GraphProperties.WienerIndex = graphEntity.WienerIndex;
+            // Map Graph Properties from Entity
+            var propertyMappings = graph.GraphProperties.PropertyMappings;
+            foreach(var graphPropertyValue in graphEntity.GraphPropertyValues)
+            {
+                var propertyMapping = propertyMappings
+                                        .Where(pm => 
+                                            (int)pm.Key == graphPropertyValue.GraphPropertyID)
+                                        .First();
 
-            // Graph Classes
+                propertyMapping.Value.Setter(Convert.ChangeType(graphPropertyValue.PropertyValue, propertyMapping.Value.Type));
+            }
+
+            // Map Graph Classes from Entity
             if(graphEntity.GraphClasses != null)
             {
                 foreach(GraphClassEntity graphClass in graphEntity.GraphClasses)
