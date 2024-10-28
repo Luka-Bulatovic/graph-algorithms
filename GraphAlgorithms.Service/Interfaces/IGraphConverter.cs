@@ -32,11 +32,18 @@ namespace GraphAlgorithms.Service.Interfaces
         public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity);
 
         /// <summary>
-        /// Used to convert GraphDrawingUpdateDTO object to GraphEntity object for persisting in database.
+        /// Used to convert GraphDrawingUpdateDTO object to new GraphEntity object for persisting in database.
         /// </summary>
         /// <param name="graphDTO"></param>
         /// <returns>GraphEntity</returns>
         public Task<GraphEntity> GetGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO);
+
+        /// <summary>
+        /// Used to return existing GraphEntity updated with new data, based on GraphDrawingUpdateDTO object.
+        /// </summary>
+        /// <param name="graphDTO"></param>
+        /// <returns>GraphEntity</returns>
+        public Task<GraphEntity> GetUpdatedGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO);
 
         /// <summary>
         /// This function is used when converting Graph object to GraphEntity object,

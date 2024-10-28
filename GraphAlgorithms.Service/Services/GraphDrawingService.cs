@@ -56,26 +56,7 @@ namespace GraphAlgorithms.Service.Services
                 graphEntity.Action = actionEntity;
             }
             else
-            {
-                graphEntity = await graphRepository.GetByIdAsync(graphDTO.id);
-
-                Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO);
-
-                // Update GraphEntity object
-                graphEntity.Order = graph.Nodes.Count;
-                graphEntity.Size = graph.Edges.Count;
-                graphEntity.DataXML = graphEvaluator.GetGraphMLForGraph(graph);
-                graphEntity.WienerIndex = graph.GraphProperties.WienerIndex;
-
-                // Update its GraphClasses
-                graphEntity.GraphClasses.Clear();
-                
-                List<int> graphClassIDs = graph.GraphClasses.Select(gc => (int)gc).ToList();
-                List<GraphClassEntity> graphClassEntities = await graphClassRepository.GetGraphClassesByIDsAsync(graphClassIDs);
-                
-                foreach(var graphClassEntity in graphClassEntities)
-                    graphEntity.GraphClasses.Add(graphClassEntity);
-            }
+                graphEntity = await graphConverter.GetUpdatedGraphEntityFromGraphDrawingUpdateDTO(graphDTO);
 
             // Save GraphEntity (along with the associated entities)
             var storedGraphEntity = await graphRepository.SaveAsync(graphEntity);

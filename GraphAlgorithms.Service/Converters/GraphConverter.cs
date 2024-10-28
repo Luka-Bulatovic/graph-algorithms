@@ -15,12 +15,14 @@ namespace GraphAlgorithms.Service.Converters
     public class GraphConverter : IGraphConverter
     {
         public readonly IGraphClassRepository graphClassRepository;
+        public readonly IGraphRepository graphRepository;
         public readonly GraphEvaluator graphEvaluator;
 
-        public GraphConverter(IGraphClassRepository graphClassRepository, GraphEvaluator graphEvaluator)
+        public GraphConverter(IGraphClassRepository graphClassRepository, GraphEvaluator graphEvaluator, IGraphRepository graphRepository)
         {
             this.graphClassRepository = graphClassRepository;
             this.graphEvaluator = graphEvaluator;
+            this.graphRepository = graphRepository;
         }
 
         #region Conversion from GraphDrawingUpdateDTO
@@ -55,6 +57,23 @@ namespace GraphAlgorithms.Service.Converters
             Graph graph = GetGraphFromGraphDrawingUpdateDTO(graphDTO);
 
             GraphEntity graphEntity = await GetGraphEntityFromGraph(graph);
+
+            return graphEntity;
+        }
+
+        public async Task<GraphEntity> GetUpdatedGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO)
+        {
+            Graph graph = GetGraphFromGraphDrawingUpdateDTO(graphDTO);
+            GraphEntity newGraphEntity = await GetGraphEntityFromGraph(graph);
+
+            GraphEntity graphEntity = await graphRepository.GetByIdAsync(graphDTO.id);
+            // Copy new data
+            graphEntity.Order = newGraphEntity.Order;
+            graphEntity.Size = newGraphEntity.Size;
+            graphEntity.WienerIndex = newGraphEntity.WienerIndex;
+            graphEntity.DataXML = newGraphEntity.DataXML;
+            graphEntity.GraphClasses = newGraphEntity.GraphClasses;
+            graphEntity.GraphPropertyValues = newGraphEntity.GraphPropertyValues;
 
             return graphEntity;
         }
