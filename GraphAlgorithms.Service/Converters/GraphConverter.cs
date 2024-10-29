@@ -81,39 +81,6 @@ namespace GraphAlgorithms.Service.Converters
 
         #region Conversion from GraphEntity to GraphDTO and its helpers
         /// <summary>
-        /// Used for converting Graph object to GraphDTO object for displaying purposes.
-        /// It includes any graph Properties from Graph object, but NOT any Classes,
-        /// as these are copied from GraphEntity directly by their names.
-        /// </summary>
-        /// <param name="graph"></param>
-        /// <returns>GraphDTO</returns>
-        private GraphDTO GetGraphDTOFromGraph(Graph graph)
-        {
-            GraphDTO graphDTO = new GraphDTO();
-
-            graphDTO.id = graph.ID;
-
-            foreach (Node node in graph.Nodes)
-                graphDTO.nodes.Add(new NodeDTO(node));
-
-            foreach (Node node in graph.Nodes)
-            {
-                List<Edge> adjEdges = graph.GetAdjacentEdges(node);
-
-                foreach (Edge e in adjEdges)
-                {
-                    if (node.Index < e.GetDestNodeIndex())
-                        graphDTO.edges.Add(new EdgeDTO(e));
-                }
-            }
-
-            // TODO: Here, we will add mapping for WienerIndex and some more properties in future (other indices)
-            graphDTO.score = graph.GraphProperties.WienerIndex;
-
-            return graphDTO;
-        }
-
-        /// <summary>
         /// Used to convert GraphEntity object to Graph object. Will also include any Properties and Classes
         /// that were previously persisted.
         /// </summary>
@@ -151,21 +118,41 @@ namespace GraphAlgorithms.Service.Converters
 
         public GraphDTO GetGraphDTOFromGraphEntity(GraphEntity graphEntity)
         {
-            // Transform Graph Repository model into actual Graph object
+            // First, transform GraphEntity into actual Graph object
             Graph graph = GetGraphFromGraphEntity(graphEntity);
 
-            // Transform Graph object into GraphDTO
-            GraphDTO graphDTO = GetGraphDTOFromGraph(graph);
+            // Create GraphDTO
+            GraphDTO graphDTO = new GraphDTO();
+            graphDTO.id = graph.ID;
 
-            // Add additional data to GraphDTO that are stored to DB and not contained in Graph object
+            foreach (Node node in graph.Nodes)
+                graphDTO.nodes.Add(new NodeDTO(node));
+
+            foreach (Node node in graph.Nodes)
+            {
+                List<Edge> adjEdges = graph.GetAdjacentEdges(node);
+
+                foreach (Edge e in adjEdges)
+                {
+                    if (node.Index < e.GetDestNodeIndex())
+                        graphDTO.edges.Add(new EdgeDTO(e));
+                }
+            }
+
+            // TODO: Here, we will add mapping for some more properties in future
+            graphDTO.score = graph.GraphProperties.WienerIndex;
+
+            // Graph Classes
+            if (graphEntity.GraphClasses != null && graphEntity.GraphClasses.Count > 0)
+            {
+                graphDTO.classNames = string.Join(", ", graphEntity.GraphClasses.Select(c => c.Name));
+            }
+
+            // Some additional data
             graphDTO.actionTypeName = graphEntity.Action.ActionType.Name;
             graphDTO.actionForGraphClassName = graphEntity.Action.ForGraphClass != null
                                             ? graphEntity.Action.ForGraphClass.Name : "";
             graphDTO.createdDate = graphEntity.CreatedDate;
-
-            // Graph Classes
-            if (graphEntity.GraphClasses != null)
-                graphDTO.classNames = string.Join(", ", graphEntity.GraphClasses.Select(c => c.Name));
 
             return graphDTO;
         }
