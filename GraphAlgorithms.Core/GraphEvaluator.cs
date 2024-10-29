@@ -153,11 +153,6 @@ namespace GraphAlgorithms.Core
             return sb.ToString();
         }
 
-
-        /// <summary>
-        /// We should move this somewhere, should not be in evaluator. Maybe move this and above to some GraphMLConverter?
-        /// </summary>
-        /// <returns></returns>
         public Graph GetGraphFromGraphML(int graphID, string graphML)
         {
             var xdoc = XDocument.Parse(graphML);

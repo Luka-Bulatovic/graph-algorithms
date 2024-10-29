@@ -39,7 +39,7 @@ namespace GraphAlgorithms.Service.Interfaces
         public Task<GraphEntity> GetGraphEntityFromGraphDrawingUpdateDTO(GraphDrawingUpdateDTO graphDTO);
 
         /// <summary>
-        /// Used to return existing GraphEntity updated with new data, based on GraphDrawingUpdateDTO object.
+        /// Returns existing GraphEntity updated with new data, based on GraphDrawingUpdateDTO object.
         /// </summary>
         /// <param name="graphDTO"></param>
         /// <returns>GraphEntity</returns>
