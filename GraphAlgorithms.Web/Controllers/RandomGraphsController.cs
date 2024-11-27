@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms.Core;
+using GraphAlgorithms.Core.Interfaces;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Service.Services;
@@ -20,12 +21,14 @@ namespace GraphAlgorithms.Web.Controllers
         public readonly IGraphClassService graphClassService;
         public readonly IRandomGraphsService randomGraphsService;
         public readonly GraphEvaluator graphEvaluator;
+        public readonly RandomGraphsGenerator randomGraphsGenerator;
 
-        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService, GraphEvaluator graphEvaluator)
+        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService, GraphEvaluator graphEvaluator, RandomGraphsGenerator randomGraphsGenerator)
         {
             this.graphClassService = graphClassService;
             this.randomGraphsService = randomGraphsService;
             this.graphEvaluator = graphEvaluator;
+            this.randomGraphsGenerator = randomGraphsGenerator;
         }
 
 
@@ -109,20 +112,17 @@ namespace GraphAlgorithms.Web.Controllers
             catch(Exception ex)
             {
                 // Process generating graphs locally
-                switch (model.GraphClassID)
+                var randomGraphRequestDTO = new RandomGraphRequestDTO()
                 {
-                    case (int)GraphClassEnum.ConnectedGraph:
-                        actionDTO = await randomGraphsService.GenerateRandomConnectedGraphs(model.Data.Nodes, model.Data.MinEdgesFactor, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
-                        break;
-                    case (int)GraphClassEnum.UnicyclicBipartiteGraph:
-                        actionDTO = await randomGraphsService.GenerateRandomUnicyclicBipartiteGraphs(model.Data.FirstPartitionSize, model.Data.SecondPartitionSize, model.Data.CycleLength, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
-                        break;
-                    case (int)GraphClassEnum.AcyclicGraphWithFixedDiameter:
-                        actionDTO = await randomGraphsService.GenerateRandomAcyclicGraphsWithFixedDiameter(model.Data.Nodes, model.Data.Diameter, model.TotalNumberOfRandomGraphs, model.StoreTopNumberOfGraphs);
-                        break;
-                    default:
-                        break;
-                }
+                    GraphClassID = model.GraphClassID,
+                    ReturnNumberOfGraphs = model.StoreTopNumberOfGraphs,
+                    TotalNumberOfRandomGraphs = model.TotalNumberOfRandomGraphs,
+                    Data = model.Data
+                };
+
+                IGraphFactory factory = randomGraphsGenerator.GetGraphFactoryForRandomGeneration(randomGraphRequestDTO);
+                List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, randomGraphRequestDTO.TotalNumberOfRandomGraphs, randomGraphRequestDTO.ReturnNumberOfGraphs);
+                actionDTO = await randomGraphsService.StoreGeneratedGraphs(graphs, (GraphClassEnum)model.GraphClassID);
             }
 
             return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });

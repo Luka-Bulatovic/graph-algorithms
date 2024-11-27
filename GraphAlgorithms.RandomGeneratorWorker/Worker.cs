@@ -78,25 +78,11 @@ namespace GraphAlgorithms.RandomGeneratorWorker
                 RandomGraphRequestDTO jsonData = JsonSerializer.Deserialize<RandomGraphRequestDTO>(messageContent);
                 IGraphFactory factory;
 
-                switch ((GraphClassEnum)jsonData.GraphClassID)
-                {
-                    case GraphClassEnum.ConnectedGraph:
-                        factory = new RandomConnectedUndirectedGraphFactory(jsonData.Data.Nodes, jsonData.Data.MinEdgesFactor);
-                        break;
-                    case GraphClassEnum.UnicyclicBipartiteGraph:
-                        factory = new RandomUnicyclicBipartiteGraphFactory(jsonData.Data.FirstPartitionSize, jsonData.Data.SecondPartitionSize, jsonData.Data.CycleLength);
-                        break;
-                    case GraphClassEnum.AcyclicGraphWithFixedDiameter:
-                        factory = new RandomAcyclicGraphWithFixedDiameterFactory(jsonData.Data.Nodes, jsonData.Data.Diameter);
-                        break;
-                    default:
-                        throw new InvalidOperationException("Invalid Graph Class detected.");
-                }
-
-
                 GraphAlgorithmManager graphAlgorithmManager = new GraphAlgorithmManager();
                 GraphEvaluator graphEvaluator = new GraphEvaluator(graphAlgorithmManager);
                 RandomGraphsGenerator randomGraphsGenerator = new RandomGraphsGenerator(graphEvaluator);
+
+                factory = randomGraphsGenerator.GetGraphFactoryForRandomGeneration(jsonData);
                 List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
                 List<string> graphsMLData = new();
 
