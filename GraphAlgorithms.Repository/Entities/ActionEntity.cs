@@ -22,6 +22,8 @@ namespace GraphAlgorithms.Repository.Entities
 
         public ActionTypeEntity ActionType { get; set; }
         public GraphClassEntity? ForGraphClass { get; set; }
+        
         public ICollection<GraphEntity> Graphs { get; set; }
+        public ICollection<ActionPropertyValueEntity> ActionPropertyValues { get; set; }
     }
 }

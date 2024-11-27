@@ -20,6 +20,7 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<CustomGraphSetEntity> CustomGraphSets { get; set; }
         public DbSet<GraphPropertyEntity> GraphProperties { get; set; }
         public DbSet<GraphPropertyValueEntity> GraphPropertyValues { get; set; }
+        public DbSet<ActionPropertyValueEntity> ActionPropertyValues { get; set; }
 
         #region Seeders
         private void SeedGraphClasses(ModelBuilder modelBuilder)
@@ -211,6 +212,20 @@ namespace GraphAlgorithms.Repository.Data
                 entity.HasOne(gpv => gpv.GraphProperty)
                       .WithMany(gp => gp.GraphPropertyValues)
                       .HasForeignKey(gpv => gpv.GraphPropertyID);
+            });
+
+            //// Action - GraphProperty (for storing Properties used for random generation Action)
+            modelBuilder.Entity<ActionPropertyValueEntity>(entity =>
+            {
+                entity.HasKey(apv => new { apv.ActionID, apv.GraphPropertyID });
+
+                entity.HasOne(apv => apv.Action)
+                      .WithMany(a => a.ActionPropertyValues)
+                      .HasForeignKey(apv => apv.ActionID);
+
+                entity.HasOne(apv => apv.GraphProperty)
+                      .WithMany(gp => gp.ActionPropertyValues)
+                      .HasForeignKey(apv => apv.GraphPropertyID);
             });
         }
 

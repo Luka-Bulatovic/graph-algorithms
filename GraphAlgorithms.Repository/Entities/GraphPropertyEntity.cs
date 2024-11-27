@@ -18,5 +18,7 @@ namespace GraphAlgorithms.Repository.Entities
 
         // Navigation property for the many-to-many relationship with graphs
         public ICollection<GraphPropertyValueEntity> GraphPropertyValues { get; set; }
+        
+        public ICollection<ActionPropertyValueEntity> ActionPropertyValues { get; set; }
     }
 }
