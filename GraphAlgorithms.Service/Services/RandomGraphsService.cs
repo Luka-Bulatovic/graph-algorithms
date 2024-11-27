@@ -57,33 +57,6 @@ namespace GraphAlgorithms.Service.Services
                 .ToList();
         }
 
-        public async Task<ActionDTO> GenerateRandomConnectedGraphs(int numberOfNodes, int minEdgeFactor, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
-        {
-            RandomConnectedUndirectedGraphFactory factory = new(numberOfNodes, minEdgeFactor);
-
-            List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
-
-            return await StoreGeneratedGraphs(graphs, GraphClassEnum.ConnectedGraph);
-        }
-
-        public async Task<ActionDTO> GenerateRandomUnicyclicBipartiteGraphs(int firstPartitionSize, int secondPartitionSize, int cycleLength, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
-        {
-            RandomUnicyclicBipartiteGraphFactory factory = new(firstPartitionSize, secondPartitionSize, cycleLength);
-
-            List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
-
-            return await StoreGeneratedGraphs(graphs, GraphClassEnum.UnicyclicBipartiteGraph);
-        }
-
-        public async Task<ActionDTO> GenerateRandomAcyclicGraphsWithFixedDiameter(int numberOfNodes, int diameter, int totalNumberOfRandomGraphs, int storeTopNumberOfGraphs)
-        {
-            RandomAcyclicGraphWithFixedDiameterFactory factory = new(numberOfNodes, diameter);
-
-            List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, totalNumberOfRandomGraphs, storeTopNumberOfGraphs);
-
-            return await StoreGeneratedGraphs(graphs, GraphClassEnum.AcyclicGraphWithFixedDiameter);
-        }
-
         public async Task<ActionDTO> StoreGeneratedGraphs(List<Graph> graphs, GraphClassEnum graphClass)
         {
             //      Persisting data
