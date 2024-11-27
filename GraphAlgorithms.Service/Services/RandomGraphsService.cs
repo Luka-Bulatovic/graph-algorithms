@@ -57,7 +57,7 @@ namespace GraphAlgorithms.Service.Services
                 .ToList();
         }
 
-        public async Task<ActionDTO> StoreGeneratedGraphs(List<Graph> graphs, GraphClassEnum graphClass)
+        public async Task<ActionDTO> StoreGeneratedGraphs(GraphClassEnum graphClass, List<GraphPropertyValueDTO> graphPropertyValues, List<Graph> graphs)
         {
             //      Persisting data
             // Create an ActionEntity and set its properties
@@ -66,7 +66,15 @@ namespace GraphAlgorithms.Service.Services
                 ActionTypeID = (int)ActionTypeEnum.GenerateRandom,
                 ForGraphClassID = (int)graphClass,
                 CreatedByID = 0, // Set the creator's ID,
-                CreatedDate = DateTime.UtcNow
+                CreatedDate = DateTime.UtcNow,
+                
+                // List of ActionPropertyValueEntities to store Property values used to generate graphs
+                ActionPropertyValues = graphPropertyValues 
+                    .Select(gpv => new ActionPropertyValueEntity()
+                    {
+                        GraphPropertyID = gpv.GraphPropertyID,
+                        PropertyValue = gpv.Value
+                    }).ToList()
             };
 
             // Convert and store best Graphs to DB

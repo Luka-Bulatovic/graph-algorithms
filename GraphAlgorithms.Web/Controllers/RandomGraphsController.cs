@@ -65,6 +65,20 @@ namespace GraphAlgorithms.Web.Controllers
             }
             */
 
+            // Re-initialize metadata for properties used for random generation
+            var graphProperties = await randomGraphsService.GetGraphClassProperties((GraphClassEnum)model.GraphClassID);
+            model.InitializeMetadataForProperties(graphProperties);
+
+            // Prepare Property values to store for Action
+            var graphPropertyValues = new List<GraphPropertyValueDTO>();
+            foreach (var graphProperty in graphProperties)
+            {
+                graphPropertyValues.Add(new GraphPropertyValueDTO()
+                {
+                    GraphPropertyID = graphProperty.ID,
+                    Value = model.PropertiesMetadata[(GraphPropertyEnum)graphProperty.ID].Getter().ToString()
+                });
+            }
 
             try
             {
@@ -107,7 +121,7 @@ namespace GraphAlgorithms.Web.Controllers
                 graphs = graphs.OrderByDescending(graph => graph.GraphProperties.WienerIndex).ToList();
                 graphs = graphs.GetRange(0, model.StoreTopNumberOfGraphs);
 
-                actionDTO = await randomGraphsService.StoreGeneratedGraphs(graphs, (GraphClassEnum)model.GraphClassID);
+                actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, graphPropertyValues, graphs);
             }
             catch(Exception ex)
             {
@@ -122,7 +136,7 @@ namespace GraphAlgorithms.Web.Controllers
 
                 IGraphFactory factory = randomGraphsGenerator.GetGraphFactoryForRandomGeneration(randomGraphRequestDTO);
                 List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, randomGraphRequestDTO.TotalNumberOfRandomGraphs, randomGraphRequestDTO.ReturnNumberOfGraphs);
-                actionDTO = await randomGraphsService.StoreGeneratedGraphs(graphs, (GraphClassEnum)model.GraphClassID);
+                actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, graphPropertyValues, graphs);
             }
 
             return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });
