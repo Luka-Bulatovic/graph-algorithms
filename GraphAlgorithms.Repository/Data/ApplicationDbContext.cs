@@ -112,17 +112,17 @@ namespace GraphAlgorithms.Repository.Data
         {
             j.HasData(
                 // Random Connected Graph
-                new { GraphPropertyID = (int)GraphPropertyEnum.Order, GraphClassID = (int)GraphClassEnum.ConnectedGraph },
-                new { GraphPropertyID = (int)GraphPropertyEnum.MinSizeCoef, GraphClassID = (int)GraphClassEnum.ConnectedGraph },
+                new { GraphPropertyID = (int)GraphPropertyEnum.Order, GraphClassID = (int)GraphClassEnum.Connected },
+                new { GraphPropertyID = (int)GraphPropertyEnum.MinSizeCoef, GraphClassID = (int)GraphClassEnum.Connected },
 
                 // Random Unicyclic Bipartite Graph
-                new { GraphPropertyID = (int)GraphPropertyEnum.FirstBipartitionSize, GraphClassID = (int)GraphClassEnum.UnicyclicBipartiteGraph },
-                new { GraphPropertyID = (int)GraphPropertyEnum.SecondBipartitionSize, GraphClassID = (int)GraphClassEnum.UnicyclicBipartiteGraph },
-                new { GraphPropertyID = (int)GraphPropertyEnum.CycleLength, GraphClassID = (int)GraphClassEnum.UnicyclicBipartiteGraph },
+                new { GraphPropertyID = (int)GraphPropertyEnum.FirstBipartitionSize, GraphClassID = (int)GraphClassEnum.UnicyclicBipartite },
+                new { GraphPropertyID = (int)GraphPropertyEnum.SecondBipartitionSize, GraphClassID = (int)GraphClassEnum.UnicyclicBipartite },
+                new { GraphPropertyID = (int)GraphPropertyEnum.CycleLength, GraphClassID = (int)GraphClassEnum.UnicyclicBipartite },
 
                 // Random Acyclic Graph with fixed diameter
-                new { GraphPropertyID = (int)GraphPropertyEnum.Order, GraphClassID = (int)GraphClassEnum.AcyclicGraphWithFixedDiameter },
-                new { GraphPropertyID = (int)GraphPropertyEnum.Diameter, GraphClassID = (int)GraphClassEnum.AcyclicGraphWithFixedDiameter }
+                new { GraphPropertyID = (int)GraphPropertyEnum.Order, GraphClassID = (int)GraphClassEnum.AcyclicWithFixedDiameter },
+                new { GraphPropertyID = (int)GraphPropertyEnum.Diameter, GraphClassID = (int)GraphClassEnum.AcyclicWithFixedDiameter }
             );
         }
         #endregion

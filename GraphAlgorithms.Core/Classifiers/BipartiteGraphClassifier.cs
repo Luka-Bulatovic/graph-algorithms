@@ -52,7 +52,7 @@ namespace GraphAlgorithms.Core.Classifiers
 
         public GraphClassEnum GetGraphClass()
         {
-            return GraphClassEnum.BipartiteGraph;
+            return GraphClassEnum.Bipartite;
         }
     }
 }

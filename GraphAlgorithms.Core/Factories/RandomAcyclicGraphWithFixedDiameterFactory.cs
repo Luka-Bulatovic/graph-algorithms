@@ -104,7 +104,7 @@ namespace GraphAlgorithms.Core.Factories
 
         public Shared.Shared.GraphClassEnum GetGraphClass()
         {
-            return Shared.Shared.GraphClassEnum.AcyclicGraphWithFixedDiameter;
+            return Shared.Shared.GraphClassEnum.AcyclicWithFixedDiameter;
         }
     }
 }

@@ -23,7 +23,7 @@ namespace GraphAlgorithms.Core.Classifiers
 
         public GraphClassEnum GetGraphClass()
         {
-            return GraphClassEnum.ConnectedGraph;
+            return GraphClassEnum.Connected;
         }
     }
 }

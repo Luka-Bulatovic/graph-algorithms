@@ -25,7 +25,7 @@ namespace GraphAlgorithms.Core.Classifiers
 
         public GraphClassEnum GetGraphClass()
         {
-            return GraphClassEnum.UnicyclicGraph;
+            return GraphClassEnum.Unicyclic;
         }
     }
 }

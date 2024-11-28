@@ -160,7 +160,7 @@ namespace GraphAlgorithms.Core.Factories
 
         public GraphClassEnum GetGraphClass()
         {
-            return GraphClassEnum.UnicyclicBipartiteGraph;
+            return GraphClassEnum.UnicyclicBipartite;
         }
 
         private void StoreInitialGraphProperties(Graph g)

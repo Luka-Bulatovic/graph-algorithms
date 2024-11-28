@@ -44,13 +44,13 @@ namespace GraphAlgorithms.Core
 
             switch ((GraphClassEnum)randomGraphRequestDTO.GraphClassID)
             {
-                case GraphClassEnum.ConnectedGraph:
+                case GraphClassEnum.Connected:
                     factory = new RandomConnectedUndirectedGraphFactory(randomGraphRequestDTO.Data.Nodes, randomGraphRequestDTO.Data.MinEdgesFactor);
                     break;
-                case GraphClassEnum.UnicyclicBipartiteGraph:
+                case GraphClassEnum.UnicyclicBipartite:
                     factory = new RandomUnicyclicBipartiteGraphFactory(randomGraphRequestDTO.Data.FirstPartitionSize, randomGraphRequestDTO.Data.SecondPartitionSize, randomGraphRequestDTO.Data.CycleLength);
                     break;
-                case GraphClassEnum.AcyclicGraphWithFixedDiameter:
+                case GraphClassEnum.AcyclicWithFixedDiameter:
                     factory = new RandomAcyclicGraphWithFixedDiameterFactory(randomGraphRequestDTO.Data.Nodes, randomGraphRequestDTO.Data.Diameter);
                     break;
                 default:

@@ -51,7 +51,7 @@ namespace GraphAlgorithms.Core.Factories
 
         public GraphClassEnum GetGraphClass()
         {
-            return GraphClassEnum.ConnectedGraph;
+            return GraphClassEnum.Connected;
         }
 
         private bool GenerateNextRandomEdgeAndPerformUnion(Graph g, UnionFind uf)
