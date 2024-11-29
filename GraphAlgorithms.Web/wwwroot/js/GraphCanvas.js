@@ -26,6 +26,10 @@ var GraphCanvas = new function () {
         // Calculate click
         viewDataObj.btnCalculate.on('click', function (e) { GraphCanvas.onCalculateBtnClick(viewDataObj); })
 
+        // On header mouseover/mouseout, show/hide additional properties
+        //viewDataObj.canvasHeader.on('mouseover', function (e) { GraphCanvas.onHeaderMouseOver(viewDataObj); });
+        //viewDataObj.canvasHeader.on('mouseout', function (e) { GraphCanvas.onHeaderMouseOut(viewDataObj); });
+
         // Initial network
         GraphCanvas.createInitialNetwork(viewDataObj);
     }
@@ -244,4 +248,17 @@ var GraphCanvas = new function () {
 
         return idx;
     }
+
+    //this.onHeaderMouseOver = function (viewDataObj) {
+    //    if (viewDataObj.graphID == 0)
+    //        return;
+
+    //    console.log("Showing header properties");
+    //    viewDataObj.canvasHeaderPropertiesContainer.removeClass("hidden");
+    //}
+
+    //this.onHeaderMouseOut = function (viewDataObj) {
+    //    console.log("Hiding header properties");
+    //    viewDataObj.canvasHeaderPropertiesContainer.addClass("hidden");
+    //}
 };

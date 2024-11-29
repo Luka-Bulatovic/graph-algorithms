@@ -10,7 +10,11 @@
     }
 
     .graph-canvas-container .canvas-header {
-        @apply flex-col h-32 p-2 bg-gray-300;
+        @apply flex-col p-2 bg-gray-300 relative;
+    }
+    
+    .graph-canvas-container .canvas-header .canvas-header-properties-container {
+        @apply absolute left-0 top-full w-full bg-gray-300 p-2 pt-0 shadow-lg flex-col z-10;
     }
 
     .graph-canvas-container .graph-and-status-bar-container {

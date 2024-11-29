@@ -1,4 +1,6 @@
-﻿using GraphAlgorithms.Service.DTO;
+﻿using GraphAlgorithms.Core;
+using GraphAlgorithms.Service.DTO;
+using System;
 using System.Collections.Generic;
 using System.Text.Json;
 
@@ -54,5 +56,13 @@ namespace GraphAlgorithms.Web.Models
             ShowHeader = showHeader;
         }
         #endregion
+
+        public string ConvertGraphPropertyToDisplayString(PropertyMetadata property)
+        {
+            if (property.Type == typeof(decimal))
+                return ((decimal)property.Getter()).ToString("F4");
+
+            return Convert.ToString(property.Getter());
+        }
     }
 }

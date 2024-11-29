@@ -40,15 +40,15 @@ namespace GraphAlgorithms.Core
             propertyMappings = new Dictionary<GraphPropertyEnum, PropertyMetadata>()
             {
                 { GraphPropertyEnum.Order, new PropertyMetadata("Order", () => this.Order, value => this.Order = (int)value, typeof(int)) },
+                { GraphPropertyEnum.Size, new PropertyMetadata("Size", () => this.Size, value => this.Size = (int)value, typeof(int)) },
+                { GraphPropertyEnum.WienerIndex, new PropertyMetadata("Wiener Index", () => this.WienerIndex, value => this.WienerIndex = (int)value, typeof(int)) },
                 { GraphPropertyEnum.Diameter, new PropertyMetadata("Diameter", () => this.Diameter, value => this.Diameter = (int)value, typeof(int)) },
-                { GraphPropertyEnum.FirstBipartitionSize, new PropertyMetadata("FirstPartitionSize", () => this.FirstPartitionSize, value => this.FirstPartitionSize = (int)value, typeof(int)) },
-                { GraphPropertyEnum.SecondBipartitionSize, new PropertyMetadata("SecondPartitionSize", () => this.SecondPartitionSize, value => this.SecondPartitionSize = (int)value, typeof(int)) },
-                { GraphPropertyEnum.CycleLength, new PropertyMetadata("CycleLength", () => this.CycleLength, value => this.CycleLength = (int)value, typeof(int)) },
+                { GraphPropertyEnum.FirstBipartitionSize, new PropertyMetadata("First Partition Size", () => this.FirstPartitionSize, value => this.FirstPartitionSize = (int)value, typeof(int)) },
+                { GraphPropertyEnum.SecondBipartitionSize, new PropertyMetadata("Second Partition Size", () => this.SecondPartitionSize, value => this.SecondPartitionSize = (int)value, typeof(int)) },
+                { GraphPropertyEnum.CycleLength, new PropertyMetadata("Cycle Length", () => this.CycleLength, value => this.CycleLength = (int)value, typeof(int)) },
                 { GraphPropertyEnum.MinSizeCoef, new PropertyMetadata("MinEdgesFactor", () => this.MinEdgesFactor, value => this.MinEdgesFactor = (int)value, typeof(int)) },
                 { GraphPropertyEnum.Radius, new PropertyMetadata("Radius", () => this.Radius, value => this.Radius = (int)value, typeof(int)) },
-                { GraphPropertyEnum.SizeToOrderRatio, new PropertyMetadata("SizeToOrderRatio", () => this.SizeToOrderRatio, value => this.SizeToOrderRatio = (decimal)value, typeof(decimal)) },
-                { GraphPropertyEnum.WienerIndex, new PropertyMetadata("WienerIndex", () => this.WienerIndex, value => this.WienerIndex = (int)value, typeof(int)) },
-                { GraphPropertyEnum.Size, new PropertyMetadata("Size", () => this.Size, value => this.Size = (int)value, typeof(int)) },
+                { GraphPropertyEnum.SizeToOrderRatio, new PropertyMetadata("Size-to-Order Ratio", () => this.SizeToOrderRatio, value => this.SizeToOrderRatio = (decimal)value, typeof(decimal)) },
             };
         }
     }

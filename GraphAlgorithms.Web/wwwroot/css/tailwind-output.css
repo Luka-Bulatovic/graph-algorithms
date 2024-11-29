@@ -736,11 +736,27 @@ select {
 }
 
 .graph-canvas-container .canvas-header {
-  height: 8rem;
+  position: relative;
   flex-direction: column;
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
   padding: 0.5rem;
+}
+
+.graph-canvas-container .canvas-header .canvas-header-properties-container {
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  z-index: 10;
+  width: 100%;
+  flex-direction: column;
+  --tw-bg-opacity: 1;
+  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+  padding: 0.5rem;
+  padding-top: 0px;
+  --tw-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --tw-shadow-colored: 0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);
+  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 .graph-canvas-container .graph-and-status-bar-container {
@@ -1513,4 +1529,8 @@ select {
 .hover\:bg-gray-300:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+}
+
+.group:hover .group-hover\:flex {
+  display: flex;
 }

@@ -139,8 +139,9 @@ namespace GraphAlgorithms.Service.Converters
                 }
             }
 
-            // TODO: Here, we will add mapping for some more properties in future
             graphDTO.score = graph.GraphProperties.WienerIndex;
+
+            graphDTO.properties = graph.GraphProperties;
 
             // Graph Classes
             if (graphEntity.GraphClasses != null && graphEntity.GraphClasses.Count > 0)
@@ -183,22 +184,11 @@ namespace GraphAlgorithms.Service.Converters
             var propertyMappings = graph.GraphProperties.PropertyMappings;
             foreach (var propertyMapping in propertyMappings)
             {
-                if (propertyMapping.Value.Getter() == null)
+                var value = propertyMapping.Value.Getter();
+                if (value == null)
                     continue;
 
-                string propertyValueStr = "";
-                if (propertyMapping.Value.Type == typeof(int) 
-                    && (int)propertyMapping.Value.Getter() != 0)
-                {
-                    propertyValueStr = ((int)propertyMapping.Value.Getter()).ToString();
-                }
-                else if(propertyMapping.Value.Type == typeof(decimal)
-                    && (decimal)propertyMapping.Value.Getter() != 0)
-                {
-                    propertyValueStr = ((decimal)propertyMapping.Value.Getter()).ToString();
-                }
-                // TODO: Add cases for some more data types here as needed
-
+                string propertyValueStr = Convert.ToString(value);
 
                 // If there is a value, link GraphPropertyValueEntity to Graph
                 if (propertyValueStr.Length > 0) 

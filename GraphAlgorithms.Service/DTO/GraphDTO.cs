@@ -12,6 +12,7 @@ namespace GraphAlgorithms.Service.DTO
         public string actionForGraphClassName { get; set; }
         public string classNames { get; set; }
         public DateTime createdDate { get; set; }
+        public GraphProperties properties { get; set; }
 
         public GraphDTO()
         {
