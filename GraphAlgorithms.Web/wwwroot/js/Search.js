@@ -56,7 +56,7 @@
 
         searchParamsString = searchParamsString.slice(0, -1);
 
-        window.location.href = `/GraphLibrary?${searchParamsString}`;
+        window.location.href = `${viewDataObj.baseUrl}?${searchParamsString}`;
     }
 
     this.onAddParam = function (viewDataObj) {

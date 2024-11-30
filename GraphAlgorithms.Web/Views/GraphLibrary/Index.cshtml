@@ -55,6 +55,15 @@
         </div>
     }
 
+    <div class="flex flex-row justify-end mb-2">
+        <button type="button" class="btn-grid-view-type @(Model.ViewType == GraphLibraryViewType.Grid ? "bg-gray-300" : "bg-gray-200") p-2 hover:bg-gray-300 mr-2 rounded">
+            <i class="fa-solid fa-grip"></i>
+        </button>
+        <button type="button" class="btn-table-view-type @(Model.ViewType == GraphLibraryViewType.Table ? "bg-gray-300" : "bg-gray-200") p-2 hover:bg-gray-300 rounded">
+            <i class="fa-solid fa-bars"></i>
+        </button>
+    </div>
+
     @for(int i = 0; i < numberOfRows; i++)
     {
         <div class="library-row w-full flex flex-row">
@@ -104,6 +113,21 @@
             $(".btn-close-modal").on('click', (e) => {
                 $("#custom-set-modal").addClass("hidden");
             });
+
+            $(".btn-grid-view-type").on('click', (e) => {
+                if (typeof (searchModelDataObj) === 'object') {
+                    searchModelDataObj.baseUrl = '/GraphLibrary/Index';
+                    searchModelDataObj.btnSearch.trigger('click');
+                }
+            });
+
+            $(".btn-table-view-type").on('click', (e) => {
+                if (typeof (searchModelDataObj) === 'object') {
+                    searchModelDataObj.baseUrl = '/GraphLibrary/IndexTable';
+                    searchModelDataObj.btnSearch.trigger('click');
+                }
+            });
+
         });
     </script>
 </div>

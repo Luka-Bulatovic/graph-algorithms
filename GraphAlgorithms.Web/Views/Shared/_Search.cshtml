@@ -54,6 +54,7 @@
     var @(ViewDataObj) = {
         viewID: "@ViewID",
         container: $("#@ViewID"),
+        baseUrl: "@(Model.BaseUrl)",
 
         searchParamsJSON: '@Html.Raw(Model.SearchParamsJSON)',
         searchParams: JSON.parse('@Html.Raw(Model.SearchParamsJSON)'),
@@ -82,6 +83,8 @@
         currSearchParams: [],
         selectedParamsContainer: $("#@ViewID .selected-parameters-container"),
     };
+
+    var searchModelDataObj = @(ViewDataObj);
 
     $(document).ready(() => {
         var viewDataObj = @(ViewDataObj);

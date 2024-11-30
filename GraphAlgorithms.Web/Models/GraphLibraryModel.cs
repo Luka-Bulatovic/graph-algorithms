@@ -8,6 +8,8 @@ using static GraphAlgorithms.Shared.SearchParameter;
 
 namespace GraphAlgorithms.Web.Models
 {
+    public enum GraphLibraryViewType { Grid = 1, Table = 2 }
+
     public class GraphLibraryModel
     {
         public int ForActionID { get; set; }
@@ -19,19 +21,24 @@ namespace GraphAlgorithms.Web.Models
         public bool AllowAddingToCustomGraphSets { get; set; }
 
         public SaveActionGraphsToCustomSetModel CustomSetModel { get; set; }
+        public GraphLibraryViewType ViewType { get; set; } = GraphLibraryViewType.Grid;
 
-        public GraphLibraryModel()
+        public GraphLibraryModel(GraphLibraryViewType viewType)
         {
+            ViewType = viewType;
             ForActionID = 0;
             PaginationInfo = new();
             AllowAddingToCustomGraphSets = false;
 
-            SearchModel = new SearchModel(new List<SearchParameter>()
-            {
-                new SearchParameter("id", "ID", SearchParamType.Number, allowMultipleValues: true),
-                new SearchParameter("order", "Order", SearchParamType.NumberRange),
-                new SearchParameter("size", "Size", SearchParamType.NumberRange)
-            });
+            SearchModel = new SearchModel(
+                viewType == GraphLibraryViewType.Grid ? "/GraphLibrary/Index" : "/GraphLibrary/IndexTable",
+                new List<SearchParameter>()
+                {
+                    new SearchParameter("id", "ID", SearchParamType.Number, allowMultipleValues: true),
+                    new SearchParameter("order", "Order", SearchParamType.NumberRange),
+                    new SearchParameter("size", "Size", SearchParamType.NumberRange)
+                }
+            );
 
             CustomSetModel = new SaveActionGraphsToCustomSetModel();
         }

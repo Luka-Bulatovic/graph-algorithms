@@ -8,6 +8,8 @@ namespace GraphAlgorithms.Web.Models
 {
     public class SearchModel
     {
+        public string BaseUrl { get; set; }
+
         public int SearchByID { get; set; }
         public SelectList SearchBy { get; set; }
         public List<SearchParameter> SearchParams { get; set; }
@@ -24,13 +26,14 @@ namespace GraphAlgorithms.Web.Models
 
         public List<string> SearchItems { get; set; }
 
-        public SearchModel()
+        public SearchModel(string baseUrl)
         {
             LoadSearchParams(new List<SearchParameter>());
             SelectedSearchParams = new();
+            BaseUrl = baseUrl;
         }
 
-        public SearchModel(List<SearchParameter> searchParams) : this()
+        public SearchModel(string baseUrl, List<SearchParameter> searchParams) : this(baseUrl)
         {
             LoadSearchParams(searchParams);
         }
