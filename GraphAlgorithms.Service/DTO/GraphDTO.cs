@@ -24,6 +24,7 @@ namespace GraphAlgorithms.Service.DTO
             actionForGraphClassName = "";
             classNames = "";
             createdDate = DateTime.Now;
+            properties = new GraphProperties();
         }
     }
 }
