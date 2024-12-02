@@ -27,7 +27,7 @@ namespace GraphAlgorithms.Web.Models
         {
             ViewType = viewType;
             ForActionID = 0;
-            PaginationInfo = new();
+            PaginationInfo = new(actionName: (viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable"));
             AllowAddingToCustomGraphSets = false;
 
             SearchModel = new SearchModel(

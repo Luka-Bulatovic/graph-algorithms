@@ -16,6 +16,9 @@ namespace GraphAlgorithms.Web.Models
         public bool ShowSaveAsNewButton { get; set; }
         public bool ShowCalculateButton { get; set; }
         public bool ShowHeader { get; set; }
+        public bool ShowFooter { get; set; }
+        public bool IsVisible { get; set; }
+        public string ContainerClasses { get; set; }
 
         private GraphDTO graph;
         public GraphDTO Graph => graph;
@@ -41,7 +44,7 @@ namespace GraphAlgorithms.Web.Models
         #endregion
 
         #region Constructors
-        public GraphCanvasModel(GraphDTO graph, bool isEditable = false, bool showEditButton = false, bool showSaveButton = false, bool showSaveAsNewButton = false, bool showCalculateButton = false, bool showHeader = true)
+        public GraphCanvasModel(GraphDTO graph, bool isEditable = false, bool showEditButton = false, bool showSaveButton = false, bool showSaveAsNewButton = false, bool showCalculateButton = false, bool showHeader = true, bool showFooter = true, bool isVisible = true, string containerClasses = "")
         {
             ID = graph.id;
             this.graph = graph;
@@ -54,15 +57,11 @@ namespace GraphAlgorithms.Web.Models
             ShowCalculateButton = showCalculateButton;
             
             ShowHeader = showHeader;
+            ShowFooter = showFooter;
+
+            IsVisible = isVisible;
+            ContainerClasses = containerClasses;
         }
         #endregion
-
-        public string ConvertGraphPropertyToDisplayString(PropertyMetadata property)
-        {
-            if (property.Type == typeof(decimal))
-                return ((decimal)property.Getter()).ToString("F4");
-
-            return Convert.ToString(property.Getter());
-        }
     }
 }

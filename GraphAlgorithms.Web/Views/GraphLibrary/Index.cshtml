@@ -1,8 +1,13 @@
-﻿@model GraphLibraryModel
+﻿@using static GraphAlgorithms.Shared.Shared;
+@model GraphLibraryModel
 
 @{
     int itemsPerRow = 3;
     int numberOfRows = (int)Math.Ceiling((decimal)Model.Graphs.Count / (decimal)itemsPerRow);
+
+    List<GraphPropertyEnum> propertiesToSkipInPropertiesCol =
+        new List<GraphPropertyEnum>() { GraphPropertyEnum.Order, GraphPropertyEnum.Size, GraphPropertyEnum.WienerIndex };
+
 }
 
 <div class="container">
@@ -64,26 +69,84 @@
         </button>
     </div>
 
-    @for(int i = 0; i < numberOfRows; i++)
+    @if(Model.ViewType == GraphLibraryViewType.Grid)
     {
-        <div class="library-row w-full flex flex-row">
-            @for(int j = 0; j < itemsPerRow; j++)
-            {
-                if (i * itemsPerRow + j < Model.Graphs.Count)
+        @for (int i = 0; i < numberOfRows; i++)
+        {
+            <div class="library-row w-full flex flex-row">
+                @for (int j = 0; j < itemsPerRow; j++)
                 {
-                    <div class="library-item w-1/3 h-192">
-                        @{
-                            var model = new GraphCanvasModel(
+                    if (i * itemsPerRow + j < Model.Graphs.Count)
+                    {
+                        <div class="library-item w-1/3 h-192">
+                            @{
+                                var model = new GraphCanvasModel(
                                 Model.Graphs[i * itemsPerRow + j],
                                 showEditButton: true
-                            );
-                        }
-                        @Html.Partial("_GraphCanvas", model)
-                    </div>
+                                );
+                            }
+                            @Html.Partial("_GraphCanvas", model)
+                        </div>
+                    }
                 }
-            }
+            </div>
+        }
+    }
+    else if(Model.ViewType == GraphLibraryViewType.Table)
+    {
+        <div class="overflow-x-auto library-table">
+            <table class="w-full border border-gray-200 bg-white">
+                <thead>
+                    <tr class="bg-gray-200 text-gray-700 text-sm">
+                        <th class="border px-4 py-2">ID</th>
+                        <th class="border px-4 py-2">Order</th>
+                        <th class="border px-4 py-2">Size</th>
+                        <th class="border px-4 py-2">Wiener Index</th>
+                        <th class="border px-4 py-2">Classes</th>
+                        <th class="border px-4 py-2">Properties</th>
+                        <th class="border px-4 py-2"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var graph in Model.Graphs)
+                    {
+                        <tr class="hover:bg-gray-100 text-sm text-gray-700">
+                            <td class="border px-4 py-2">@graph.id</td>
+                            <td class="border px-4 py-2">@graph.properties.Order</td>
+                            <td class="border px-4 py-2">@graph.properties.Size</td>
+                            <td class="border px-4 py-2">@graph.properties.WienerIndex</td>
+                            <td class="border px-4 py-2">@graph.classNames</td>
+                            <td class="border px-4 py-2">
+                                @* Show Graph additional properties *@
+                                @foreach (var propertyMapping in graph.properties.PropertyMappings)
+                                {
+                                    if (propertiesToSkipInPropertiesCol.Contains(propertyMapping.Key))
+                                        continue;
+
+                                    if (propertyMapping.Value.Getter() == null)
+                                        continue;
+
+                                    string propertyValueStr = graph.properties.ConvertGraphPropertyToDisplayString(propertyMapping.Value);
+
+                                    <div class="w-full"><b>@(propertyMapping.Value.Name):</b> @(propertyValueStr)</div>
+                                }
+                            </td>
+                            <td class="border px-4 py-2">
+                                <button type="button" class="relative p-2 bg-gray-200 btn-preview" data-id="@(graph.id)">
+                                    <i class="fa-solid fa-magnifying-glass"></i>
+                                </button>
+                                @{
+                                    var canvasModel = new GraphCanvasModel(graph, showHeader: false, showFooter: false, isVisible: false, containerClasses: "w-128 h-128 z-10 absolute");
+                                }
+                                @Html.Partial("_GraphCanvas", canvasModel)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
         </div>
     }
+
 
     <!-- Pagination -->
     @Html.Partial("_Pagination", Model.PaginationInfo)
@@ -128,6 +191,24 @@
                 }
             });
 
+            $(".library-table tbody tr .btn-preview")
+                .on('mouseenter', function(e) {
+                    console.log("Enter", e);
+                    let id = $(this).attr("data-id");
+
+                    if (id == null)
+                        return;
+
+                    EventBus.emit('showCanvasAtCurrentPos', { id: id, y: e.pageY, x: e.pageX });
+                })
+                .on('mouseleave', function () {
+                    let id = $(this).attr("data-id");
+
+                    if (id == null)
+                        return;
+
+                    EventBus.emit('hideCanvas', { id: id });
+                });
         });
     </script>
 </div>

@@ -51,5 +51,13 @@ namespace GraphAlgorithms.Core
                 { GraphPropertyEnum.SizeToOrderRatio, new PropertyMetadata("Size-to-Order Ratio", () => this.SizeToOrderRatio, value => this.SizeToOrderRatio = (decimal)value, typeof(decimal)) },
             };
         }
+
+        public string ConvertGraphPropertyToDisplayString(PropertyMetadata property)
+        {
+            if (property.Type == typeof(decimal))
+                return ((decimal)property.Getter()).ToString("F4");
+
+            return Convert.ToString(property.Getter());
+        }
     }
 }

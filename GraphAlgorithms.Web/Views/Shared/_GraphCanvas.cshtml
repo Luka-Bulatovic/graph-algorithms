@@ -10,7 +10,7 @@
         new List<GraphPropertyEnum>() { GraphPropertyEnum.Order, GraphPropertyEnum.Size, GraphPropertyEnum.WienerIndex };
 }
 
-<div id="@ViewID" class="graph-canvas-container">
+<div id="@ViewID" class="graph-canvas-container @(Model.ContainerClasses) @(Model.IsVisible ? "" : "hidden")">
     <div class="canvas-header group @(Model.ShowHeader ? "flex" : "hidden")">
         <div class="flex flex-row w-full">
             <div class="w-1/3"><b>ID:</b> @Model.ID</div>
@@ -35,7 +35,7 @@
                 if (propertyMapping.Value.Getter() == null)
                     continue;
 
-                string propertyValueStr = Model.ConvertGraphPropertyToDisplayString(propertyMapping.Value);
+                string propertyValueStr = Model.Graph.properties.ConvertGraphPropertyToDisplayString(propertyMapping.Value);
 
                 <div class="w-full"><b>@(propertyMapping.Value.Name):</b> @(propertyValueStr)</div>
             }
@@ -50,9 +50,9 @@
         <div class="item context-item-finish-adding-edge">Finish Adding Edge</div>
     </div>
 
-    <div class="graph-and-status-bar-container">
+    <div class="graph-and-status-bar-container bg-white">
         <div class="graph-container"></div>
-        <div class="status-bar">
+        <div class="status-bar @(Model.ShowFooter ? "" : "hidden")">
             <span class="status-msg"></span>
 
             <div class="status-bar-buttons">

@@ -26,12 +26,40 @@ var GraphCanvas = new function () {
         // Calculate click
         viewDataObj.btnCalculate.on('click', function (e) { GraphCanvas.onCalculateBtnClick(viewDataObj); })
 
-        // On header mouseover/mouseout, show/hide additional properties
-        //viewDataObj.canvasHeader.on('mouseover', function (e) { GraphCanvas.onHeaderMouseOver(viewDataObj); });
-        //viewDataObj.canvasHeader.on('mouseout', function (e) { GraphCanvas.onHeaderMouseOut(viewDataObj); });
-
         // Initial network
         GraphCanvas.createInitialNetwork(viewDataObj);
+
+        // Subscribe to showCanvasAtCurrentPos on Event bus
+        EventBus.on('showCanvasAtCurrentPos', (e) => GraphCanvas.onShowCanvas(viewDataObj, e));
+        EventBus.on('hideCanvas', (e) => GraphCanvas.onHideCanvas(viewDataObj, e));
+    }
+
+    this.onShowCanvas = function (viewDataObj, e) {
+        if (e.detail.id != viewDataObj.graphID)
+            return;
+
+        let canvasWidth = viewDataObj.canvasContainer.outerWidth();
+        let canvasHeight = viewDataObj.canvasContainer.outerHeight();
+        let windowHeightWithScroll = window.innerHeight + window.scrollY;
+
+        let top = (canvasHeight + e.detail.y + 10 <= windowHeightWithScroll) ?
+            e.detail.y + 10 :
+            e.detail.y - 10 - canvasHeight;
+
+        viewDataObj.canvasContainer.removeClass("hidden");
+        viewDataObj.canvasContainer.css({
+            top: top + 'px',
+            left: (e.detail.x - canvasWidth - 10) + 'px'
+        });
+
+        viewDataObj.network.fit();
+    }
+
+    this.onHideCanvas = function (viewDataObj, e) {
+        if (e.detail.id != viewDataObj.graphID)
+            return;
+
+        viewDataObj.canvasContainer.addClass("hidden");
     }
 
     this.onContextMenuItemClick = function (viewDataObj, itemObj) {
