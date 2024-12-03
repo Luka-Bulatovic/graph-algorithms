@@ -1,0 +1,52 @@
+﻿@model MultiSelectListModel
+
+@{
+    string ViewID = string.Format("MultiSelectList_{0}", Guid.NewGuid().ToString().Replace("-", ""));
+    string ViewDataObj = string.Format("{0}_ViewData", ViewID);
+}
+
+<div id="@ViewID" class="relative inline-block w-64">
+    <!-- Dropdown Button -->
+    <button type="button"
+            class="btn-ms-dropdown w-full px-4 py-2 text-sm font-medium text-left bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
+        Select Options
+        <i class="fas fa-chevron-down ml-2"></i>
+    </button>
+
+    <!-- Dropdown Menu -->
+    <div class="ms-dropdown-menu absolute z-10 hidden w-full bg-white border border-gray-300 rounded shadow-md">
+        @foreach(var item in Model.Items)
+        {
+            <div class="ms-item px-4 py-2">
+                <label class="flex items-center">
+                    <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="@item.Key" />
+                    <span class="ml-2 text-sm text-gray-700">@item.Value</span>
+                </label>
+            </div>
+        }
+    </div>
+</div>
+
+<script type="text/javascript">
+    var @(ViewDataObj) = {
+        viewID: "@ViewID",
+        multiSelectID: "@Model.MultiSelectID",
+        container: $("#@ViewID"),
+        btnDropdown: $("#@ViewID .btn-ms-dropdown"),
+        dropdownMenu: $("#@ViewID .ms-dropdown-menu"),
+        dropdownItems: $("#@ViewID .ms-dropdown-menu .ms-item"),
+        items: [
+            @foreach(var item in Model.Items)
+            {
+                @(Html.Raw("{ 'key': '" + item.Key + "', 'value': '" + item.Value + "'}, "))
+            }
+        ],
+        selectedItems: [],
+        selectedItemsNames: ""
+    };
+
+    $(document).ready(() => {
+        var viewDataObj = @(ViewDataObj);
+        MultiSelectList.Initialize(viewDataObj);
+    });
+</script>

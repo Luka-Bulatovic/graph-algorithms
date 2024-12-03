@@ -15,12 +15,15 @@ namespace GraphAlgorithms.Shared
         public List<string> Values { get; set; } // Can store one or more values based on FieldType and AllowMultipleValues
         public bool IsValid => ValidateParameter();
 
+        public List<MultiSelectListItem> MultiSelectItems { get; set; } // Used when parameter is of type MultiSelectList
+        public string MultiSelectListID { get; set; } // Used when parameter is of type MultiSelectList
+
         public SearchParameter()
         {
             Values = new();
         }
 
-        public SearchParameter(string key, string displayName, SearchParamType paramType, bool allowMultipleValues = false) : this()
+        public SearchParameter(string key, string displayName, SearchParamType paramType, bool allowMultipleValues = false, List<MultiSelectListItem> multiSelectItems = null, string multiSelectListID = "") : this()
         {
             if (allowMultipleValues && (paramType != SearchParamType.Number && paramType != SearchParamType.Text))
                 throw new InvalidDataException("Multiple values are only allowed for Search Parameters of type Number or Text.");
@@ -29,6 +32,9 @@ namespace GraphAlgorithms.Shared
             DisplayName = displayName;
             ParamType = paramType;
             AllowMultipleValues = allowMultipleValues;
+
+            MultiSelectItems = multiSelectItems;
+            MultiSelectListID = multiSelectListID;
         }
 
         private bool ValidateParameter()

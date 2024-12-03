@@ -36,7 +36,14 @@ namespace GraphAlgorithms.Web.Models
                 {
                     new SearchParameter("id", "ID", SearchParamType.Number, allowMultipleValues: true),
                     new SearchParameter("order", "Order", SearchParamType.NumberRange),
-                    new SearchParameter("size", "Size", SearchParamType.NumberRange)
+                    new SearchParameter("size", "Size", SearchParamType.NumberRange),
+                    new SearchParameter("class", "Class", SearchParamType.MultiSelectList,
+                        multiSelectListID: "SearchByGraphClass",
+                        multiSelectItems: new List<MultiSelectListItem>() {
+                            new MultiSelectListItem() { Key = "1", Value = "A" },
+                            new MultiSelectListItem() { Key = "2", Value = "B" },
+                        }
+                    )
                 }
             );
 

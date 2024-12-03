@@ -30,6 +30,17 @@
                 <span>-</span>
                 <input asp-for="DateRangeToValue" type="date" class="ml-2 field-date-range-to form-input-field">
             </span>
+            
+            @*Draw containers for Multi Select Lists*@
+            @foreach(var searchParam in Model.SearchParams)
+            {
+                if(searchParam.ParamType == GraphAlgorithms.Shared.SearchParamType.MultiSelectList)
+                {
+                    <span class="field-multi-select-container flex flex-row hidden" data-id="@searchParam.Key">
+                        @Html.Partial("_MultiSelectList", new MultiSelectListModel(searchParam.MultiSelectListID, searchParam.MultiSelectItems))
+                    </span>
+                }
+            }
         </div>
 
         <div class="flex flex-row mt-4 mb-8">
@@ -75,6 +86,8 @@
         fldDateRangeFrom: $("#@ViewID .field-date-range-from"),
         fldDateRangeTo: $("#@ViewID .field-date-range-to"),
         fldDateRangeContainer: $("#@ViewID .field-date-range-container"),
+
+        fldMultiSelectContainers: $("#@ViewID .field-multi-select-container"),
 
         btnSearch: $("#@ViewID .btn-search"),
         btnAddParam: $("#@ViewID .btn-add-param"),

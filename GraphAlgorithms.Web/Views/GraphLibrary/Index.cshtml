@@ -1,4 +1,5 @@
-﻿@using static GraphAlgorithms.Shared.Shared;
+﻿@using GraphAlgorithms.Shared;
+@using static GraphAlgorithms.Shared.Shared;
 @model GraphLibraryModel
 
 @{
@@ -68,6 +69,12 @@
             <i class="fa-solid fa-bars"></i>
         </button>
     </div>
+
+    @* @Html.Partial("_MultiSelectList",
+        new MultiSelectListModel("SearchByGraphClass", new List<MultiSelectListItem>() {
+            new MultiSelectListItem() { Key = "1", Value = "A" },
+            new MultiSelectListItem() { Key = "2", Value = "B" },
+        })) *@
 
     @if(Model.ViewType == GraphLibraryViewType.Grid)
     {
@@ -209,6 +216,12 @@
 
                     EventBus.emit('hideCanvas', { id: id });
                 });
+
+            EventBus.on('getMultiSelectSelectedItemsResponse', (e) => {
+                console.log(e.detail);
+            });
         });
+
+
     </script>
 </div>

@@ -126,6 +126,7 @@
         viewDataObj.fldNumberContainer.addClass("hidden");
         viewDataObj.fldNumberRangeContainer.addClass("hidden");
         viewDataObj.fldDateRangeContainer.addClass("hidden");
+        viewDataObj.fldMultiSelectContainers.addClass("hidden");
 
         var paramID = viewDataObj.slSearchBy.val();
 
@@ -155,6 +156,14 @@
                 viewDataObj.fldDateRangeFrom.val(null);
                 viewDataObj.fldDateRangeTo.val(null);
                 viewDataObj.fldDateRangeContainer.removeClass("hidden");
+                break;
+            case Search.SearchParamTypes.MultiSelectList:
+                let multiSelectContainer = viewDataObj.fldMultiSelectContainers.filter(function () {
+                    return $(this).attr("data-id") == paramID;
+                });
+
+                multiSelectContainer.removeClass("hidden");
+
                 break;
             default:
                 break;
