@@ -17,6 +17,8 @@ namespace GraphAlgorithms.Shared
 
         public List<MultiSelectListItem> MultiSelectItems { get; set; } // Used when parameter is of type MultiSelectList
         public string MultiSelectListID { get; set; } // Used when parameter is of type MultiSelectList
+        
+        public string DisplayValues { get; set; } // Used to display initial values that are selected for Parameter (for example, names of selected MultiSelectListItems)
 
         public SearchParameter()
         {

@@ -9,7 +9,7 @@
     <!-- Dropdown Button -->
     <button type="button"
             class="btn-ms-dropdown w-full px-4 py-2 text-sm font-medium text-left bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500">
-        Select Options
+        <span class="btn-text">Select Options</span>
         <i class="fas fa-chevron-down ml-2"></i>
     </button>
 
@@ -17,7 +17,7 @@
     <div class="ms-dropdown-menu absolute z-10 hidden w-full bg-white border border-gray-300 rounded shadow-md">
         @foreach(var item in Model.Items)
         {
-            <div class="ms-item px-4 py-2">
+            <div class="ms-item px-4 py-2 hover:bg-gray-300">
                 <label class="flex items-center">
                     <input type="checkbox" class="form-checkbox h-4 w-4 text-blue-600" value="@item.Key" />
                     <span class="ml-2 text-sm text-gray-700">@item.Value</span>

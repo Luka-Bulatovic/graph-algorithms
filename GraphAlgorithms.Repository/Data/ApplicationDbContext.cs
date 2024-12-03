@@ -26,9 +26,52 @@ namespace GraphAlgorithms.Repository.Data
         private void SeedGraphClasses(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<GraphClassEntity>().HasData(
-                Enum.GetValues(typeof(GraphClassEnum))
-                    .Cast<GraphClassEnum>()
-                    .Select(e => new GraphClassEntity() { ID = (int)e, Name = AddSpacesToEnumName(e.ToString()) })
+                new List<GraphClassEntity>()
+                {
+                    new GraphClassEntity()
+                    {
+                        ID = (int)GraphClassEnum.Connected,
+                        Name = "Connected",
+                        CanGenerateRandomGraphs = true,
+                        HasClassifier = true,
+                    },
+                    new GraphClassEntity()
+                    {
+                        ID = (int)GraphClassEnum.UnicyclicBipartite,
+                        Name = "Unicyclic Bipartite",
+                        CanGenerateRandomGraphs = true,
+                        HasClassifier = false,
+                    },
+                    new GraphClassEntity()
+                    {
+                        ID = (int)GraphClassEnum.Tree,
+                        Name = "Tree",
+                        CanGenerateRandomGraphs = false,
+                        HasClassifier = true,
+                    },
+                    new GraphClassEntity()
+                    {
+                        ID = (int)GraphClassEnum.Unicyclic,
+                        Name = "Unicyclic",
+                        CanGenerateRandomGraphs = false,
+                        HasClassifier = true,
+                    },
+                    new GraphClassEntity()
+                    {
+                        ID = (int)GraphClassEnum.Bipartite,
+                        Name = "Bipartite",
+                        CanGenerateRandomGraphs = false,
+                        HasClassifier = true,
+                    },
+                    new GraphClassEntity()
+                    {
+                        ID = (int)GraphClassEnum.AcyclicWithFixedDiameter,
+                        Name = "Acyclic With Fixed Diameter",
+                        CanGenerateRandomGraphs = true,
+                        HasClassifier = false,
+                    },
+
+                }
             );
         }
         private void SeedActionTypes(ModelBuilder modelBuilder)

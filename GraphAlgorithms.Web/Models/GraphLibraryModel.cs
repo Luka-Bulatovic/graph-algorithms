@@ -1,9 +1,12 @@
 ﻿using GraphAlgorithms.Service.DTO;
+using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Shared;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Threading.Tasks;
 using static GraphAlgorithms.Shared.SearchParameter;
 
 namespace GraphAlgorithms.Web.Models
@@ -30,8 +33,18 @@ namespace GraphAlgorithms.Web.Models
             PaginationInfo = new(actionName: (viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable"));
             AllowAddingToCustomGraphSets = false;
 
+            CustomSetModel = new SaveActionGraphsToCustomSetModel();
+        }
+
+        public async Task InitializeSearchModel(IGraphClassService graphClassService)
+        {
+            var graphClassDTOs = await graphClassService.GetClassifiableGraphClasses();
+            var graphClassMultiSelectItemsList = graphClassDTOs
+                    .Select(gc => new MultiSelectListItem() { Key = gc.ID.ToString(), Value = gc.Name })
+                    .ToList();
+
             SearchModel = new SearchModel(
-                viewType == GraphLibraryViewType.Grid ? "/GraphLibrary/Index" : "/GraphLibrary/IndexTable",
+                ViewType == GraphLibraryViewType.Grid ? "/GraphLibrary/Index" : "/GraphLibrary/IndexTable",
                 new List<SearchParameter>()
                 {
                     new SearchParameter("id", "ID", SearchParamType.Number, allowMultipleValues: true),
@@ -39,15 +52,10 @@ namespace GraphAlgorithms.Web.Models
                     new SearchParameter("size", "Size", SearchParamType.NumberRange),
                     new SearchParameter("class", "Class", SearchParamType.MultiSelectList,
                         multiSelectListID: "SearchByGraphClass",
-                        multiSelectItems: new List<MultiSelectListItem>() {
-                            new MultiSelectListItem() { Key = "1", Value = "A" },
-                            new MultiSelectListItem() { Key = "2", Value = "B" },
-                        }
+                        multiSelectItems: graphClassMultiSelectItemsList
                     )
                 }
             );
-
-            CustomSetModel = new SaveActionGraphsToCustomSetModel();
         }
     }
 }

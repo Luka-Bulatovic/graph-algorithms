@@ -11,6 +11,7 @@ namespace GraphAlgorithms.Repository.Repositories
     {
         Task<GraphClassEntity> GetGraphClassByIdAsync(int id);
         Task<List<GraphClassEntity>> GetGraphClassesAsync();
+        Task<List<GraphClassEntity>> GetClassifiableGraphClassesAsync();
         Task<List<GraphClassEntity>> GetGraphClassesByIDsAsync(List<int> ids);
         Task<List<GraphClassEntity>> GetGraphClassesForGeneratingRandomGraphsAsync();
         Task<List<GraphPropertyEntity>> GetRandomGenerationPropertiesForGraphClassAsync(int id);

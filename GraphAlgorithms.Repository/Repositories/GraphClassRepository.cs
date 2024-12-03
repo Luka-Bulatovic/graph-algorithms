@@ -33,6 +33,16 @@ namespace GraphAlgorithms.Repository.Repositories
             return graphClasses;
         }
 
+        public async Task<List<GraphClassEntity>> GetClassifiableGraphClassesAsync()
+        {
+            List<GraphClassEntity> graphClasses = 
+                await _context.GraphClasses
+                        .Where(gc => gc.HasClassifier == true)
+                        .ToListAsync();
+
+            return graphClasses;
+        }
+
         public async Task<List<GraphClassEntity>> GetGraphClassesByIDsAsync(List<int> ids)
         {
             return await _context

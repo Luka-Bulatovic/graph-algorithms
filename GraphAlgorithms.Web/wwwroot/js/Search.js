@@ -49,6 +49,7 @@
             searchParamsString += `searchParams[${index}].Key=${encodeURIComponent(param.id)}&`;
             searchParamsString += `searchParams[${index}].AllowMultipleValues=${encodeURIComponent(param.allowMultipleValues)}&`;
             searchParamsString += `searchParams[${index}].ParamType=${encodeURIComponent(param.paramType)}&`;
+            searchParamsString += `searchParams[${index}].DisplayValues=${encodeURIComponent(param.displayValues)}&`;
             param.values.forEach((value, valueIndex) => {
                 searchParamsString += `searchParams[${index}].Values[${valueIndex}]=${encodeURIComponent(value)}&`;
             });
@@ -74,7 +75,8 @@
         //    displayName: searchParam.DisplayName,
         //    paramType: searchParam.ParamType,
         //    allowMultipleValues: searchParam.AllowMultipleValues,
-        //    values: []
+        //    values: [],
+        //    displayValues: ''
         //};
 
         switch (searchParam.ParamType) {
@@ -91,6 +93,11 @@
             case Search.SearchParamTypes.DateRange:
                 newParam.values.push(viewDataObj.fldDateRangeFrom.val());
                 newParam.values.push(viewDataObj.fldDateRangeTo.val());
+                break;
+            case Search.SearchParamTypes.MultiSelectList:
+                let multiSelectListObj = MultiSelectListManager.get(searchParam.MultiSelectListID);
+                newParam.values = [...multiSelectListObj.selectedItems];
+                newParam.displayValues = multiSelectListObj.selectedItemsNames;
                 break;
             default:
                 break;
@@ -176,7 +183,9 @@
         viewDataObj.currSearchParams.forEach((e, i) => {
             let values = '';
 
-            if (e.paramType == Search.SearchParamTypes.NumberRange || e.paramType == Search.SearchParamTypes.DateRange)
+            if (e.displayValues != '')
+                values = e.displayValues;
+            else if (e.paramType == Search.SearchParamTypes.NumberRange || e.paramType == Search.SearchParamTypes.DateRange)
                 values = `${e.values[0]} - ${e.values[1]}`;
             else
                 values = e.values.join(', ');
@@ -194,20 +203,21 @@
             return;
 
         viewDataObj.selectedSearchParams.forEach(p => {
-            var currParam = Search.createSearchParam(p.Key, p.DisplayName, p.ParamType, p.AllowMultipleValues, p.Values);
+            var currParam = Search.createSearchParam(p.Key, p.DisplayName, p.ParamType, p.AllowMultipleValues, p.Values, p.DisplayValues);
             viewDataObj.currSearchParams.push(currParam);
         });
 
         Search.redrawSelectedParameters(viewDataObj);
     }
 
-    this.createSearchParam = function (id, displayName, paramType, allowMultipleValues, values) {
+    this.createSearchParam = function (id, displayName, paramType, allowMultipleValues, values, displayValues = '') {
         return {
             id: id,
             displayName: displayName,
             paramType: paramType,
             allowMultipleValues: allowMultipleValues,
-            values: values
+            values: values,
+            displayValues: displayValues == null ? '' : displayValues
         };
     }
 

@@ -1,4 +1,16 @@
-﻿var MultiSelectList = new function () {
+﻿var MultiSelectListManager = new function () {
+    this.instances = {};
+
+    this.register = function (multiSelectID, viewDataObj) {
+        this.instances[multiSelectID] = viewDataObj;
+    }
+
+    this.get = function (multiSelectID) {
+        return this.instances[multiSelectID];
+    }
+}
+
+var MultiSelectList = new function () {
     this.Initialize = function (viewDataObj) {
         // Show/hide menu on button click
         viewDataObj.btnDropdown.on('click', () => {
@@ -21,8 +33,8 @@
             MultiSelectList.onDropdownItemChanged(viewDataObj, e);
         });
 
-        // Handle requests for selected items
-        EventBus.on('getMultiSelectSelectedItems', (e) => MultiSelectList.onGetMultiSelectSelectedItems(viewDataObj, e));
+        // Register this list in MultiSelectListManager
+        MultiSelectListManager.register(viewDataObj.multiSelectID, viewDataObj);
     }
 
     this.onDropdownItemChanged = function (viewDataObj, e) {
@@ -52,16 +64,10 @@
         }
 
         viewDataObj.selectedItemsNames = selectedItemsNames;
-    }
 
-    this.onGetMultiSelectSelectedItems = function (viewDataObj, e) {
-        if (e.detail.id != viewDataObj.multiSelectID)
-            return;
-
-        EventBus.emit('getMultiSelectSelectedItemsResponse', {
-            id: viewDataObj.multiSelectID,
-            selectedItemIDs: viewDataObj.selectedItems.join('$'),
-            selectedItemsNames: viewDataObj.selectedItemsNames
-        });
+        if (viewDataObj.selectedItemsNames != null && viewDataObj.selectedItemsNames != "")
+            viewDataObj.btnDropdown.find(".btn-text").html("Selected: " + selectedItemsNames);
+        else
+            viewDataObj.btnDropdown.find(".btn-text").html("Select Options");
     }
 }
