@@ -38,19 +38,19 @@ namespace GraphAlgorithms.Web.Controllers
             return await Index(pageNumber, pageSize, searchParams, GraphLibraryViewType.Table);
         }
 
-        //public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
-        //{
-        //    GraphLibraryModel model = new GraphLibraryModel(viewType);
+        public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
+        {
+            GraphLibraryModel model = new GraphLibraryModel(viewType);
 
-        //    (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsForActionPaginated(actionID, pageNumber, pageSize);
+            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsForActionPaginated(actionID, pageNumber, pageSize);
 
-        //    model.ForActionID = actionID;
-        //    model.Graphs = graphs;
-        //    model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
-        //    model.AllowAddingToCustomGraphSets = true;
+            model.ForActionID = actionID;
+            model.Graphs = graphs;
+            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
+            model.AllowAddingToCustomGraphSets = true;
 
-        //    return View("Index", model);
-        //}
+            return View("Index", model);
+        }
 
         public async Task<IActionResult> SaveToCustomSet(SaveActionGraphsToCustomSetModel model)
         {

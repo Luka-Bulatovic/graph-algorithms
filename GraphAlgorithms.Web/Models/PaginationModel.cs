@@ -52,6 +52,7 @@ namespace GraphAlgorithms.Web.Models
                 queryStringBuilder.Append($"&searchParams[{i}].Key={WebUtility.UrlEncode(param.Key)}");
                 queryStringBuilder.Append($"&searchParams[{i}].ParamType={WebUtility.UrlEncode(((int)param.ParamType).ToString())}");
                 queryStringBuilder.Append($"&searchParams[{i}].AllowMultipleValues={WebUtility.UrlEncode(param.AllowMultipleValues.ToString().ToLower())}");
+                queryStringBuilder.Append($"&searchParams[{i}].DisplayValues={WebUtility.UrlEncode(param.DisplayValues)}");
 
                 for(int j = 0; j < param.Values.Count; j++)
                     queryStringBuilder.Append($"&searchParams[{i}].Values[{j}]={WebUtility.UrlEncode(param.Values[j])}");

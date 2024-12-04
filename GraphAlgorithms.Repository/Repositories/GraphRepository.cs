@@ -79,6 +79,13 @@ namespace GraphAlgorithms.Repository.Repositories
 
                         query = query.Where(g => g.Size >= int.Parse(searchParam.Values[0]) && g.Size <= int.Parse(searchParam.Values[1]));
                         break;
+                    case "class":
+                        if (searchParam.ParamType != SearchParamType.MultiSelectList)
+                            continue;
+
+                        var graphClassIDs = searchParam.Values.Select(v => int.Parse(v)).ToList();
+                        query = query.Where(g => g.GraphClasses.Any(gc => graphClassIDs.Contains(gc.ID)));
+                        break;
                     default:
                         break;
                 }
