@@ -21,6 +21,8 @@ namespace GraphAlgorithms.Core
         public int? MinEdgesFactor { get; set; }
         public int? Radius { get; set; }
         public decimal? SizeToOrderRatio { get; set; }
+        public int? MinNodeDegree { get; set; }
+        public int? MaxNodeDegree { get; set; }
 
         private Dictionary<GraphPropertyEnum, PropertyMetadata> propertyMappings;
         public Dictionary<GraphPropertyEnum, PropertyMetadata> PropertyMappings
@@ -49,6 +51,8 @@ namespace GraphAlgorithms.Core
                 { GraphPropertyEnum.MinSizeCoef, new PropertyMetadata("MinEdgesFactor", () => this.MinEdgesFactor, value => this.MinEdgesFactor = (int)value, typeof(int)) },
                 { GraphPropertyEnum.Radius, new PropertyMetadata("Radius", () => this.Radius, value => this.Radius = (int)value, typeof(int)) },
                 { GraphPropertyEnum.SizeToOrderRatio, new PropertyMetadata("Size-to-Order Ratio", () => this.SizeToOrderRatio, value => this.SizeToOrderRatio = (decimal)value, typeof(decimal)) },
+                { GraphPropertyEnum.MinNodeDegree, new PropertyMetadata("Min. Node Degree", () => this.MinNodeDegree, value => this.MinNodeDegree = (int)value, typeof(int)) },
+                { GraphPropertyEnum.MaxNodeDegree, new PropertyMetadata("Max. Node Degree", () => this.MaxNodeDegree, value => this.MaxNodeDegree = (int)value, typeof(int)) },
             };
         }
 

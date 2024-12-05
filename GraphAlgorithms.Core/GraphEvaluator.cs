@@ -93,6 +93,12 @@ namespace GraphAlgorithms.Core
 
             if(unicyclicGraphClassifier.BelongsToClass(graph))
                 graph.GraphProperties.CycleLength = dfsAlgorithm.FirstCycleLength;
+
+            if (graph.GraphProperties.MinNodeDegree == null)
+                graph.GraphProperties.MinNodeDegree = dfsAlgorithm.MinNodeDegree;
+            
+            if (graph.GraphProperties.MaxNodeDegree == null)
+                graph.GraphProperties.MaxNodeDegree = dfsAlgorithm.MaxNodeDegree;
         }
 
         private void CalculateGraphClasses(Graph graph)

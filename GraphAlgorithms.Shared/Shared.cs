@@ -22,7 +22,9 @@
             Radius = 7,
             SizeToOrderRatio = 8,
             Size = 9,
-            WienerIndex = 10
+            WienerIndex = 10,
+            MinNodeDegree = 11,
+            MaxNodeDegree = 12,
         }
     }
 }

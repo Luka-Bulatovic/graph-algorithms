@@ -14,12 +14,30 @@ namespace GraphAlgorithms.Core.Algorithms
         private NodePropertyArray<int> _component;
         private Node _startNode;
         private int _numberOfComponents;
+        private int _minNodeDegree;
+        private int _maxNodeDegree = INF_DISTANCE;
 
         private NodePropertyArray<int> _coloring; // (0,1,2) Used for detecting cycles
         private int _firstCycleLength = 0;
         public int FirstCycleLength
         {
             get { return _firstCycleLength; }
+        }
+
+        public int MaxNodeDegree
+        {
+            get
+            {
+                return _maxNodeDegree;
+            }
+        }
+
+        public int MinNodeDegree
+        {
+            get
+            {
+                return _minNodeDegree;
+            }
         }
 
         public DepthFirstSearchAlgorithm(Graph g, Node startNode) : base(g)
@@ -41,6 +59,8 @@ namespace GraphAlgorithms.Core.Algorithms
             _prev.InitializeValues(null);
             _component.InitializeValues(0);
             _coloring.InitializeValues(0);
+            _minNodeDegree = INF_DISTANCE;
+            _maxNodeDegree = 0;
         }
 
         private void DFS(Node currNode, Node parentNode)
@@ -68,6 +88,8 @@ namespace GraphAlgorithms.Core.Algorithms
             }
 
             _coloring[currNode] = 2;
+            _minNodeDegree = Math.Min(_minNodeDegree, adjEdges.Count);
+            _maxNodeDegree = Math.Max(_maxNodeDegree, adjEdges.Count);
         }
 
         private int CalculateCycleLength(Node firstNode, Node lastNode)

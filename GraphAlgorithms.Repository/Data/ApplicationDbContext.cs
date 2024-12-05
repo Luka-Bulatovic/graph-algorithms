@@ -147,6 +147,18 @@ namespace GraphAlgorithms.Repository.Data
                         Description = "Wiener Index of a graph",
                         IsGeneralDisplayProperty = true
                     },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.MinNodeDegree,
+                        Name = "Min. Node Degree",
+                        Description = "",
+                        IsGeneralDisplayProperty = true
+                    },
+                    new GraphPropertyEntity() {
+                        ID = (int)GraphPropertyEnum.MaxNodeDegree,
+                        Name = "Max. Node Degree",
+                        Description = "",
+                        IsGeneralDisplayProperty = true
+                    },
                 }
             );
         }
