@@ -44,6 +44,8 @@
     this.onSearch = function (viewDataObj) {
         var searchParamsString = '';
 
+        searchParamsString += `sortBy=${encodeURIComponent(viewDataObj.slSortBy.val())}&`;
+
         viewDataObj.currSearchParams.forEach((param, index) => {
             searchParamsString += `searchParams[${index}].DisplayName=${encodeURIComponent(param.displayName)}&`;
             searchParamsString += `searchParams[${index}].Key=${encodeURIComponent(param.id)}&`;
@@ -135,6 +137,8 @@
         viewDataObj.fldDateRangeContainer.addClass("hidden");
         viewDataObj.fldMultiSelectContainers.addClass("hidden");
 
+        viewDataObj.btnAddParam.addClass("hidden");
+
         var paramID = viewDataObj.slSearchBy.val();
 
         if (paramID == -1)
@@ -175,6 +179,8 @@
             default:
                 break;
         }
+
+        viewDataObj.btnAddParam.removeClass("hidden");
     }
 
     this.redrawSelectedParameters = function (viewDataObj) {

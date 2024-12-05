@@ -54,6 +54,11 @@ namespace GraphAlgorithms.Web.Models
                         multiSelectListID: "SearchByGraphClass",
                         multiSelectItems: graphClassMultiSelectItemsList
                     )
+                },
+                new List<SortParameter>()
+                {
+                    new SortParameter("wiener,asc", "Wiener Index, ASC"),
+                    new SortParameter("wiener,desc", "Wiener Index, DESC"),
                 }
             );
         }

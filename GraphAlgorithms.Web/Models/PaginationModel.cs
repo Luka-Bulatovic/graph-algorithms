@@ -15,6 +15,7 @@ namespace GraphAlgorithms.Web.Models
         public int TotalPages => (int)Math.Ceiling((decimal)TotalCount / PageSize);
         public string ActionName { get; set; }
         public List<SearchParameter> SearchParams { get; set; }
+        public string SortBy { get; set; }
         public string SearchParamsJSON => JsonSerializer.Serialize(SearchParams);
 
         public PaginationModel(string actionName = "Index")
@@ -25,13 +26,14 @@ namespace GraphAlgorithms.Web.Models
             ActionName = actionName;
         }
 
-        public void SetData(int pageNumber, int pageSize, int totalCount, List<SearchParameter> searchParams = null)
+        public void SetData(int pageNumber, int pageSize, int totalCount, List<SearchParameter> searchParams = null, string sortBy = "")
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
             TotalCount = totalCount;
 
             SearchParams = searchParams ?? SearchParams;
+            SortBy = sortBy;
         }
 
         public string GetSearchParamsQueryString()
@@ -44,7 +46,9 @@ namespace GraphAlgorithms.Web.Models
 
             StringBuilder queryStringBuilder = new StringBuilder();
 
-            for(int i = 0; i < SearchParams.Count; i++)
+            queryStringBuilder.Append($"&sortBy={WebUtility.UrlEncode(SortBy)}");
+
+            for (int i = 0; i < SearchParams.Count; i++)
             {
                 SearchParameter param = SearchParams[i];
 

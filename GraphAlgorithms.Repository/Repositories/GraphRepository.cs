@@ -27,7 +27,7 @@ namespace GraphAlgorithms.Repository.Repositories
             return graphs;
         }
 
-        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, List<SearchParameter> searchParams = null)
+        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, List<SearchParameter> searchParams = null, string sortBy = "")
         {
             var query = _context.Graphs.AsQueryable();
 
@@ -35,19 +35,41 @@ namespace GraphAlgorithms.Repository.Repositories
                 query = ApplySearchCriteria(query, searchParams);
 
             var totalCount = await query.CountAsync();
-            var graphs = await query
+
+            query = query
                             .Include(g => g.Action)
                                 .ThenInclude(a => a.ActionType)
                             .Include(g => g.Action)
                                 .ThenInclude(a => a.ForGraphClass)
                             .Include(g => g.GraphClasses)
-                            .Include(g => g.GraphPropertyValues)
-                            .OrderByDescending(g => g.ID)
+                            .Include(g => g.GraphPropertyValues);
+
+            query = ApplySortCriteria(query, sortBy);
+
+            var graphs = await query
                             .Skip((pageNumber - 1) * pageSize)
                             .Take(pageSize)
                             .ToListAsync();
 
             return (graphs, totalCount);
+        }
+
+        private IQueryable<GraphEntity> ApplySortCriteria(IQueryable<GraphEntity> query, string sortBy)
+        {
+            if (sortBy == "")
+                return query;
+
+            switch(sortBy)
+            {
+                case "wiener,asc":
+                    query = query.OrderBy(g => g.WienerIndex);
+                    break;
+                case "wiener,desc":
+                    query = query.OrderByDescending(g => g.WienerIndex);
+                    break;
+            }
+
+            return query;
         }
 
         private IQueryable<GraphEntity> ApplySearchCriteria(IQueryable<GraphEntity> query, List<SearchParameter> searchParams)

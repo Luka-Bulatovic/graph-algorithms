@@ -19,23 +19,23 @@ namespace GraphAlgorithms.Web.Controllers
             this.graphClassService = graphClassService;
         }
 
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 9, List<SearchParameter> searchParams = null, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
+        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 9, List<SearchParameter> searchParams = null, string sortBy = "", GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
         {
             GraphLibraryModel model = new GraphLibraryModel(viewType);
             await model.InitializeSearchModel(graphClassService);
 
-            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, searchParams);
+            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, searchParams, sortBy);
 
             model.Graphs = graphs;
-            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount, searchParams);
-            model.SearchModel.SetSelectedSearchParams(searchParams);
+            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount, searchParams, sortBy);
+            model.SearchModel.SetSelectedSearchParams(searchParams, sortBy);
 
             return View("Index", model);
         }
 
-        public async Task<IActionResult> IndexTable(int pageNumber = 1, int pageSize = 9, List<SearchParameter> searchParams = null)
+        public async Task<IActionResult> IndexTable(int pageNumber = 1, int pageSize = 9, List<SearchParameter> searchParams = null, string sortBy = "")
         {
-            return await Index(pageNumber, pageSize, searchParams, GraphLibraryViewType.Table);
+            return await Index(pageNumber, pageSize, searchParams, sortBy, GraphLibraryViewType.Table);
         }
 
         public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)

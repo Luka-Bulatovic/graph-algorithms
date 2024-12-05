@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Text.Json;
 
 namespace GraphAlgorithms.Web.Models
@@ -26,16 +28,23 @@ namespace GraphAlgorithms.Web.Models
 
         public List<string> SearchItems { get; set; }
 
+        // Sorting
+        public string SortByID { get; set; }
+        [DisplayName("Sort By:")]
+        public SelectList SortBy { get; set; }
+
         public SearchModel(string baseUrl)
         {
             LoadSearchParams(new List<SearchParameter>());
+            LoadSortParams(new List<SortParameter>());
             SelectedSearchParams = new();
             BaseUrl = baseUrl;
         }
 
-        public SearchModel(string baseUrl, List<SearchParameter> searchParams) : this(baseUrl)
+        public SearchModel(string baseUrl, List<SearchParameter> searchParams, List<SortParameter> sortParams) : this(baseUrl)
         {
             LoadSearchParams(searchParams);
+            LoadSortParams(sortParams);
         }
 
         public void LoadSearchParams(List<SearchParameter> searchParams)
@@ -44,9 +53,18 @@ namespace GraphAlgorithms.Web.Models
             SearchBy = new SelectList(searchParams, "Key", "DisplayName");
         }
 
-        public void SetSelectedSearchParams(List<SearchParameter> selectedSearchParams)
+        public void LoadSortParams(List<SortParameter> sortParams)
+        {
+            SortBy = new SelectList(sortParams, "Key", "Name");
+
+            if (sortParams.Count > 0)
+                SortByID = sortParams[0].Key;
+        }
+
+        public void SetSelectedSearchParams(List<SearchParameter> selectedSearchParams, string sortBy)
         {
             SelectedSearchParams = selectedSearchParams ?? new();
+            SortByID = sortBy;
         }
     }
 }
