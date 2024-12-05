@@ -67,6 +67,12 @@ namespace GraphAlgorithms.Repository.Repositories
                 case "wiener,desc":
                     query = query.OrderByDescending(g => g.WienerIndex);
                     break;
+                case "id,asc":
+                    query = query.OrderBy(g => g.ID);
+                    break;
+                case "id,desc":
+                    query = query.OrderByDescending(g => g.ID);
+                    break;
             }
 
             return query;

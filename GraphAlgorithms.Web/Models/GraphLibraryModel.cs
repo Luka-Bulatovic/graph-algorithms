@@ -36,7 +36,7 @@ namespace GraphAlgorithms.Web.Models
             CustomSetModel = new SaveActionGraphsToCustomSetModel();
         }
 
-        public async Task InitializeSearchModel(IGraphClassService graphClassService)
+        public async Task InitializeSearchModel(IGraphClassService graphClassService, List<SearchParameter> selectedSearchParams, string sortBy)
         {
             var graphClassDTOs = await graphClassService.GetClassifiableGraphClasses();
             var graphClassMultiSelectItemsList = graphClassDTOs
@@ -57,10 +57,15 @@ namespace GraphAlgorithms.Web.Models
                 },
                 new List<SortParameter>()
                 {
-                    new SortParameter("wiener,asc", "Wiener Index, ASC"),
+                    new SortParameter("id,desc", "ID, DESC"),
+                    new SortParameter("id,asc", "ID, ASC"),
                     new SortParameter("wiener,desc", "Wiener Index, DESC"),
+                    new SortParameter("wiener,asc", "Wiener Index, ASC"),
                 }
             );
+
+            // Set selected parameters
+            SearchModel.SetSelectedSearchParams(selectedSearchParams, sortBy);
         }
     }
 }

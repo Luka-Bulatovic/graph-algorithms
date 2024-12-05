@@ -64,7 +64,9 @@ namespace GraphAlgorithms.Web.Models
         public void SetSelectedSearchParams(List<SearchParameter> selectedSearchParams, string sortBy)
         {
             SelectedSearchParams = selectedSearchParams ?? new();
-            SortByID = sortBy;
+            
+            if(sortBy != "")
+                SortByID = sortBy;
         }
     }
 }
