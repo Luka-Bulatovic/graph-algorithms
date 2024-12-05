@@ -136,6 +136,9 @@
                                 <button type="button" class="relative p-2 bg-gray-200 btn-preview" data-id="@(graph.id)">
                                     <i class="fa-solid fa-magnifying-glass"></i>
                                 </button>
+                                <a class="btn-edit p-2 ml-2" href="@Url.Action("Edit", "GraphDrawing", new { id = graph.id })">
+                                    <i class="fas fa-pencil-alt"></i> Edit
+                                </a>
                                 @{
                                     var canvasModel = new GraphCanvasModel(graph, showHeader: false, showFooter: false, isVisible: false, containerClasses: "w-128 h-128 z-10 absolute");
                                 }
