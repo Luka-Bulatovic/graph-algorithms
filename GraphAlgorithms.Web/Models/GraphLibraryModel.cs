@@ -53,7 +53,9 @@ namespace GraphAlgorithms.Web.Models
                     new SearchParameter("class", "Class", SearchParamType.MultiSelectList,
                         multiSelectListID: "SearchByGraphClass",
                         multiSelectItems: graphClassMultiSelectItemsList
-                    )
+                    ),
+                    new SearchParameter("mindegree", "Min. Degree", SearchParamType.NumberRange),
+                    new SearchParameter("maxdegree", "Max. Degree", SearchParamType.NumberRange),
                 },
                 new List<SortParameter>()
                 {

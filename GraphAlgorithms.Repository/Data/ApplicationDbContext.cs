@@ -191,6 +191,11 @@ namespace GraphAlgorithms.Repository.Data
             SeedTables(modelBuilder);
 
             ConfigureManyToManyMappings(modelBuilder);
+
+            modelBuilder
+                .HasDbFunction(typeof(CustomDBFunctions).GetMethod(nameof(CustomDBFunctions.ConvertToInt)))
+                .HasName("ConvertToInt")
+                .HasSchema("dbo");
         }
 
         private void ConfigureManyToManyMappings(ModelBuilder modelBuilder)
