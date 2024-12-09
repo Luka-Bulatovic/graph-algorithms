@@ -21,6 +21,12 @@ namespace GraphAlgorithms.Core
             NodeProperties.BipartitionComponent = 0;
         }
 
+        public Node(int index, string label, int planePosX, int planePosY) : this(index, label)
+        {
+            NodeProperties.PlanePosX = planePosX;
+            NodeProperties.PlanePosY = planePosY;
+        }
+
         public override string ToString()
         {
             return Label;

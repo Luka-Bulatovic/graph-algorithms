@@ -97,6 +97,10 @@ var GraphCanvas = new function () {
 
     this.createInitialNetwork = function (viewDataObj) {
         var options = {
+            layout: {
+                improvedLayout: true,
+                randomSeed: 42, // Ensures consistent results
+            },
             physics: {
                 barnesHut: {
                     gravitationalConstant: -2000,
@@ -243,6 +247,8 @@ var GraphCanvas = new function () {
         }).done(function (result) {
             GraphCanvas.setStatus(viewDataObj, `Wiener Index value = ${result}`);
         });
+
+        console.log(viewDataObj.network.getSeed());
     }
 
     this.setStatus = function (viewDataObj, status) {
@@ -262,6 +268,8 @@ var GraphCanvas = new function () {
         });
 
         viewDataObj.nodes.get().forEach((n, i) => {
+            n.x = parseInt(viewDataObj.network.body.nodes[n.id].x);
+            n.y = parseInt(viewDataObj.network.body.nodes[n.id].y);
             n.id = newNodeIDs[i];
         });
     }

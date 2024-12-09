@@ -31,7 +31,7 @@ namespace GraphAlgorithms.Service.Converters
             Graph graph = new Graph(graphDTO.id, graphDTO.nodes.Count);
 
             for (int i = 0; i < graphDTO.nodes.Count; i++)
-                graph.AddNode(new Node(graphDTO.nodes[i].id, graphDTO.nodes[i].label));
+                graph.AddNode(new Node(graphDTO.nodes[i].id, graphDTO.nodes[i].label, graphDTO.nodes[i].x.Value, graphDTO.nodes[i].y.Value));
 
             for (int i = 0; i < graphDTO.edges.Count; i++)
             {
@@ -154,6 +154,16 @@ namespace GraphAlgorithms.Service.Converters
             graphDTO.actionForGraphClassName = graphEntity.Action.ForGraphClass != null
                                             ? graphEntity.Action.ForGraphClass.Name : "";
             graphDTO.createdDate = graphEntity.CreatedDate;
+
+            // Set node positions if nodes have defined positions
+            if(graph.Nodes.Any(n => n.NodeProperties.PlanePosX > 0 || n.NodeProperties.PlanePosY > 0))
+            {
+                for(int i = 0; i < graph.Nodes.Count; i++)
+                {
+                    graphDTO.nodes[i].x = graph.Nodes[i].NodeProperties.PlanePosX;
+                    graphDTO.nodes[i].y = graph.Nodes[i].NodeProperties.PlanePosY;
+                }
+            }
 
             return graphDTO;
         }

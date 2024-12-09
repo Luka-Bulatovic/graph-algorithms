@@ -130,6 +130,8 @@ namespace GraphAlgorithms.Core
 
             root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "d0"), new XAttribute("for", "node"), new XAttribute("attr.name", "label"), new XAttribute("attr.type", "string")));
             root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "d1"), new XAttribute("for", "node"), new XAttribute("attr.name", "color"), new XAttribute("attr.type", "string")));
+            root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "d2"), new XAttribute("for", "node"), new XAttribute("attr.name", "posx"), new XAttribute("attr.type", "int")));
+            root.Add(new XElement(GraphMLNamespace + "key", new XAttribute("id", "d3"), new XAttribute("for", "node"), new XAttribute("attr.name", "posy"), new XAttribute("attr.type", "int")));
 
             var graphElement = new XElement(GraphMLNamespace + "graph",
                 new XAttribute("id", "G"),
@@ -140,6 +142,8 @@ namespace GraphAlgorithms.Core
                 var nodeElement = new XElement(GraphMLNamespace + "node", new XAttribute("id", node.Index));
                 nodeElement.Add(new XElement(GraphMLNamespace + "data", new XAttribute("key", "d0"), node.Label));
                 nodeElement.Add(new XElement(GraphMLNamespace + "data", new XAttribute("key", "d1"), node.NodeProperties.Color));
+                nodeElement.Add(new XElement(GraphMLNamespace + "data", new XAttribute("key", "d2"), node.NodeProperties.PlanePosX));
+                nodeElement.Add(new XElement(GraphMLNamespace + "data", new XAttribute("key", "d3"), node.NodeProperties.PlanePosY));
                 graphElement.Add(nodeElement);
             }
 
@@ -199,6 +203,14 @@ namespace GraphAlgorithms.Core
                                                     .Where(e => e.Attribute("key").Value == "d1")
                                                     .FirstOrDefault();
 
+                var nodePosXElement = nodeElement.Elements(GraphEvaluator.GraphMLNamespace + "data")
+                                                    .Where(e => e.Attribute("key").Value == "d2")
+                                                    .FirstOrDefault();
+
+                var nodePosYElement = nodeElement.Elements(GraphEvaluator.GraphMLNamespace + "data")
+                                                    .Where(e => e.Attribute("key").Value == "d3")
+                                                    .FirstOrDefault();
+
                 var nodeLabel = nodeLabelElement.Value;
 
                 Node node = new Node(int.Parse(nodeIndex), nodeLabel);
@@ -208,6 +220,12 @@ namespace GraphAlgorithms.Core
                     var nodeColor = nodeColorElement.Value;
                     node.NodeProperties.Color = nodeColor;
                 }
+
+                if (nodePosXElement != null)
+                    node.NodeProperties.PlanePosX = int.Parse(nodePosXElement.Value);
+
+                if (nodePosYElement != null)
+                    node.NodeProperties.PlanePosY = int.Parse(nodePosYElement.Value);
 
                 graph.Nodes.Add(node);
             }
