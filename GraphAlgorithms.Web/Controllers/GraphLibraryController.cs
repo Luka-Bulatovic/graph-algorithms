@@ -19,10 +19,14 @@ namespace GraphAlgorithms.Web.Controllers
             this.graphClassService = graphClassService;
         }
 
-        public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 9, List<SearchParameter> searchParams = null, string sortBy = "", GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
+        public async Task<IActionResult> Index(
+            [ModelBinder(typeof(SearchParamsModelBinder))] SearchParamsWrapper searchWrapper,
+            int pageNumber = 1, 
+            int pageSize = 9,
+            GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
         {
             GraphLibraryModel model = new GraphLibraryModel(viewType);
-            await model.InitializeSearchModel(graphClassService, searchParams, sortBy);
+            await model.InitializeSearchModel(graphClassService, searchWrapper.SearchParams, searchWrapper.SortBy);
 
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
@@ -32,9 +36,12 @@ namespace GraphAlgorithms.Web.Controllers
             return View("Index", model);
         }
 
-        public async Task<IActionResult> IndexTable(int pageNumber = 1, int pageSize = 9, List<SearchParameter> searchParams = null, string sortBy = "")
+        public async Task<IActionResult> IndexTable(
+            [ModelBinder(typeof(SearchParamsModelBinder))] SearchParamsWrapper searchWrapper,
+            int pageNumber = 1, 
+            int pageSize = 9)
         {
-            return await Index(pageNumber, pageSize, searchParams, sortBy, GraphLibraryViewType.Table);
+            return await Index(searchWrapper, pageNumber, pageSize, GraphLibraryViewType.Table);
         }
 
         public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)

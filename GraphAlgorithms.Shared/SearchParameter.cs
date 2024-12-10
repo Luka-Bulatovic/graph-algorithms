@@ -16,9 +16,16 @@ namespace GraphAlgorithms.Shared
         public bool IsValid => ValidateParameter();
 
         public List<MultiSelectListItem> MultiSelectItems { get; set; } // Used when parameter is of type MultiSelectList
-        public string MultiSelectListID { get; set; } // Used when parameter is of type MultiSelectList
+        public string MultiSelectListID { get; set; } // Used when parameter is of type MultiSelectList, as object identifier for MultiSelectList control
         
-        public string DisplayValues { get; set; } // Used to display initial values that are selected for Parameter (for example, names of selected MultiSelectListItems)
+        public string DisplayValues { 
+            get {
+                return MultiSelectItems != null ?
+                    String.Join(", ", MultiSelectItems
+                        .Where(msi => Values != null && msi.Key != null && Values.Contains(msi.Key))
+                        .Select(msi => msi.Value)) : "";
+            }
+        } // Used to display initial values that are selected for Parameter (for example, names of selected MultiSelectListItems)
 
         public SearchParameter()
         {

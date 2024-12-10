@@ -42,24 +42,38 @@
     }
 
     this.onSearch = function (viewDataObj) {
-        var searchParamsString = '';
-
-        searchParamsString += `sortBy=${encodeURIComponent(viewDataObj.slSortBy.val())}&`;
+        let params = {
+            sortBy: viewDataObj.slSortBy.val(),
+            searchParams: []
+        };
 
         viewDataObj.currSearchParams.forEach((param, index) => {
-            searchParamsString += `searchParams[${index}].DisplayName=${encodeURIComponent(param.displayName)}&`;
-            searchParamsString += `searchParams[${index}].Key=${encodeURIComponent(param.id)}&`;
-            searchParamsString += `searchParams[${index}].AllowMultipleValues=${encodeURIComponent(param.allowMultipleValues)}&`;
-            searchParamsString += `searchParams[${index}].ParamType=${encodeURIComponent(param.paramType)}&`;
-            searchParamsString += `searchParams[${index}].DisplayValues=${encodeURIComponent(param.displayValues)}&`;
+            params.searchParams[index] = { Key: '', Values: [] };
+            params.searchParams[index].Key = param.id;
             param.values.forEach((value, valueIndex) => {
-                searchParamsString += `searchParams[${index}].Values[${valueIndex}]=${encodeURIComponent(value)}&`;
+                params.searchParams[index].Values.push(value);
             });
         });
+        //var searchParamsString = '';
 
-        searchParamsString = searchParamsString.slice(0, -1);
+        //searchParamsString += `sortBy=${encodeURIComponent(viewDataObj.slSortBy.val())}&`;
 
-        window.location.href = `${viewDataObj.baseUrl}?${searchParamsString}`;
+        //viewDataObj.currSearchParams.forEach((param, index) => {
+        //    searchParamsString += `searchParams[${index}].DisplayName=${encodeURIComponent(param.displayName)}&`;
+        //    searchParamsString += `searchParams[${index}].Key=${encodeURIComponent(param.id)}&`;
+        //    searchParamsString += `searchParams[${index}].AllowMultipleValues=${encodeURIComponent(param.allowMultipleValues)}&`;
+        //    searchParamsString += `searchParams[${index}].ParamType=${encodeURIComponent(param.paramType)}&`;
+        //    searchParamsString += `searchParams[${index}].DisplayValues=${encodeURIComponent(param.displayValues)}&`;
+        //    param.values.forEach((value, valueIndex) => {
+        //        searchParamsString += `searchParams[${index}].Values[${valueIndex}]=${encodeURIComponent(value)}&`;
+        //    });
+        //});
+
+        //searchParamsString = searchParamsString.slice(0, -1);
+
+        // Encode and make final URL
+        let encoded = btoa(JSON.stringify(params));
+        window.location.href = `${viewDataObj.baseUrl}?searchquery=${encodeURIComponent(encoded)}`;    
     }
 
     this.onAddParam = function (viewDataObj) {
