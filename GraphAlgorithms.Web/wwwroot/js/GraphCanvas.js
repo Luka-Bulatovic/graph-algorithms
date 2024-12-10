@@ -32,6 +32,24 @@ var GraphCanvas = new function () {
         // Subscribe to showCanvasAtCurrentPos on Event bus
         EventBus.on('showCanvasAtCurrentPos', (e) => GraphCanvas.onShowCanvas(viewDataObj, e));
         EventBus.on('hideCanvas', (e) => GraphCanvas.onHideCanvas(viewDataObj, e));
+
+        // Subscribe to events for editing graph on keypresses
+        EventBus.on('canvasAddNode', (e) => {
+            if (viewDataObj.isEditable && e.detail.id == viewDataObj.graphID)
+                viewDataObj.network.addNodeMode();
+        });
+        EventBus.on('canvasAddEdge', (e) => {
+            if (viewDataObj.isEditable && e.detail.id == viewDataObj.graphID)
+                viewDataObj.network.addEdgeMode();
+        });
+        EventBus.on('canvasDeleteSelected', (e) => {
+            if (viewDataObj.isEditable && e.detail.id == viewDataObj.graphID)
+                viewDataObj.network.deleteSelected();
+        });
+        EventBus.on('canvasCloseEdit', (e) => {
+            if (viewDataObj.isEditable && e.detail.id == viewDataObj.graphID)
+                viewDataObj.network.disableEditMode();
+        });
     }
 
     this.onShowCanvas = function (viewDataObj, e) {
