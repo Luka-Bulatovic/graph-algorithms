@@ -31,7 +31,7 @@ namespace GraphAlgorithms.Web.Controllers
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
             model.Graphs = graphs;
-            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
+            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount, model.SearchModel);
 
             return View("Index", model);
         }
@@ -47,7 +47,7 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
         {
             GraphLibraryModel model = new GraphLibraryModel(viewType);
-            model.InitializeSearchModel(graphClassService, null, "");
+            await model.InitializeSearchModel(graphClassService, null, "");
 
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsForActionPaginated(actionID, pageNumber, pageSize);
 

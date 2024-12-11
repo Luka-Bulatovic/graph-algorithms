@@ -9,6 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static GraphAlgorithms.Web.Models.SearchParamsModelBinder;
 
 namespace GraphAlgorithms.Web.Models
 {
@@ -91,6 +92,35 @@ namespace GraphAlgorithms.Web.Models
             if(sortBy != "")
                 SortByID = sortBy;
         }
+
+        public string GetSearchParamsQueryString()
+        {
+            SearchQueryPayload searchQueryPayload = new SearchQueryPayload();
+            searchQueryPayload.sortBy = SortByID;
+            searchQueryPayload.searchParams = new();
+
+            if(SelectedSearchParams != null && SelectedSearchParams.Count > 0)
+            {
+                for (int i = 0; i < SelectedSearchParams.Count; i++)
+                {
+                    SearchParameter param = SelectedSearchParams[i];
+
+                    var querySearchParam = new SearchQueryParam()
+                    {
+                        Key = param.Key,
+                        Values = new List<string>()
+                    };
+
+                    for (int j = 0; j < param.Values.Count; j++)
+                        querySearchParam.Values.Add(param.Values[j]);
+
+                    searchQueryPayload.searchParams.Add(querySearchParam);
+                }
+            }
+
+
+            return Convert.ToBase64String(Encoding.UTF8.GetBytes(JsonSerializer.Serialize(searchQueryPayload)));
+        }
     }
 
     public class SearchParamsModelBinder : IModelBinder
@@ -107,7 +137,7 @@ namespace GraphAlgorithms.Web.Models
                     var decodedJson = Encoding.UTF8.GetString(Convert.FromBase64String(qValue));
 
                     // Deserialize the JSON into a known structure
-                    var payload = JsonSerializer.Deserialize<QueryPayload>(decodedJson);
+                    var payload = JsonSerializer.Deserialize<SearchQueryPayload>(decodedJson);
 
                     // Convert the payload into SearchParamsWrapper
                     var wrapper = new Shared.SearchParamsWrapper
@@ -129,18 +159,18 @@ namespace GraphAlgorithms.Web.Models
                 }
             }
 
-            // If 'q' not present or fails to parse, just provide defaults
+            // If 'searchquery' not present or fails to parse, just provide defaults
             bindingContext.Result = ModelBindingResult.Success(new SearchParamsWrapper());
             return Task.CompletedTask;
         }
 
-        private class QueryPayload
+        public class SearchQueryPayload
         {
             public string sortBy { get; set; }
-            public List<QuerySearchParam> searchParams { get; set; }
+            public List<SearchQueryParam> searchParams { get; set; }
         }
 
-        private class QuerySearchParam
+        public class SearchQueryParam
         {
             public string Key { get; set; }
             public List<string> Values { get; set; }
