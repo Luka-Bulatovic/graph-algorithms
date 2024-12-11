@@ -41,9 +41,9 @@ namespace GraphAlgorithms.Service.Services
             return (graphDTOs, totalCount);
         }
 
-        public async Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize)
+        public async Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize, List<SearchParameter> searchParams = null, string sortBy = "")
         {
-            (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsForActionPaginatedAsync(actionID, pageNumber, pageSize);
+            (List<GraphEntity> graphEntities, int totalCount) = await graphRepository.GetGraphsForActionPaginatedAsync(actionID, pageNumber, pageSize, searchParams, sortBy);
 
             List<GraphDTO> graphDTOs = graphEntities
                                         .Select(graphEntity => graphConverter.GetGraphDTOFromGraphEntity(graphEntity))

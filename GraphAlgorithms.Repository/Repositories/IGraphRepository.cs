@@ -9,6 +9,6 @@ namespace GraphAlgorithms.Repository.Repositories
         Task<GraphEntity> GetByIdAsync(int id);
         Task<GraphEntity> SaveAsync(GraphEntity graph);
         Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, List<SearchParameter> searchParams, string sortBy);
-        Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize);
+        Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize, List<SearchParameter> searchParams, string sortBy);
     }
 }

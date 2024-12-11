@@ -197,23 +197,31 @@ namespace GraphAlgorithms.Repository.Repositories
             return await GetByIdAsync(graph.ID);
         }
 
-        public async Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize)
+        public async Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize, List<SearchParameter> searchParams = null, string sortBy = "")
         {
-            var totalCount = await _context.Graphs
-                                            .Where(g => g.ActionID == actionID)
-                                            .CountAsync();
+            var query = _context.Graphs
+                .Where(g => g.ActionID == actionID)
+                .AsQueryable();
 
-            var graphs = await _context.Graphs
-                                        .Where(g => g.ActionID == actionID)
-                                        .Include(g => g.Action)
-                                            .ThenInclude(a => a.ActionType)
-                                        .Include(g => g.Action)
-                                            .ThenInclude(a => a.ForGraphClass)
-                                        .Include(g => g.GraphClasses)
-                                        .Include(g => g.GraphPropertyValues)
-                                        .Skip((pageNumber - 1) * pageSize)
+            if (searchParams != null && searchParams.Count > 0)
+                query = ApplySearchCriteria(query, searchParams);
+
+            var totalCount = await query.CountAsync();
+
+            query = query
+                    .Include(g => g.Action)
+                        .ThenInclude(a => a.ActionType)
+                    .Include(g => g.Action)
+                        .ThenInclude(a => a.ForGraphClass)
+                    .Include(g => g.GraphClasses)
+                    .Include(g => g.GraphPropertyValues);
+
+            query = ApplySortCriteria(query, sortBy);
+
+            var graphs = await query.Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
                                         .ToListAsync();
+
             return (graphs, totalCount);
         }
     }

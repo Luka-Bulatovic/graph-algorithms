@@ -15,8 +15,8 @@ namespace GraphAlgorithms.Web.Models
         public int TotalCount { get; set; }
         public int TotalPages => (int)Math.Ceiling((decimal)TotalCount / PageSize);
         public string ActionName { get; set; }
-
-        public SearchModel SearchModel { get; set; }
+        public string SearchQueryString { get; set; }
+        public Dictionary<string, object> AdditionalQueryParams { get; set; }
 
         public PaginationModel(string actionName = "Index")
         {
@@ -25,13 +25,32 @@ namespace GraphAlgorithms.Web.Models
             ActionName = actionName;
         }
 
-        public void SetData(int pageNumber, int pageSize, int totalCount, SearchModel searchModel = null)
+        public PaginationModel(int pageNumber, int pageSize, int totalCount, string actionName = "Index", string searchQueryString = "", Dictionary<string, object> additionalQueryParams = null)
         {
             PageNumber = pageNumber;
             PageSize = pageSize;
             TotalCount = totalCount;
+            ActionName = actionName;
+            SearchQueryString = searchQueryString;
+            AdditionalQueryParams = additionalQueryParams;
+        }
 
-            SearchModel = searchModel ?? new(ActionName);
+        public Dictionary<string, object> GetQueryStringForPage(int pageNumber)
+        {
+            var queryStringValues = new Dictionary<string, object>
+            {
+                { "pageNumber", pageNumber },
+                { "pageSize", this.PageSize },
+            };
+
+            if (!string.IsNullOrEmpty(this.SearchQueryString))
+                queryStringValues["searchquery"] = this.SearchQueryString;
+
+            if(this.AdditionalQueryParams != null)
+                foreach (var kvp in this.AdditionalQueryParams)
+                    queryStringValues[kvp.Key] = kvp.Value;
+
+            return queryStringValues;
         }
     }
 }

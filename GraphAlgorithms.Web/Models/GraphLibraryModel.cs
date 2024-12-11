@@ -30,13 +30,14 @@ namespace GraphAlgorithms.Web.Models
         {
             ViewType = viewType;
             ForActionID = 0;
-            PaginationInfo = new(actionName: (viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable"));
+            PaginationInfo = new();
+            //PaginationInfo = new(actionName: (viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable"));
             AllowAddingToCustomGraphSets = false;
 
             CustomSetModel = new SaveActionGraphsToCustomSetModel();
         }
 
-        public async Task InitializeSearchModel(IGraphClassService graphClassService, List<SearchParameter> selectedSearchParams, string sortBy)
+        public async Task InitializeSearchModel(string actionName, IGraphClassService graphClassService, List<SearchParameter> selectedSearchParams, string sortBy, Dictionary<string, object> additionalQueryParams = null)
         {
             var graphClassDTOs = await graphClassService.GetClassifiableGraphClasses();
             var graphClassMultiSelectItemsList = graphClassDTOs
@@ -44,7 +45,7 @@ namespace GraphAlgorithms.Web.Models
                     .ToList();
 
             SearchModel = new SearchModel(
-                ViewType == GraphLibraryViewType.Grid ? "/GraphLibrary/Index" : "/GraphLibrary/IndexTable",
+                actionName,
                 new List<SearchParameter>()
                 {
                     new SearchParameter("id", "ID", SearchParamType.Number, allowMultipleValues: true),
@@ -68,6 +69,9 @@ namespace GraphAlgorithms.Web.Models
 
             // Set selected parameters
             SearchModel.SetSelectedSearchParams(selectedSearchParams, sortBy);
+
+            // If URL has more query params that we need to supply along with search params
+            SearchModel.SetAdditionalQueryParams(additionalQueryParams);
         }
     }
 }

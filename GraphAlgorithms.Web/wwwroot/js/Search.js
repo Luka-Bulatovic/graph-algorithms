@@ -73,7 +73,13 @@
 
         // Encode and make final URL
         let encoded = btoa(JSON.stringify(params));
-        window.location.href = `${viewDataObj.baseUrl}?searchquery=${encodeURIComponent(encoded)}`;    
+        let finalUrl = `${viewDataObj.baseUrl}?searchquery=${encodeURIComponent(encoded)}`;
+        if (viewDataObj.additionalQueryParams != null && Object.keys(viewDataObj.additionalQueryParams).length > 0) {
+            Object.keys(viewDataObj.additionalQueryParams).forEach((key) => {
+                finalUrl += `&${key}=${viewDataObj.additionalQueryParams[key]}`;
+            });
+        }
+        window.location.href = finalUrl;
     }
 
     this.onAddParam = function (viewDataObj) {

@@ -12,6 +12,6 @@ namespace GraphAlgorithms.Service.Interfaces
     {
         public Task<List<GraphDTO>> GetGraphs();
         public Task<(List<GraphDTO>, int)> GetGraphsPaginated(int pageNumber, int pageSize, List<SearchParameter> searchParams, string sortBy);
-        public Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize);
+        public Task<(List<GraphDTO>, int)> GetGraphsForActionPaginated(int actionID, int pageNumber, int pageSize, List<SearchParameter> searchParams, string sortBy);
     }
 }

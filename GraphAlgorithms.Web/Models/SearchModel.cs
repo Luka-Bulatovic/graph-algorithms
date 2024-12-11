@@ -38,12 +38,17 @@ namespace GraphAlgorithms.Web.Models
         [DisplayName("Sort By:")]
         public SelectList SortBy { get; set; }
 
+        // This is used to carry additional query params when searching using Actions that have some more params
+        public Dictionary<string, object> AdditionalQueryParams { get; set; }
+        public string AdditionalQueryParamsJSON => JsonSerializer.Serialize(AdditionalQueryParams);
+
         public SearchModel(string baseUrl)
         {
             LoadSearchParams(new List<SearchParameter>());
             LoadSortParams(new List<SortParameter>());
             SelectedSearchParams = new();
             BaseUrl = baseUrl;
+            AdditionalQueryParams = new();
         }
 
         public SearchModel(string baseUrl, List<SearchParameter> searchParams, List<SortParameter> sortParams) : this(baseUrl)
@@ -64,6 +69,11 @@ namespace GraphAlgorithms.Web.Models
 
             if (sortParams.Count > 0)
                 SortByID = sortParams[0].Key;
+        }
+
+        public void SetAdditionalQueryParams(Dictionary<string, object> additionalQueryParams)
+        {
+            AdditionalQueryParams = additionalQueryParams ?? new();
         }
 
         public void SetSelectedSearchParams(List<SearchParameter> selectedSearchParams, string sortBy)

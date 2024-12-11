@@ -3,21 +3,21 @@
 <div class="pagination-container">
     @if (Model.PageNumber > 1)
     {
-        <a href="@(Url.Action(Model.ActionName, new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize }) + "&searchquery=" + Model.SearchModel.GetSearchParamsQueryString())" class="btn-pagination">
+        <a href="@(Url.Action(Model.ActionName, Model.GetQueryStringForPage(Model.PageNumber - 1)))" class="btn-pagination">
             Previous
         </a>
     }
 
     @for (int i = 1; i <= Model.TotalPages; i++)
     {
-        <a href="@(Url.Action(Model.ActionName, new { pageNumber = i, pageSize = Model.PageSize }) + "&searchquery=" + Model.SearchModel.GetSearchParamsQueryString())" class="@(i == Model.PageNumber ? "btn-pagination-selected" : "btn-pagination")">
+        <a href="@(Url.Action(Model.ActionName, Model.GetQueryStringForPage(i)))" class="@(i == Model.PageNumber ? "btn-pagination-selected" : "btn-pagination")">
             @i
         </a>
     }
 
     @if (Model.PageNumber < Model.TotalPages)
     {
-        <a href="@(Url.Action(Model.ActionName, new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize }) + "&searchquery=" + Model.SearchModel.GetSearchParamsQueryString())" class="btn-pagination">
+        <a href="@(Url.Action(Model.ActionName, Model.GetQueryStringForPage(Model.PageNumber + 1)))" class="btn-pagination">
             Next
         </a>
     }

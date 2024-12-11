@@ -26,12 +26,16 @@ namespace GraphAlgorithms.Web.Controllers
             GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
         {
             GraphLibraryModel model = new GraphLibraryModel(viewType);
-            await model.InitializeSearchModel(graphClassService, searchWrapper.SearchParams, searchWrapper.SortBy);
+            
+            string actionName = viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable";
+            await model.InitializeSearchModel(actionName, graphClassService, searchWrapper.SearchParams, searchWrapper.SortBy);
 
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
             model.Graphs = graphs;
-            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount, model.SearchModel);
+            model.PaginationInfo = new PaginationModel(
+                pageNumber, pageSize, totalCount, actionName,
+                model.SearchModel.GetSearchParamsQueryString());
 
             return View("Index", model);
         }
@@ -44,20 +48,42 @@ namespace GraphAlgorithms.Web.Controllers
             return await Index(searchWrapper, pageNumber, pageSize, GraphLibraryViewType.Table);
         }
 
-        public async Task<IActionResult> Action(int actionID, int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
+        public async Task<IActionResult> Action(
+            int actionID,
+            [ModelBinder(typeof(SearchParamsModelBinder))] SearchParamsWrapper searchWrapper,
+            int pageNumber = 1, int pageSize = 9, GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
         {
-            GraphLibraryModel model = new GraphLibraryModel(viewType);
-            await model.InitializeSearchModel(graphClassService, null, "");
+            Dictionary<string, object> additionalQueryParams = new Dictionary<string, object>()
+            {
+                { "actionID", actionID }
+            };
 
-            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsForActionPaginated(actionID, pageNumber, pageSize);
+            string actionName = viewType == GraphLibraryViewType.Grid ? "Action" : "ActionTable";
+
+            GraphLibraryModel model = new GraphLibraryModel(viewType);
+            await model.InitializeSearchModel(actionName, graphClassService, searchWrapper.SearchParams, searchWrapper.SortBy, additionalQueryParams);
+
+            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsForActionPaginated(actionID, pageNumber, pageSize, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
             model.ForActionID = actionID;
             model.Graphs = graphs;
-            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
             model.AllowAddingToCustomGraphSets = true;
+
+            model.PaginationInfo = new PaginationModel(
+                pageNumber, pageSize, totalCount, actionName,
+                model.SearchModel.GetSearchParamsQueryString(),
+                additionalQueryParams);
 
             return View("Index", model);
         }
+
+        public async Task<IActionResult> ActionTable(
+            int actionID, [ModelBinder(typeof(SearchParamsModelBinder))] SearchParamsWrapper searchWrapper,
+            int pageNumber = 1, int pageSize = 9)
+        {
+            return await Action(actionID, searchWrapper, pageNumber, pageSize, GraphLibraryViewType.Table);
+        }
+
 
         public async Task<IActionResult> SaveToCustomSet(SaveActionGraphsToCustomSetModel model)
         {

@@ -22,7 +22,7 @@ namespace GraphAlgorithms.Web.Controllers
 
             (List<ActionDTO> actions, int totalCount) = await graphActionsService.GetActionsPaginated(pageNumber, pageSize);
             model.Actions = actions;
-            model.PaginationInfo.SetData(pageNumber, pageSize, totalCount);
+            model.PaginationInfo = new PaginationModel(pageNumber, pageSize, totalCount);
 
             return View(model);
         }
