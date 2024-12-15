@@ -6,7 +6,7 @@
     <p class="action-card-text">User: @Model.Action.CreatedByUserName</p>
     <p class="action-card-text">Date: @Model.Action.CreatedDate.ToString("yyyy-MM-dd")</p>
     <div class="flex flex-row justify-end">
-        <a class="btn-edit" href="@Url.Action("Action", "GraphLibrary", new { actionID = Model.Action.ID })">
+        <a class="btn-edit" href="@Url.Action("Index", "GraphLibrary", new { actionID = Model.Action.ID })">
             <i class="fa-solid fa-magnifying-glass"></i> View
         </a>
     </div>

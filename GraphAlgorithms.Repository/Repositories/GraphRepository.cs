@@ -28,9 +28,12 @@ namespace GraphAlgorithms.Repository.Repositories
             return graphs;
         }
 
-        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, List<SearchParameter> searchParams = null, string sortBy = "")
+        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, int actionID = 0, List<SearchParameter> searchParams = null, string sortBy = "")
         {
             var query = _context.Graphs.AsQueryable();
+
+            if (actionID > 0)
+                query = query.Where(g => g.ActionID == actionID);
 
             if(searchParams != null && searchParams.Count > 0)
                 query = ApplySearchCriteria(query, searchParams);
@@ -195,34 +198,6 @@ namespace GraphAlgorithms.Repository.Repositories
             await _context.SaveChangesAsync();
 
             return await GetByIdAsync(graph.ID);
-        }
-
-        public async Task<(List<GraphEntity>, int)> GetGraphsForActionPaginatedAsync(int actionID, int pageNumber, int pageSize, List<SearchParameter> searchParams = null, string sortBy = "")
-        {
-            var query = _context.Graphs
-                .Where(g => g.ActionID == actionID)
-                .AsQueryable();
-
-            if (searchParams != null && searchParams.Count > 0)
-                query = ApplySearchCriteria(query, searchParams);
-
-            var totalCount = await query.CountAsync();
-
-            query = query
-                    .Include(g => g.Action)
-                        .ThenInclude(a => a.ActionType)
-                    .Include(g => g.Action)
-                        .ThenInclude(a => a.ForGraphClass)
-                    .Include(g => g.GraphClasses)
-                    .Include(g => g.GraphPropertyValues);
-
-            query = ApplySortCriteria(query, sortBy);
-
-            var graphs = await query.Skip((pageNumber - 1) * pageSize)
-                                        .Take(pageSize)
-                                        .ToListAsync();
-
-            return (graphs, totalCount);
         }
     }
 }
