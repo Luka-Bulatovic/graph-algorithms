@@ -2,6 +2,7 @@
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Shared;
 using GraphAlgorithms.Web.Models;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -12,11 +13,13 @@ namespace GraphAlgorithms.Web.Controllers
     {
         public readonly IGraphLibraryService graphLibraryService;
         public readonly IGraphClassService graphClassService;
+        public readonly IWebHostEnvironment webHostEnvironment;
 
-        public GraphLibraryController(IGraphLibraryService graphLibraryService, IGraphClassService graphClassService)
+        public GraphLibraryController(IGraphLibraryService graphLibraryService, IGraphClassService graphClassService, IWebHostEnvironment webHostEnvironment)
         {
             this.graphLibraryService = graphLibraryService;
             this.graphClassService = graphClassService;
+            this.webHostEnvironment = webHostEnvironment;
         }
 
         public async Task<IActionResult> Index(
@@ -59,6 +62,12 @@ namespace GraphAlgorithms.Web.Controllers
             int pageSize = 9)
         {
             return await Index(searchWrapper, actionID, pageNumber, pageSize, GraphLibraryViewType.Table);
+        }
+
+        public async Task<IActionResult> Export(GraphDrawingUpdateDTO graph)
+        {
+            string url = await graphLibraryService.ExportGraph(graph, webHostEnvironment.ContentRootPath);
+            return Json(new { url = url });
         }
 
 

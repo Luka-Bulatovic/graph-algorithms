@@ -6,18 +6,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using System.IO;
 
 namespace GraphAlgorithms.Web
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
         }
-
-        public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -54,6 +56,14 @@ namespace GraphAlgorithms.Web
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+
+            // Setup Temp folder for static files download
+            var tempFolderPath = Path.Combine(env.ContentRootPath, "Temp");
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(tempFolderPath),
+                RequestPath = "/Temp"
+            });
 
             app.UseRouting();
 

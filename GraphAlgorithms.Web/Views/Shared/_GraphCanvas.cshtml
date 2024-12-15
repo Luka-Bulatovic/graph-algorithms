@@ -56,6 +56,10 @@
             <span class="status-msg"></span>
 
             <div class="status-bar-buttons">
+                <a class="export-download" href="#" download></a>
+                <button class="btn-export">
+                    <i class="fa-solid fa-download"></i>
+                </button>
                 <a class="btn-edit @(Model.ShowEditButton ? "" : "hidden")" href="@Url.Action("Edit", "GraphDrawing", new { id = Model.ID })">
                     <i class="fas fa-pencil-alt"></i> Edit
                 </a>
@@ -93,6 +97,8 @@
         btnSaveAsNew: $("#@ViewID .status-bar .btn-save-as-new"),
         btnFullScreen: $("#@ViewID .status-bar .btn-fullscreen"),
         btnCalculate: $("#@ViewID .status-bar .btn-calculate"),
+        btnExport: $("#@ViewID .btn-export"),
+        exportDownload: $("#@ViewID .export-download"),
         network: null,
         nodes: @Html.Raw(Model.NodesJSON),
         edges: @Html.Raw(Model.EdgesJSON),

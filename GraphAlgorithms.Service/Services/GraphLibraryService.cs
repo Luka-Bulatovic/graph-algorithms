@@ -1,13 +1,9 @@
-﻿using GraphAlgorithms.Repository.Entities;
+﻿using GraphAlgorithms.Core;
+using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Shared;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Service.Services
 {
@@ -15,11 +11,30 @@ namespace GraphAlgorithms.Service.Services
     {
         public readonly IGraphRepository graphRepository;
         public readonly IGraphConverter graphConverter;
-
-        public GraphLibraryService(IGraphRepository graphRepository, IGraphConverter graphConverter)
+        public readonly GraphEvaluator graphEvaluator;
+        
+        public GraphLibraryService(
+            IGraphRepository graphRepository, 
+            IGraphConverter graphConverter, 
+            GraphEvaluator graphEvaluator
+            )
         {
             this.graphRepository = graphRepository;
             this.graphConverter = graphConverter;
+            this.graphEvaluator = graphEvaluator;
+        }
+
+        public async Task<string> ExportGraph(GraphDrawingUpdateDTO graphDTO, string rootFolder)
+        {
+            Graph graph = graphConverter.GetGraphFromGraphDrawingUpdateDTO(graphDTO);
+            string graphML = graphEvaluator.GetGraphMLForGraph(graph);
+
+            Guid guid = Guid.NewGuid();
+            string virtualPath = "Temp/" + guid.ToString() + ".xml";
+            string filePath = Path.Combine(rootFolder, virtualPath);
+            await File.WriteAllTextAsync(filePath, graphML);
+
+            return virtualPath;
         }
 
         public async Task<List<GraphDTO>> GetGraphs()

@@ -20,6 +20,9 @@ var GraphCanvas = new function () {
         viewDataObj.btnSave.on('click', function (e) { GraphCanvas.onBtnSaveClick(viewDataObj, false); });
         viewDataObj.btnSaveAsNew.on('click', function (e) { GraphCanvas.onBtnSaveClick(viewDataObj, true); });
 
+        // Export click
+        viewDataObj.btnExport.on('click', function (e) { GraphCanvas.onBtnExportClick(viewDataObj); });
+
         // Full Screen click
         viewDataObj.btnFullScreen.on('click', function (e) { GraphCanvas.onFullScreenBtnClick(viewDataObj); });
 
@@ -208,6 +211,27 @@ var GraphCanvas = new function () {
         }).done(function (data) {
             if(data.redirectUrl != null && data.redirectUrl != "")
                 window.location.href = data.redirectUrl;
+        });
+    }
+
+    this.onBtnExportClick = function (viewDataObj) {
+        GraphCanvas.reassignNodeIDs(viewDataObj);
+
+        var nodes = viewDataObj.nodes.get();
+        var edges = viewDataObj.edges.get();
+
+        $.post("/GraphLibrary/Export", {
+            graph: {
+                nodes: nodes,
+                edges: edges
+            }
+        }).done(function (data) {
+            if (data.url != null && data.url != "") {
+                viewDataObj.exportDownload.attr('href', data.url);
+                viewDataObj.exportDownload.trigger('click');
+            }
+            else
+                alert("Error export graph.");
         });
     }
 
