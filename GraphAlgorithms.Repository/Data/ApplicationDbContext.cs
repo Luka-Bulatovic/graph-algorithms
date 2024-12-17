@@ -1,4 +1,5 @@
 ﻿using GraphAlgorithms.Repository.Entities;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
@@ -7,7 +8,7 @@ using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Repository.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<UserEntity>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -180,6 +181,39 @@ namespace GraphAlgorithms.Repository.Data
                 new { GraphPropertyID = (int)GraphPropertyEnum.Diameter, GraphClassID = (int)GraphClassEnum.AcyclicWithFixedDiameter }
             );
         }
+
+        private void SeedTestUsers(ModelBuilder modelBuilder)
+        {
+            //AQAAAAIAAYagAAAAEPywUphZYSOThwHJm+zMnei4mrv0rF+QKd91ePCk+CeC0k3yBPDCtcYvf56LzC7fBQ==
+            var user1ID = "c9b1c1ae-76aa-45cf-93e1-7b54c6446a01"; // Fixed GUID
+            var user2ID = "b05a5e47-8a72-4838-a53a-2b04222858fb"; // Fixed GUID
+
+            var user1 = new UserEntity
+            {
+                Id = user1ID,
+                UserName = "luka",
+                NormalizedUserName = "LUKA",
+                Email = "luka@graphs.com",
+                NormalizedEmail = "LUKA@GRAPHS.COM",
+                EmailConfirmed = true,
+                SecurityStamp = string.Empty,
+                PasswordHash = "AQAAAAIAAYagAAAAEPywUphZYSOThwHJm+zMnei4mrv0rF+QKd91ePCk+CeC0k3yBPDCtcYvf56LzC7fBQ==" // Pre-hashed password
+            };
+
+            var user2 = new UserEntity
+            {
+                Id = user2ID,
+                UserName = "zana",
+                NormalizedUserName = "ZANA",
+                Email = "zana@graphs.com",
+                NormalizedEmail = "ZANA@GRAPHS.COM",
+                EmailConfirmed = true,
+                SecurityStamp = string.Empty,
+                PasswordHash = "AQAAAAIAAYagAAAAEOsVGxeoyKOkqR1GbtTt66R1Y7sZjXvvXvh1pjjwVlzxlLQBU3NZpPWffgauQPGPYw==" // Pre-hashed password
+            };
+
+            modelBuilder.Entity<UserEntity>().HasData(new UserEntity[] { user1, user2 });
+        }
         #endregion
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -329,6 +363,7 @@ namespace GraphAlgorithms.Repository.Data
             SeedGraphClasses(modelBuilder);
             SeedActionTypes(modelBuilder);
             SeedGraphProperties(modelBuilder);
+            SeedTestUsers(modelBuilder);
         }
 
         private string AddSpacesToEnumName(string enumName)

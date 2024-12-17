@@ -1,8 +1,10 @@
 using GraphAlgorithms.Repository;
 using GraphAlgorithms.Repository.Data;
+using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -36,6 +38,17 @@ namespace GraphAlgorithms.Web
             string connectionString = Configuration.GetConnectionString("WebAppDB");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
+
+            // Identity
+            services.AddIdentity<UserEntity, IdentityRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Login";
+                options.LogoutPath = "/Login/Logout";
+            });
 
             // Inject Service and Repository services
             services.AddServiceProjectServices();
@@ -74,6 +87,7 @@ namespace GraphAlgorithms.Web
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

@@ -5,6 +5,7 @@ using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Service.Services;
 using GraphAlgorithms.Shared.DTO;
 using GraphAlgorithms.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
@@ -16,6 +17,7 @@ using static GraphAlgorithms.Shared.Shared;
 
 namespace GraphAlgorithms.Web.Controllers
 {
+    [Authorize]
     public class RandomGraphsController : Controller
     {
         public readonly IGraphClassService graphClassService;
@@ -139,7 +141,7 @@ namespace GraphAlgorithms.Web.Controllers
                 actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, graphPropertyValues, graphs);
             }
 
-            return RedirectToAction("Action", "GraphLibrary", new { actionID = actionDTO.ID });
+            return RedirectToAction("Index", "GraphLibrary", new { actionID = actionDTO.ID });
         }
     }
 }

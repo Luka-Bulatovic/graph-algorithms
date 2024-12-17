@@ -5,6 +5,7 @@ using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.Converters;
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -15,6 +16,7 @@ using System.Xml.Linq;
 
 namespace GraphAlgorithms.Web.Controllers
 {
+    [Authorize]
     public class GraphImportController : Controller
     {
         private readonly IWebHostEnvironment webHostEnvironment;

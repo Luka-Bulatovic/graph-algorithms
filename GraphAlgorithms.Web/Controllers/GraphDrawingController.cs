@@ -1,11 +1,13 @@
 ﻿using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Web.Controllers
 {
+    [Authorize]
     public class GraphDrawingController : Controller
     {
         private readonly IGraphDrawingService graphDrawingService;

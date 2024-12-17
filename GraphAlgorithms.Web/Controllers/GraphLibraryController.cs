@@ -2,6 +2,7 @@
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Shared;
 using GraphAlgorithms.Web.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Web.Controllers
 {
+    [Authorize]
     public class GraphLibraryController : Controller
     {
         public readonly IGraphLibraryService graphLibraryService;
@@ -36,7 +38,7 @@ namespace GraphAlgorithms.Web.Controllers
 
             GraphLibraryModel model = new GraphLibraryModel(viewType);
             
-            string actionName = viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable";
+            string actionName = viewType == GraphLibraryViewType.Grid ? Url.Action("Index", "GraphLibrary") : Url.Action("IndexTable", "GraphLibrary");
             await model.InitializeSearchModel(actionName, graphClassService, searchWrapper.SearchParams, searchWrapper.SortBy, additionalQueryParams);
 
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, actionID, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);

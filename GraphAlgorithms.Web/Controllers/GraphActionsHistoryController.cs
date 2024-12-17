@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using GraphAlgorithms.Service.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 
 namespace GraphAlgorithms.Web.Controllers
 {
+    [Authorize]
     public class GraphActionsHistoryController : Controller
     {
         public readonly IGraphActionsService graphActionsService;

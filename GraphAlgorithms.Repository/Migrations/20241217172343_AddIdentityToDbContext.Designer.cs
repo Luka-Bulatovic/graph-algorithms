@@ -4,6 +4,7 @@ using GraphAlgorithms.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GraphAlgorithms.Repository.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241217172343_AddIdentityToDbContext")]
+    partial class AddIdentityToDbContext
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -439,40 +442,6 @@ namespace GraphAlgorithms.Repository.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "c9b1c1ae-76aa-45cf-93e1-7b54c6446a01",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "c9f1d1be-8905-43ff-b7d5-a83e4916e0f4",
-                            Email = "luka@graphs.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "LUKA@GRAPHS.COM",
-                            NormalizedUserName = "LUKA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEPywUphZYSOThwHJm+zMnei4mrv0rF+QKd91ePCk+CeC0k3yBPDCtcYvf56LzC7fBQ==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "luka"
-                        },
-                        new
-                        {
-                            Id = "b05a5e47-8a72-4838-a53a-2b04222858fb",
-                            AccessFailedCount = 0,
-                            ConcurrencyStamp = "1527f655-de75-48cf-8560-5f28a4721a00",
-                            Email = "zana@graphs.com",
-                            EmailConfirmed = true,
-                            LockoutEnabled = false,
-                            NormalizedEmail = "ZANA@GRAPHS.COM",
-                            NormalizedUserName = "ZANA",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOsVGxeoyKOkqR1GbtTt66R1Y7sZjXvvXvh1pjjwVlzxlLQBU3NZpPWffgauQPGPYw==",
-                            PhoneNumberConfirmed = false,
-                            SecurityStamp = "",
-                            TwoFactorEnabled = false,
-                            UserName = "zana"
-                        });
                 });
 
             modelBuilder.Entity("GraphClassGraphXRef", b =>
