@@ -1,0 +1,25 @@
+﻿@model GraphImportModel
+
+@{
+    ViewData["Title"] = "File Upload";
+}
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="flex items-center border-l-4 border-red-500 bg-red-100 text-red-700 p-4 rounded-md">
+        <span class="mr-2">
+            <i class="fa-solid fa-xmark"></i>
+        </span>
+        @ViewBag.ErrorMessage
+    </div>
+}
+
+<form asp-action="Upload" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="UploadedFile" class="form-label"></label>
+        <input asp-for="UploadedFile" type="file" class="form-input-field" />
+        <span asp-validation-for="UploadedFile" class="text-danger"></span>
+    </div>
+    <br />
+    <button type="submit" class="btn-submit">Upload</button>
+</form>

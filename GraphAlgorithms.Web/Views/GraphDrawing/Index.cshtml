@@ -1,14 +1,17 @@
 ﻿@model GraphDrawingModel
 
-<div class="mb-2">
-    <h3>Shortcuts:</h3>
-    <ul class="pl-8 list-disc">
-        <li>(A) to add new Node</li>
-        <li>(E) to add new Edge</li>
-        <li>(D) to delete selected elements</li>
-        <li>(ESC) to close edit mode</li>
-    </ul>
-</div>
+@if(Model.IsEditing)
+{
+    <div class="mb-2">
+        <h3>Shortcuts:</h3>
+        <ul class="pl-8 list-disc">
+            <li>(A) to add new Node</li>
+            <li>(E) to add new Edge</li>
+            <li>(D) to delete selected elements</li>
+            <li>(ESC) to close edit mode</li>
+        </ul>
+    </div>
+}
 <form action="@Url.Action("Store", "GraphDrawing")" method="post">
     <div class="container w-full h-192 flex flex-row">
         <div class="@(Model.IsEditing ? "w-1/2" : "w-full")">
