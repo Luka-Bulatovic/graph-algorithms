@@ -80,6 +80,10 @@
         @apply bg-blue-500 hover:bg-blue-700 text-white font-normal py-1 px-2 rounded;
     }
 
+    .btn-export {
+        @apply text-white font-normal py-1 px-2 bg-blue-500 hover:bg-blue-700 rounded;
+    }
+
     .btn-submit {
         @apply bg-blue-500 hover:bg-blue-700 text-white font-normal py-1 px-2 rounded;
     }

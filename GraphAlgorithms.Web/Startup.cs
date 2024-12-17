@@ -3,6 +3,7 @@ using GraphAlgorithms.Repository.Data;
 using GraphAlgorithms.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -59,10 +60,16 @@ namespace GraphAlgorithms.Web
 
             // Setup Temp folder for static files download
             var tempFolderPath = Path.Combine(env.ContentRootPath, "Temp");
+
+            // MIME type for .graphml
+            FileExtensionContentTypeProvider graphMLContentTypeProvider = new FileExtensionContentTypeProvider();
+            graphMLContentTypeProvider.Mappings[".graphml"] = "application/graphml+xml";
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(tempFolderPath),
-                RequestPath = "/Temp"
+                RequestPath = "/Temp",
+                ContentTypeProvider = graphMLContentTypeProvider
             });
 
             app.UseRouting();

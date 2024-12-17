@@ -30,7 +30,7 @@ namespace GraphAlgorithms.Service.Services
             string graphML = graphEvaluator.GetGraphMLForGraph(graph);
 
             Guid guid = Guid.NewGuid();
-            string virtualPath = "Temp/" + guid.ToString() + ".xml";
+            string virtualPath = "Temp/" + guid.ToString() + ".graphml";
             string filePath = Path.Combine(rootFolder, virtualPath);
             await File.WriteAllTextAsync(filePath, graphML);
 

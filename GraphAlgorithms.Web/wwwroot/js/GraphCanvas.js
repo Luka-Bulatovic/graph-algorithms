@@ -226,9 +226,10 @@ var GraphCanvas = new function () {
                 edges: edges
             }
         }).done(function (data) {
+            console.log("Received export data", data);
             if (data.url != null && data.url != "") {
                 viewDataObj.exportDownload.attr('href', data.url);
-                viewDataObj.exportDownload.trigger('click');
+                viewDataObj.exportDownload.get(0).click();
             }
             else
                 alert("Error export graph.");
