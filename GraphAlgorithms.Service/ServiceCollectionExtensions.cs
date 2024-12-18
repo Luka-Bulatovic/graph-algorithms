@@ -22,11 +22,13 @@ namespace GraphAlgorithms.Service
             services.AddScoped<IGraphClassService, GraphClassService>();
             services.AddScoped<IRandomGraphsService, RandomGraphsService>();
             services.AddScoped<IGraphImportService, GraphImportService>();
+            services.AddScoped<ICustomGraphSetsService, CustomGraphSetsService>();
             
             services.AddScoped<IGraphConverter, GraphConverter>();
             services.AddScoped<IActionConverter, ActionConverter>();
             services.AddScoped<IGraphClassConverter, GraphClassConverter>();
             services.AddScoped<IGraphPropertyConverter, GraphPropertyConverter>();
+            services.AddScoped<ICustomGraphSetConverter, CustomGraphSetConverter>();
 
             services.AddScoped<GraphEvaluator>();
             services.AddScoped<RandomGraphsGenerator>();

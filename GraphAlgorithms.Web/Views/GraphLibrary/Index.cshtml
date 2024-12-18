@@ -92,6 +92,11 @@
                 }
             </div>
         }
+
+        if(Model.Graphs.Count == 0)
+        {
+            <div class="flex-row text-center p-2 bg-gray-200">No Data</div>
+        }
     }
     else if(Model.ViewType == GraphLibraryViewType.Table)
     {
@@ -144,6 +149,13 @@
                                 }
                                 @Html.Partial("_GraphCanvas", canvasModel)
                             </td>
+                        </tr>
+                    }
+
+                    @if(Model.Graphs.Count == 0)
+                    {
+                        <tr class="text-center bg-gray-100 text-gray-700">
+                            <td colspan="7">No Data</td>
                         </tr>
                     }
                 </tbody>

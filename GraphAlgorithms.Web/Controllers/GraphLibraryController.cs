@@ -27,6 +27,7 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task<IActionResult> Index(
             [ModelBinder(typeof(SearchParamsModelBinder))] SearchParamsWrapper searchWrapper,
             int actionID = 0,
+            int customGraphSetID = 0,
             int pageNumber = 1, 
             int pageSize = 9,
             GraphLibraryViewType viewType = GraphLibraryViewType.Grid)
@@ -36,12 +37,15 @@ namespace GraphAlgorithms.Web.Controllers
             if (actionID > 0)
                 additionalQueryParams.Add("actionID", actionID);
 
+            if(customGraphSetID > 0)
+                additionalQueryParams.Add("customGraphSetID", customGraphSetID);
+
             GraphLibraryModel model = new GraphLibraryModel(viewType);
             
             string actionName = viewType == GraphLibraryViewType.Grid ? Url.Action("Index", "GraphLibrary") : Url.Action("IndexTable", "GraphLibrary");
             await model.InitializeSearchModel(actionName, graphClassService, searchWrapper.SearchParams, searchWrapper.SortBy, additionalQueryParams);
 
-            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, actionID, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
+            (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, actionID, customGraphSetID, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
             model.Graphs = graphs;
             if (actionID > 0)
@@ -60,10 +64,11 @@ namespace GraphAlgorithms.Web.Controllers
         public async Task<IActionResult> IndexTable(
             [ModelBinder(typeof(SearchParamsModelBinder))] SearchParamsWrapper searchWrapper,
             int actionID = 0,
+            int customGraphSetID = 0,
             int pageNumber = 1, 
             int pageSize = 9)
         {
-            return await Index(searchWrapper, actionID, pageNumber, pageSize, GraphLibraryViewType.Table);
+            return await Index(searchWrapper, actionID, customGraphSetID, pageNumber, pageSize, GraphLibraryViewType.Table);
         }
 
         public async Task<IActionResult> Export(GraphDrawingUpdateDTO graph)

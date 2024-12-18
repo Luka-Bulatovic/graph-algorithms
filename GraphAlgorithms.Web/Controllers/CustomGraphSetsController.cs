@@ -21,13 +21,14 @@ namespace GraphAlgorithms.Web.Controllers
 
         public async Task<IActionResult> Index(int pageNumber = 1, int pageSize = 12)
         {
-            //GraphActionsHistoryModel model = new GraphActionsHistoryModel();
+            (List<CustomGraphSetDTO> customGraphSets, int totalCount) = await customGraphSetsService.GetCustomGraphSetsPaginatedAsync(pageNumber, pageSize);
 
-            //(List<ActionDTO> actions, int totalCount) = await graphActionsService.GetActionsPaginated(pageNumber, pageSize);
-            //model.Actions = actions;
-            //model.PaginationInfo = new PaginationModel(pageNumber, pageSize, totalCount);
+            CustomGraphSetsModel model = new CustomGraphSetsModel(
+                customGraphSets,
+                new PaginationModel(pageNumber, pageSize, totalCount)
+            );
 
-            return View(/*model*/);
+            return View(model);
         }
     }
 }

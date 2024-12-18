@@ -28,12 +28,15 @@ namespace GraphAlgorithms.Repository.Repositories
             return graphs;
         }
 
-        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, int actionID = 0, List<SearchParameter> searchParams = null, string sortBy = "")
+        public async Task<(List<GraphEntity>, int)> GetGraphsPaginatedAsync(int pageNumber, int pageSize, int actionID = 0, int customGraphSetID = 0, List<SearchParameter> searchParams = null, string sortBy = "")
         {
             var query = _context.Graphs.AsQueryable();
 
             if (actionID > 0)
                 query = query.Where(g => g.ActionID == actionID);
+
+            if (customGraphSetID > 0)
+                query = query.Where(g => g.CustomGraphSets.Where(cgs => cgs.ID == customGraphSetID).Count() > 0);
 
             if(searchParams != null && searchParams.Count > 0)
                 query = ApplySearchCriteria(query, searchParams);

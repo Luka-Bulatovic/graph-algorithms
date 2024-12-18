@@ -1,1 +1,12 @@
-﻿@*TODO*@
+﻿@model CustomGraphSetsModel
+<h1 class="font-semibold text-2xl mb-8">Custom Sets</h1>
+
+<div class="grid grid-cols-4 gap-4">
+    @foreach (var customGraphSet in Model.CustomGraphSets)
+    {
+        @Html.Partial("_CustomGraphSetCard", new CustomGraphSetCardModel(customGraphSet))
+    }
+</div>
+
+<!-- Pagination -->
+@Html.Partial("_Pagination", Model.PaginationInfo)

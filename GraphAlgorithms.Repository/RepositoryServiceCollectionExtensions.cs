@@ -15,6 +15,7 @@ namespace GraphAlgorithms.Repository
             services.AddScoped<IGraphRepository, GraphRepository>();
             services.AddScoped<IActionRepository, ActionRepository>();
             services.AddScoped<IGraphClassRepository, GraphClassRepository>();
+            services.AddScoped<ICustomGraphSetRepository, CustomGraphSetRepository>();
 
             return services;
         }
