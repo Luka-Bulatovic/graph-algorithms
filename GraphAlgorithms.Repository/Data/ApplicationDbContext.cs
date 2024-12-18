@@ -226,10 +226,22 @@ namespace GraphAlgorithms.Repository.Data
 
             ConfigureManyToManyMappings(modelBuilder);
 
+            ConfigureSpecificManyToOneMappings(modelBuilder);
+
             modelBuilder
                 .HasDbFunction(typeof(CustomDBFunctions).GetMethod(nameof(CustomDBFunctions.ConvertToInt)))
                 .HasName("ConvertToInt")
                 .HasSchema("dbo");
+        }
+
+        private void ConfigureSpecificManyToOneMappings(ModelBuilder modelBuilder)
+        {
+            // ActionEntity to User
+            modelBuilder.Entity<ActionEntity>()
+                .HasOne(a => a.CreatedBy) // Navigational property for user
+                .WithMany() // One user can have multiple actions
+                .HasForeignKey(a => a.CreatedByID)
+                .OnDelete(DeleteBehavior.Restrict); // Restrict deleting user that has actions
         }
 
         private void ConfigureManyToManyMappings(ModelBuilder modelBuilder)

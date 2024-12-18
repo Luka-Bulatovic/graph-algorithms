@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -17,7 +18,10 @@ namespace GraphAlgorithms.Repository.Entities
         [ForeignKey("ForGraphClass")]
         public int? ForGraphClassID { get; set; }
 
-        public int CreatedByID { get; set; }
+        public string CreatedByID { get; set; }
+        [ForeignKey("CreatedByID")]
+        public UserEntity CreatedBy { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public ActionTypeEntity ActionType { get; set; }

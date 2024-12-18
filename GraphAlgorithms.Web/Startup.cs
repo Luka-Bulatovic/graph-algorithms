@@ -2,6 +2,7 @@ using GraphAlgorithms.Repository;
 using GraphAlgorithms.Repository.Data;
 using GraphAlgorithms.Repository.Entities;
 using GraphAlgorithms.Service;
+using GraphAlgorithms.Service.Interfaces;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -53,6 +54,12 @@ namespace GraphAlgorithms.Web
             // Inject Service and Repository services
             services.AddServiceProjectServices();
             services.AddRepositoryServices();
+
+            // Provide the ability to inject IHttpContextAccessor where needed, in order to access things such as User
+            services.AddHttpContextAccessor();
+
+            // DI for IUserContext - Web will provide UserContext implementation for Service
+            services.AddScoped<IUserContext, UserContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

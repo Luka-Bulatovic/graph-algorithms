@@ -24,6 +24,7 @@ namespace GraphAlgorithms.Service.Services
         public readonly IActionRepository actionRepository;
         public readonly IGraphClassRepository graphClassRepository;
         public readonly IGraphPropertyConverter graphPropertyConverter;
+        public readonly IUserContext userContext;
         public readonly GraphEvaluator graphEvaluator;
         public readonly RandomGraphsGenerator randomGraphsGenerator;
 
@@ -34,6 +35,7 @@ namespace GraphAlgorithms.Service.Services
             IActionRepository actionRepository,
             IGraphClassRepository graphClassRepository,
             IGraphPropertyConverter graphPropertyConverter,
+            IUserContext userContext,
             GraphEvaluator graphEvaluator,
             RandomGraphsGenerator randomGraphsGenerator)
         {
@@ -43,6 +45,7 @@ namespace GraphAlgorithms.Service.Services
             this.actionRepository = actionRepository;
             this.graphClassRepository = graphClassRepository;
             this.graphPropertyConverter = graphPropertyConverter;
+            this.userContext = userContext;
             this.graphEvaluator = graphEvaluator;
             this.randomGraphsGenerator = randomGraphsGenerator;
         }
@@ -65,7 +68,7 @@ namespace GraphAlgorithms.Service.Services
             {
                 ActionTypeID = (int)ActionTypeEnum.GenerateRandom,
                 ForGraphClassID = (int)graphClass,
-                CreatedByID = 0, // Set the creator's ID,
+                CreatedByID = userContext.GetUserID(), // Set the creator's ID,
                 CreatedDate = DateTime.UtcNow,
                 
                 // List of ActionPropertyValueEntities to store Property values used to generate graphs

@@ -8,6 +8,7 @@ using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
 using System.Collections.Concurrent;
+using System.Security.Claims;
 
 namespace GraphAlgorithms.Service.Services
 {
@@ -17,12 +18,19 @@ namespace GraphAlgorithms.Service.Services
         private readonly IGraphClassRepository graphClassRepository;
         private readonly IGraphConverter graphConverter;
         private readonly GraphEvaluator graphEvaluator;
+        private readonly IUserContext userContext;
 
-        public GraphDrawingService(IGraphRepository graphRepository, IGraphClassRepository graphClassRepository, IGraphConverter graphConverter, GraphEvaluator graphEvaluator)
+        public GraphDrawingService(
+            IGraphRepository graphRepository, 
+            IGraphClassRepository graphClassRepository, 
+            IGraphConverter graphConverter,
+            IUserContext userContext,
+            GraphEvaluator graphEvaluator)
         {
             this.graphRepository = graphRepository;
             this.graphClassRepository = graphClassRepository;
             this.graphConverter = graphConverter;
+            this.userContext = userContext;
             this.graphEvaluator = graphEvaluator;
         }
 
@@ -48,7 +56,7 @@ namespace GraphAlgorithms.Service.Services
                 var actionEntity = new ActionEntity
                 {
                     ActionTypeID = (int)ActionTypeEnum.Draw,
-                    CreatedByID = 0, // Set the creator's ID,
+                    CreatedByID = userContext.GetUserID(), // Set the creator's ID,
                     CreatedDate = DateTime.UtcNow
                 };
 

@@ -17,15 +17,18 @@ namespace GraphAlgorithms.Service.Services
         private readonly GraphEvaluator graphEvaluator;
         private readonly IGraphConverter graphConverter;
         private readonly IGraphRepository graphRepository;
+        private readonly IUserContext userContext;
 
         public GraphImportService(
             GraphEvaluator graphEvaluator,
             IGraphConverter graphConverter,
-            IGraphRepository graphRepository)
+            IGraphRepository graphRepository,
+            IUserContext userContext)
         {
             this.graphEvaluator = graphEvaluator;
             this.graphConverter = graphConverter;
             this.graphRepository = graphRepository;
+            this.userContext = userContext;
         }
 
         public async Task<GraphEntity> ImportFromFile(string filePath)
@@ -45,7 +48,7 @@ namespace GraphAlgorithms.Service.Services
             var actionEntity = new ActionEntity
             {
                 ActionTypeID = (int)ActionTypeEnum.Import,
-                CreatedByID = 0,
+                CreatedByID = userContext.GetUserID(),
                 CreatedDate = DateTime.UtcNow,
                 ActionPropertyValues = new List<ActionPropertyValueEntity>()
             };

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Web.Controllers
@@ -49,6 +50,13 @@ namespace GraphAlgorithms.Web.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index", "Login");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public string GetUserID()
+        {
+            return User.FindFirstValue(ClaimTypes.NameIdentifier);
         }
     }
 

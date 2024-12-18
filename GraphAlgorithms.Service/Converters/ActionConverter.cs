@@ -19,7 +19,7 @@ namespace GraphAlgorithms.Service.Converters
                 ActionTypeName = actionEntity.ActionType.Name,
                 ForGraphClassName = actionEntity.ForGraphClass != null 
                                         ? actionEntity.ForGraphClass.Name : "",
-                CreatedByUserName = "System", // TODO
+                CreatedByUserName = actionEntity.CreatedBy.UserName,
                 CreatedDate = actionEntity.CreatedDate
             };
         }
