@@ -1,0 +1,12 @@
+﻿@model CustomGraphSetCardModel
+
+<div class="action-card">
+    <div class="action-card-title">Action# @Model.CustomGraphSet.ID</div>
+    <p class="action-card-text">Name: <span class="font-semibold">@Model.CustomGraphSet.Name</span></p>
+    <p class="action-card-text">Date: @Model.CustomGraphSet.CreatedDate.ToString("yyyy-MM-dd")</p>
+    <div class="flex flex-row justify-end">
+@*         <a class="btn-edit" href="@Url.Action("Index", "GraphLibrary", new { actionID = Model.Action.ID })">
+            <i class="fa-solid fa-magnifying-glass"></i> View
+        </a> *@
+    </div>
+</div>
