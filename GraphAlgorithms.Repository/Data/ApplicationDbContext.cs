@@ -242,6 +242,13 @@ namespace GraphAlgorithms.Repository.Data
                 .WithMany() // One user can have multiple actions
                 .HasForeignKey(a => a.CreatedByID)
                 .OnDelete(DeleteBehavior.Restrict); // Restrict deleting user that has actions
+
+            // CustomGraphSet to User
+            modelBuilder.Entity<CustomGraphSetEntity>()
+                .HasOne(a => a.CreatedBy) // Navigational property for user
+                .WithMany() // One user can have multiple sets
+                .HasForeignKey(a => a.CreatedByID)
+                .OnDelete(DeleteBehavior.Restrict); // Restrict deleting user that has sets
         }
 
         private void ConfigureManyToManyMappings(ModelBuilder modelBuilder)
