@@ -23,7 +23,7 @@ namespace GraphAlgorithms.Web.Models
 
         public bool AllowAddingToCustomGraphSets { get; set; }
 
-        public SaveActionGraphsToCustomSetModel CustomSetModel { get; set; }
+        public AddGraphsToCustomSetModel CustomSetModel { get; set; }
         public GraphLibraryViewType ViewType { get; set; } = GraphLibraryViewType.Grid;
 
         public GraphLibraryModel(GraphLibraryViewType viewType)
@@ -34,7 +34,7 @@ namespace GraphAlgorithms.Web.Models
             //PaginationInfo = new(actionName: (viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable"));
             AllowAddingToCustomGraphSets = false;
 
-            CustomSetModel = new SaveActionGraphsToCustomSetModel();
+            CustomSetModel = new AddGraphsToCustomSetModel();
         }
 
         public async Task InitializeSearchModel(string actionName, IGraphClassService graphClassService, List<SearchParameter> selectedSearchParams, string sortBy, Dictionary<string, object> additionalQueryParams = null)

@@ -3,7 +3,7 @@ using System.ComponentModel;
 
 namespace GraphAlgorithms.Web.Models
 {
-    public class SaveActionGraphsToCustomSetModel
+    public class AddGraphsToCustomSetModel
     {
         public int CustomGraphClassSaveType { get; set; }
         [DisplayName("Custom Set Name:")]
@@ -11,8 +11,9 @@ namespace GraphAlgorithms.Web.Models
         public int ExistingCustomSetID { get; set; }
         [DisplayName("Existing Set:")]
         public SelectList ExistingCustomSet { get; set; }
+        public string SelectedGraphIDs { get; set; }
 
-        public SaveActionGraphsToCustomSetModel()
+        public AddGraphsToCustomSetModel()
         {
         }
     }

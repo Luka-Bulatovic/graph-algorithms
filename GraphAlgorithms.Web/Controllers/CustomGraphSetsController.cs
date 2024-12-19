@@ -4,6 +4,7 @@ using GraphAlgorithms.Service.Services;
 using GraphAlgorithms.Web.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -29,6 +30,20 @@ namespace GraphAlgorithms.Web.Controllers
             );
 
             return View(model);
+        }
+
+        public async Task<IActionResult> SaveToCustomSet(AddGraphsToCustomSetModel model)
+        {
+            if(model.CustomGraphClassSaveType == 1)
+            {
+                // Add to existing
+            }
+            else if(model.CustomGraphClassSaveType == 2)
+            {
+                // Save as new
+            }
+
+            throw new NotImplementedException();
         }
     }
 }

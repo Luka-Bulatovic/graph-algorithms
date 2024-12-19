@@ -48,10 +48,10 @@ namespace GraphAlgorithms.Web.Controllers
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, actionID, customGraphSetID, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
             model.Graphs = graphs;
+            model.AllowAddingToCustomGraphSets = true;
             if (actionID > 0)
             {
                 model.ForActionID = actionID;
-                model.AllowAddingToCustomGraphSets = true;
             }
             model.PaginationInfo = new PaginationModel(
                 pageNumber, pageSize, totalCount, actionName,
@@ -75,12 +75,6 @@ namespace GraphAlgorithms.Web.Controllers
         {
             string url = await graphLibraryService.ExportGraph(graph, webHostEnvironment.ContentRootPath);
             return Json(new { url = url });
-        }
-
-
-        public async Task<IActionResult> SaveToCustomSet(SaveActionGraphsToCustomSetModel model)
-        {
-            return Ok();
         }
     }
 }
