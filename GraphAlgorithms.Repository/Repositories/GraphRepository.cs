@@ -191,6 +191,16 @@ namespace GraphAlgorithms.Repository.Repositories
             return graph;
         }
 
+        public async Task<List<GraphEntity>> GetGraphsByIDsAsync(string graphIDs)
+        {
+            List<int> graphIDsList = graphIDs.Split(',').Select(id => int.Parse(id)).ToList();
+
+            List<GraphEntity> graphs = await _context.Graphs
+                                        .Where(g => graphIDsList.Contains(g.ID))
+                                        .ToListAsync();
+            return graphs;
+        }
+
         public async Task<GraphEntity> SaveAsync(GraphEntity graph)
         {
             if(graph.ID == 0)

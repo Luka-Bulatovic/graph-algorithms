@@ -34,16 +34,21 @@ namespace GraphAlgorithms.Web.Controllers
 
         public async Task<IActionResult> SaveToCustomSet(AddGraphsToCustomSetModel model)
         {
-            if(model.CustomGraphClassSaveType == 1)
+            CustomGraphSetDTO customGraphSet = null;
+            if (model.CustomGraphClassSaveType == 1)
             {
                 // Add to existing
+                customGraphSet =
+                    await customGraphSetsService.AddGraphsToExistingCustomSet(model.ExistingCustomSetID, model.SelectedGraphIDs);
             }
             else if(model.CustomGraphClassSaveType == 2)
             {
                 // Save as new
+                customGraphSet = 
+                    await customGraphSetsService.SaveGraphsAsNewCustomSet(model.NewCustomSetName, model.SelectedGraphIDs);
             }
 
-            throw new NotImplementedException();
+            return Redirect(Url.Action("Index", "GraphLibrary", new { customGraphSetID = customGraphSet.ID }));
         }
     }
 }

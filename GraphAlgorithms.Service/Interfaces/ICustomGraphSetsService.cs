@@ -1,4 +1,5 @@
-﻿using GraphAlgorithms.Service.DTO;
+﻿using GraphAlgorithms.Repository.Entities;
+using GraphAlgorithms.Service.DTO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,5 +11,7 @@ namespace GraphAlgorithms.Service.Interfaces
     public interface ICustomGraphSetsService
     {
         Task<(List<CustomGraphSetDTO>, int)> GetCustomGraphSetsPaginatedAsync(int pageNumber, int pageSize);
+        Task<CustomGraphSetDTO> AddGraphsToExistingCustomSet(int CustomGraphSetID, string GraphIDs);
+        Task<CustomGraphSetDTO> SaveGraphsAsNewCustomSet(string CustomGraphSetName, string GraphIDs);
     }
 }

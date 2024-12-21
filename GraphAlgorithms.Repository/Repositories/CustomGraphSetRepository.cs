@@ -1,5 +1,6 @@
 ﻿using GraphAlgorithms.Repository.Data;
 using GraphAlgorithms.Repository.Entities;
+using GraphAlgorithms.Repository.Migrations;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,10 +19,42 @@ namespace GraphAlgorithms.Repository.Repositories
             _context = context;
         }
 
+        public async Task<CustomGraphSetEntity> AddGraphsToSetAsync(CustomGraphSetEntity customGraphSet, List<GraphEntity> graphs)
+        {
+            if (customGraphSet == null || graphs == null)
+                return null;
+
+            foreach (var newGraph in graphs)
+            {
+                if (customGraphSet.Graphs.Where(g => g.ID == newGraph.ID).Count() == 0)
+                    customGraphSet.Graphs.Add(newGraph);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return customGraphSet;
+        }
+
+        public async Task<CustomGraphSetEntity> Create(string customGraphSetName, string userID, List<GraphEntity> graphs)
+        {
+            CustomGraphSetEntity customGraphSet = new CustomGraphSetEntity()
+            {
+                Name = customGraphSetName,
+                CreatedByID = userID,
+                CreatedDate = DateTime.Now,
+                Graphs = graphs ?? new List<GraphEntity>()
+            };
+
+            _context.CustomGraphSets.Add(customGraphSet);
+            await _context.SaveChangesAsync();
+            return customGraphSet;
+        }
+
         public async Task<CustomGraphSetEntity> GetByIdAsync(int id)
         {
             var customGraphSet = await _context.CustomGraphSets
                                         .Include(s => s.CreatedBy)
+                                        .Include(s => s.Graphs)
                                         .FirstOrDefaultAsync(s => s.ID == id);
             return customGraphSet;
         }
