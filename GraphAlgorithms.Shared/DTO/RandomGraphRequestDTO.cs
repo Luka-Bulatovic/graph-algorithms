@@ -10,6 +10,7 @@ namespace GraphAlgorithms.Shared.DTO
     public class RandomGraphRequestDTO
     {
         public int GraphClassID { get; set; }
+        public int RandomGraphCriteriaID { get; set; }
         public int TotalNumberOfRandomGraphs { get; set; }
         public int ReturnNumberOfGraphs { get; set; }
         public RandomGraphDataDTO Data { get; set; }

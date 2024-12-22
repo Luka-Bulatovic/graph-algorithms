@@ -4,6 +4,7 @@ using GraphAlgorithms.Core.Interfaces;
 using GraphAlgorithms.Shared.DTO;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
+using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using static GraphAlgorithms.Shared.Shared;
@@ -83,7 +84,13 @@ namespace GraphAlgorithms.RandomGeneratorWorker
                 RandomGraphsGenerator randomGraphsGenerator = new RandomGraphsGenerator(graphEvaluator);
 
                 factory = randomGraphsGenerator.GetGraphFactoryForRandomGeneration(jsonData);
-                List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
+                List<Graph> graphs =
+                    jsonData.RandomGraphCriteriaID == (int)RandomGraphCriteria.MaxWienerIndex ?
+                        randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs)
+                        : randomGraphsGenerator.GenerateRandomGraphsWithSmallestWienerIndex(factory, jsonData.TotalNumberOfRandomGraphs, jsonData.ReturnNumberOfGraphs);
+
+
+
                 List<string> graphsMLData = new();
 
                 foreach (Graph graph in graphs)

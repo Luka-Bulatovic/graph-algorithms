@@ -23,6 +23,7 @@ namespace GraphAlgorithms.Service
             services.AddScoped<IRandomGraphsService, RandomGraphsService>();
             services.AddScoped<IGraphImportService, GraphImportService>();
             services.AddScoped<ICustomGraphSetsService, CustomGraphSetsService>();
+            services.AddScoped<IRandomGraphCriteriaService, RandomGraphCriteriaService>();
             
             services.AddScoped<IGraphConverter, GraphConverter>();
             services.AddScoped<IActionConverter, ActionConverter>();

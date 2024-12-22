@@ -13,5 +13,6 @@ namespace GraphAlgorithms.Service.DTO
         public string ForGraphClassName { get; set; }
         public DateTime CreatedDate { get; set; }
         public string CreatedByUserName { get; set; }
+        public string CriteriaName { get; set; }
     }
 }

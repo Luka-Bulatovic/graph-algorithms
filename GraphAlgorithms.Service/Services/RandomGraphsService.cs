@@ -60,7 +60,7 @@ namespace GraphAlgorithms.Service.Services
                 .ToList();
         }
 
-        public async Task<ActionDTO> StoreGeneratedGraphs(GraphClassEnum graphClass, List<GraphPropertyValueDTO> graphPropertyValues, List<Graph> graphs)
+        public async Task<ActionDTO> StoreGeneratedGraphs(GraphClassEnum graphClass, RandomGraphCriteria criteria, List<GraphPropertyValueDTO> graphPropertyValues, List<Graph> graphs)
         {
             //      Persisting data
             // Create an ActionEntity and set its properties
@@ -68,6 +68,7 @@ namespace GraphAlgorithms.Service.Services
             {
                 ActionTypeID = (int)ActionTypeEnum.GenerateRandom,
                 ForGraphClassID = (int)graphClass,
+                RandomGraphCriteriaID = (int)criteria,
                 CreatedByID = userContext.GetUserID(), // Set the creator's ID,
                 CreatedDate = DateTime.UtcNow,
                 

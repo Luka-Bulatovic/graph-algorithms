@@ -1,5 +1,6 @@
 ﻿using GraphAlgorithms.Core;
 using GraphAlgorithms.Core.Interfaces;
+using GraphAlgorithms.Repository.Migrations;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
 using GraphAlgorithms.Service.Services;
@@ -22,15 +23,17 @@ namespace GraphAlgorithms.Web.Controllers
     {
         public readonly IGraphClassService graphClassService;
         public readonly IRandomGraphsService randomGraphsService;
+        public readonly IRandomGraphCriteriaService randomGraphCriteriaService;
         public readonly GraphEvaluator graphEvaluator;
         public readonly RandomGraphsGenerator randomGraphsGenerator;
 
-        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService, GraphEvaluator graphEvaluator, RandomGraphsGenerator randomGraphsGenerator)
+        public RandomGraphsController(IGraphClassService graphClassService, IRandomGraphsService randomGraphsService, GraphEvaluator graphEvaluator, RandomGraphsGenerator randomGraphsGenerator, IRandomGraphCriteriaService randomGraphCriteriaService)
         {
             this.graphClassService = graphClassService;
             this.randomGraphsService = randomGraphsService;
             this.graphEvaluator = graphEvaluator;
             this.randomGraphsGenerator = randomGraphsGenerator;
+            this.randomGraphCriteriaService = randomGraphCriteriaService;
         }
 
 
@@ -39,15 +42,17 @@ namespace GraphAlgorithms.Web.Controllers
             List<GraphClassDTO> graphClasses = 
                 await graphClassService.GetGraphClassesForGeneratingRandomGraphs();
 
+            var criteriaList = await randomGraphCriteriaService.GetAllAsync();
+
             List<GraphPropertyDTO> graphProperties = new();
             if(id.HasValue)
                 graphProperties = await randomGraphsService.GetGraphClassProperties((GraphClassEnum)id.Value);
 
-            RandomGraphsModel model = new RandomGraphsModel()
-            {
-                GraphClassID = id.HasValue ? id.Value : 0,
-                GraphClassList = new SelectList(graphClasses, "ID", "Name"),
-            };
+            RandomGraphsModel model = new RandomGraphsModel(
+                graphClassID: id.HasValue ? id.Value : 0,
+                graphClassList: new SelectList(graphClasses, "ID", "Name"),
+                criteria: new SelectList(criteriaList, "ID", "Name")
+            );
 
             model.InitializeMetadataForProperties(graphProperties);
 
@@ -94,6 +99,7 @@ namespace GraphAlgorithms.Web.Controllers
                     string message = JsonSerializer.Serialize(new RandomGraphRequestDTO()
                     {
                         GraphClassID = model.GraphClassID,
+                        RandomGraphCriteriaID = model.CriteriaID,
                         ReturnNumberOfGraphs = model.StoreTopNumberOfGraphs,
                         TotalNumberOfRandomGraphs = 
                             (i == numberOfMessages - 1 && model.TotalNumberOfRandomGraphs % numberOfGraphsPerWorker > 0) ?
@@ -123,7 +129,7 @@ namespace GraphAlgorithms.Web.Controllers
                 graphs = graphs.OrderByDescending(graph => graph.GraphProperties.WienerIndex).ToList();
                 graphs = graphs.GetRange(0, model.StoreTopNumberOfGraphs);
 
-                actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, graphPropertyValues, graphs);
+                actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, (RandomGraphCriteria)model.CriteriaID, graphPropertyValues, graphs);
             }
             catch(Exception ex)
             {
@@ -131,14 +137,20 @@ namespace GraphAlgorithms.Web.Controllers
                 var randomGraphRequestDTO = new RandomGraphRequestDTO()
                 {
                     GraphClassID = model.GraphClassID,
+                    RandomGraphCriteriaID = model.CriteriaID,
                     ReturnNumberOfGraphs = model.StoreTopNumberOfGraphs,
                     TotalNumberOfRandomGraphs = model.TotalNumberOfRandomGraphs,
                     Data = model.Data
                 };
 
                 IGraphFactory factory = randomGraphsGenerator.GetGraphFactoryForRandomGeneration(randomGraphRequestDTO);
-                List<Graph> graphs = randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, randomGraphRequestDTO.TotalNumberOfRandomGraphs, randomGraphRequestDTO.ReturnNumberOfGraphs);
-                actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, graphPropertyValues, graphs);
+
+                List<Graph> graphs =
+                    model.CriteriaID == (int)RandomGraphCriteria.MaxWienerIndex ?
+                        randomGraphsGenerator.GenerateRandomGraphsWithLargestWienerIndex(factory, randomGraphRequestDTO.TotalNumberOfRandomGraphs, randomGraphRequestDTO.ReturnNumberOfGraphs)
+                        : randomGraphsGenerator.GenerateRandomGraphsWithSmallestWienerIndex(factory, randomGraphRequestDTO.TotalNumberOfRandomGraphs, randomGraphRequestDTO.ReturnNumberOfGraphs);
+
+                actionDTO = await randomGraphsService.StoreGeneratedGraphs((GraphClassEnum)model.GraphClassID, (RandomGraphCriteria)model.CriteriaID, graphPropertyValues, graphs);
             }
 
             return RedirectToAction("Index", "GraphLibrary", new { actionID = actionDTO.ID });

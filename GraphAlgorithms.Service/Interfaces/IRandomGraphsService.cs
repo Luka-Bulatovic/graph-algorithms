@@ -11,7 +11,7 @@ namespace GraphAlgorithms.Service.Interfaces
 {
     public interface IRandomGraphsService
     {
-        Task<ActionDTO> StoreGeneratedGraphs(GraphClassEnum graphClass, List<GraphPropertyValueDTO> graphPropertyValues, List<Graph> graphs);
+        Task<ActionDTO> StoreGeneratedGraphs(GraphClassEnum graphClass, RandomGraphCriteria criteria, List<GraphPropertyValueDTO> graphPropertyValues, List<Graph> graphs);
         Task<List<GraphPropertyDTO>> GetGraphClassProperties(GraphClassEnum graphClass);
     }
 }

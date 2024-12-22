@@ -38,6 +38,25 @@ namespace GraphAlgorithms.Core
             return graphs;
         }
 
+        public List<Graph> GenerateRandomGraphsWithSmallestWienerIndex(IGraphFactory factory, int totalNumberOfRandomGraphs, int returnNumberOfGraphs)
+        {
+            List<Graph> graphs = new();
+
+            // Generate totalNumberOfGraphs Random Graphs
+            for (int i = 0; i < totalNumberOfRandomGraphs; i++)
+            {
+                Graph graph = factory.CreateGraph();
+                graphEvaluator.CalculateWienerIndex(graph, cacheResult: false);
+                graphs.Add(graph);
+            }
+
+            // Take and return top returnNumberOfGraphs Graphs with smallest Wiener index value
+            graphs = graphs.OrderBy(graph => graph.GraphProperties.WienerIndex).ToList();
+            graphs = graphs.GetRange(0, returnNumberOfGraphs);
+
+            return graphs;
+        }
+
         public IGraphFactory GetGraphFactoryForRandomGeneration(RandomGraphRequestDTO randomGraphRequestDTO)
         {
             IGraphFactory factory;

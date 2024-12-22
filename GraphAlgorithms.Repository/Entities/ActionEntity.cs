@@ -22,6 +22,9 @@ namespace GraphAlgorithms.Repository.Entities
         [ForeignKey("CreatedByID")]
         public UserEntity CreatedBy { get; set; }
 
+        public int? RandomGraphCriteriaID { get; set; }
+        public RandomGraphCriteriaEntity? RandomGraphCriteria { get; set; }
+
         public DateTime CreatedDate { get; set; }
 
         public ActionTypeEntity ActionType { get; set; }

@@ -25,6 +25,7 @@ namespace GraphAlgorithms.Repository.Repositories
                                         .Include(g => g.ActionType)
                                         .Include(g => g.ForGraphClass)
                                         .Include(g => g.CreatedBy)
+                                        .Include(a => a.RandomGraphCriteria)
                                         .OrderByDescending(a => a.ID)
                                         .Skip((pageNumber - 1) * pageSize)
                                         .Take(pageSize)
@@ -37,6 +38,8 @@ namespace GraphAlgorithms.Repository.Repositories
             var action = await _context.Actions
                                         .Include(g => g.ActionType)
                                         .Include(g => g.ForGraphClass)
+                                        .Include(a => a.CreatedBy)
+                                        .Include(a => a.RandomGraphCriteria)
                                         .FirstOrDefaultAsync(g => g.ID == id);
             return action;
         }

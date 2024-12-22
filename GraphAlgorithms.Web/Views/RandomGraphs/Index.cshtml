@@ -90,6 +90,13 @@
                     </div>
                     <span asp-validation-for="StoreTopNumberOfGraphs" class="text-danger"></span>
                 </div>
+                <div class="col-span-full">
+                    <label asp-for="CriteriaID" class="form-label"></label>
+                    <div class="mt-2">
+                        <select asp-for="CriteriaID" asp-items="Model.Criteria" class="sl-criteria form-input-field">
+                        </select>
+                    </div>
+                </div>
             </div>
         </div>
 

@@ -22,6 +22,7 @@ namespace GraphAlgorithms.Repository.Data
         public DbSet<GraphPropertyEntity> GraphProperties { get; set; }
         public DbSet<GraphPropertyValueEntity> GraphPropertyValues { get; set; }
         public DbSet<ActionPropertyValueEntity> ActionPropertyValues { get; set; }
+        public DbSet<RandomGraphCriteriaEntity> RandomGraphCriteria { get; set; }
 
         #region Seeders
         private void SeedGraphClasses(ModelBuilder modelBuilder)
@@ -163,7 +164,23 @@ namespace GraphAlgorithms.Repository.Data
                 }
             );
         }
-        
+        private void SeedRandomGraphCriteria(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<RandomGraphCriteriaEntity>().HasData(
+                new List<RandomGraphCriteriaEntity>()
+                {
+                    new RandomGraphCriteriaEntity() { 
+                        ID = (int)Shared.Shared.RandomGraphCriteria.MinWienerIndex, 
+                        Name = "Min. Wiener Index" 
+                    },
+                    new RandomGraphCriteriaEntity() { 
+                        ID = (int)Shared.Shared.RandomGraphCriteria.MaxWienerIndex, 
+                        Name = "Max. Wiener Index" 
+                    },
+                }
+            );
+        }
+
         private void SeedRandomGenerationGraphClassPropertyRelationship(EntityTypeBuilder j)
         {
             j.HasData(
@@ -184,7 +201,6 @@ namespace GraphAlgorithms.Repository.Data
 
         private void SeedTestUsers(ModelBuilder modelBuilder)
         {
-            //AQAAAAIAAYagAAAAEPywUphZYSOThwHJm+zMnei4mrv0rF+QKd91ePCk+CeC0k3yBPDCtcYvf56LzC7fBQ==
             var user1ID = "c9b1c1ae-76aa-45cf-93e1-7b54c6446a01"; // Fixed GUID
             var user2ID = "b05a5e47-8a72-4838-a53a-2b04222858fb"; // Fixed GUID
 
@@ -249,6 +265,14 @@ namespace GraphAlgorithms.Repository.Data
                 .WithMany() // One user can have multiple sets
                 .HasForeignKey(a => a.CreatedByID)
                 .OnDelete(DeleteBehavior.Restrict); // Restrict deleting user that has sets
+
+            // ActionEntity to RandomGraphCriteria
+            modelBuilder.Entity<ActionEntity>()
+                .HasOne(a => a.RandomGraphCriteria) // Navigational property for criteria
+                .WithMany()
+                .HasForeignKey(a => a.RandomGraphCriteriaID)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict); // Restrict deleting criteria that has actions
         }
 
         private void ConfigureManyToManyMappings(ModelBuilder modelBuilder)
@@ -375,6 +399,7 @@ namespace GraphAlgorithms.Repository.Data
             modelBuilder.Entity<GraphClassEntity>().ToTable("GraphClasses");
             modelBuilder.Entity<GraphEntity>().ToTable("Graphs");
             modelBuilder.Entity<ActionEntity>().ToTable("Actions");
+            modelBuilder.Entity<RandomGraphCriteriaEntity>().ToTable("RandomGraphCriteria");
         }
 
         private void SeedTables(ModelBuilder modelBuilder)
@@ -383,6 +408,7 @@ namespace GraphAlgorithms.Repository.Data
             SeedActionTypes(modelBuilder);
             SeedGraphProperties(modelBuilder);
             SeedTestUsers(modelBuilder);
+            SeedRandomGraphCriteria(modelBuilder);
         }
 
         private string AddSpacesToEnumName(string enumName)

@@ -20,7 +20,8 @@ namespace GraphAlgorithms.Service.Converters
                 ForGraphClassName = actionEntity.ForGraphClass != null 
                                         ? actionEntity.ForGraphClass.Name : "",
                 CreatedByUserName = actionEntity.CreatedBy.UserName,
-                CreatedDate = actionEntity.CreatedDate
+                CreatedDate = actionEntity.CreatedDate,
+                CriteriaName = actionEntity.RandomGraphCriteria != null ? actionEntity.RandomGraphCriteria.Name : ""
             };
         }
     }

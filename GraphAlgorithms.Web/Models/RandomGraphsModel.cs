@@ -24,6 +24,11 @@ namespace GraphAlgorithms.Web.Models
         [Range(1, 10)]
         public int StoreTopNumberOfGraphs { get; set; }
 
+        // Criteria for generating random graphs
+        [DisplayName("Criteria")]
+        public int CriteriaID { get; set; }
+        public SelectList Criteria { get; set; }
+
         public Dictionary<GraphPropertyEnum, FieldMetadata> PropertiesMetadata { get; set; }
 
         public RandomGraphDataDTO Data { get; set; }
@@ -33,6 +38,14 @@ namespace GraphAlgorithms.Web.Models
             TotalNumberOfRandomGraphs = 10000;
             StoreTopNumberOfGraphs = 6;
             Data = new RandomGraphDataDTO();
+        }
+
+        public RandomGraphsModel(int graphClassID, SelectList graphClassList, SelectList criteria) : this()
+        {
+            GraphClassID = graphClassID;
+            GraphClassList = graphClassList;
+            Criteria = criteria;
+            CriteriaID = 2; // By default, max Wiener Index
         }
 
         private Dictionary<GraphPropertyEnum, FieldMetadata> GetAllPropertiesMetadata()

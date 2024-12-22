@@ -26,5 +26,12 @@
             MinNodeDegree = 11,
             MaxNodeDegree = 12,
         }
+
+        public enum RandomGraphCriteria
+        {
+//            None = 0,
+            MinWienerIndex = 1,
+            MaxWienerIndex = 2,
+        }
     }
 }
