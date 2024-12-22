@@ -8,11 +8,14 @@
 <div id="@ViewID" class="w-full flex flex-row mb-4">
     <div class="w-1/2 flex flex-col">
         <div class="flex flex-row mt-4">
+            <div class="grow basis-1/6">
+                <label asp-for="SearchBy"></label>&nbsp;
+            </div>
             <select asp-for="SearchByID" asp-items="Model.SearchBy" class="grow basis-2/6 sl-searchby mr-2 form-input-field">
                 <option value="-1">- Please select -</option>
             </select>
 
-            <div class="grow basis-3/6">
+            <div class="grow basis-2/6">
                 <span class="field-text-container hidden">
                     <input asp-for="TextValue" type="text" placeholder="Enter value" class="field-text form-input-field">
                 </span>
@@ -50,8 +53,10 @@
         </div>
 
         <div class="flex flex-row mt-4">
-            <label asp-for="SortBy"></label>&nbsp;
-            <select asp-for="SortByID" asp-items="Model.SortBy" class="grow basis-2/6 sl-sortby form-input-field"></select>
+            <div class="basis-1/6">
+                <label asp-for="SortBy"></label>&nbsp;
+            </div>
+            <select asp-for="SortByID" asp-items="Model.SortBy" class="basis-2/6 sl-sortby form-input-field"></select>
         </div>
 
         <div class="flex flex-row mt-4 mb-8">

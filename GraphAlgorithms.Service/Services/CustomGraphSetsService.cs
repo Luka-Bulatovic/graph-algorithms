@@ -3,11 +3,6 @@ using GraphAlgorithms.Repository.Repositories;
 using GraphAlgorithms.Service.Converters;
 using GraphAlgorithms.Service.DTO;
 using GraphAlgorithms.Service.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraphAlgorithms.Service.Services
 {
@@ -33,7 +28,7 @@ namespace GraphAlgorithms.Service.Services
 
         public async Task<(List<CustomGraphSetDTO>, int)> GetCustomGraphSetsPaginatedAsync(int pageNumber, int pageSize)
         {
-            (List<CustomGraphSetEntity> customGraphSetEntities, int totalCount) = await customGraphSetRepository.GetCustomGraphSetsPaginatedAsync(pageNumber, pageSize);
+            (List<CustomGraphSetEntity> customGraphSetEntities, int totalCount) = await customGraphSetRepository.GetCustomGraphSetsPaginatedAsync(userContext.GetUserID(), pageNumber, pageSize);
             List<CustomGraphSetDTO> customGraphSetDTOs = customGraphSetEntities
                                         .Select(customGraphSetEntity => customGraphSetConverter.GetCustomGraphSetDTOFromEntity(customGraphSetEntity))
                                         .ToList();
@@ -60,6 +55,12 @@ namespace GraphAlgorithms.Service.Services
             CustomGraphSetEntity customGraphSet = 
                 await customGraphSetRepository.Create(CustomGraphSetName, userContext.GetUserID(), graphs);
 
+            return customGraphSetConverter.GetCustomGraphSetDTOFromEntity(customGraphSet);
+        }
+
+        public async Task<CustomGraphSetDTO> GetCustomGraphSetByIdAsync(int id)
+        {
+            CustomGraphSetEntity customGraphSet = await customGraphSetRepository.GetByIdAsync(id);
             return customGraphSetConverter.GetCustomGraphSetDTOFromEntity(customGraphSet);
         }
     }

@@ -13,5 +13,6 @@ namespace GraphAlgorithms.Service.Interfaces
         Task<(List<CustomGraphSetDTO>, int)> GetCustomGraphSetsPaginatedAsync(int pageNumber, int pageSize);
         Task<CustomGraphSetDTO> AddGraphsToExistingCustomSet(int CustomGraphSetID, string GraphIDs);
         Task<CustomGraphSetDTO> SaveGraphsAsNewCustomSet(string CustomGraphSetName, string GraphIDs);
+        Task<CustomGraphSetDTO> GetCustomGraphSetByIdAsync(int id);
     }
 }

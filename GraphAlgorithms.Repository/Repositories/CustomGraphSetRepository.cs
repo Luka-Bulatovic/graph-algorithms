@@ -59,10 +59,13 @@ namespace GraphAlgorithms.Repository.Repositories
             return customGraphSet;
         }
 
-        public async Task<(List<CustomGraphSetEntity> customGraphSets, int totalCount)> GetCustomGraphSetsPaginatedAsync(int pageNumber, int pageSize)
+        public async Task<(List<CustomGraphSetEntity> customGraphSets, int totalCount)> GetCustomGraphSetsPaginatedAsync(string userID, int pageNumber, int pageSize)
         {
-            var totalCount = await _context.CustomGraphSets.CountAsync();
-            var customGraphSets = await _context.CustomGraphSets
+            var query = _context.CustomGraphSets
+                            .Where(cgs => cgs.CreatedByID == userID)
+                            .AsQueryable();
+            var totalCount = await query.CountAsync();
+            var customGraphSets = await query
                                         .Include(g => g.CreatedBy)
                                         .OrderByDescending(a => a.ID)
                                         .Skip((pageNumber - 1) * pageSize)

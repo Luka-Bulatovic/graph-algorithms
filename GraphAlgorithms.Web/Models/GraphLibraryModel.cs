@@ -15,7 +15,7 @@ namespace GraphAlgorithms.Web.Models
 
     public class GraphLibraryModel
     {
-        public int ForActionID { get; set; }
+        public string Heading { get; set; }
         public List<GraphDTO> Graphs { get; set; }
 
         public PaginationModel PaginationInfo { get; set; }
@@ -29,10 +29,9 @@ namespace GraphAlgorithms.Web.Models
         public GraphLibraryModel(GraphLibraryViewType viewType)
         {
             ViewType = viewType;
-            ForActionID = 0;
             PaginationInfo = new();
-            //PaginationInfo = new(actionName: (viewType == GraphLibraryViewType.Grid ? "Index" : "IndexTable"));
             AllowAddingToCustomGraphSets = false;
+            Heading = "Graph Library";
 
             CustomSetModel = new AddGraphsToCustomSetModel();
         }
@@ -72,6 +71,18 @@ namespace GraphAlgorithms.Web.Models
 
             // If URL has more query params that we need to supply along with search params
             SearchModel.SetAdditionalQueryParams(additionalQueryParams);
+        }
+
+        public async Task LoadAdditionalData(ICustomGraphSetsService customGraphSetService)
+        {
+            if (SearchModel.AdditionalQueryParams.ContainsKey("actionID"))
+                this.Heading = "Action #" + SearchModel.AdditionalQueryParams["actionID"];
+            else if (SearchModel.AdditionalQueryParams.ContainsKey("customGraphSetID"))
+            {
+                CustomGraphSetDTO customGraphSet = 
+                    await customGraphSetService.GetCustomGraphSetByIdAsync((int)SearchModel.AdditionalQueryParams["customGraphSetID"]);
+                this.Heading = string.Format("Custom Set #{0} ({1})", customGraphSet.ID, customGraphSet.Name);
+            }
         }
     }
 }

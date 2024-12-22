@@ -18,6 +18,7 @@ namespace GraphAlgorithms.Web.Models
         public string BaseUrl { get; set; }
 
         public int SearchByID { get; set; }
+        [DisplayName("Search by")]
         public SelectList SearchBy { get; set; }
         public List<SearchParameter> SearchParams { get; set; }
         public string SearchParamsJSON => JsonSerializer.Serialize(SearchParams);
@@ -35,7 +36,7 @@ namespace GraphAlgorithms.Web.Models
 
         // Sorting
         public string SortByID { get; set; }
-        [DisplayName("Sort By:")]
+        [DisplayName("Sort by")]
         public SelectList SortBy { get; set; }
 
         // This is used to carry additional query params when searching using Actions that have some more params

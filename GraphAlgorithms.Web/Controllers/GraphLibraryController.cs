@@ -16,12 +16,18 @@ namespace GraphAlgorithms.Web.Controllers
         public readonly IGraphLibraryService graphLibraryService;
         public readonly IGraphClassService graphClassService;
         public readonly IWebHostEnvironment webHostEnvironment;
+        public readonly ICustomGraphSetsService customGraphSetsService;
 
-        public GraphLibraryController(IGraphLibraryService graphLibraryService, IGraphClassService graphClassService, IWebHostEnvironment webHostEnvironment)
+        public GraphLibraryController(
+            IGraphLibraryService graphLibraryService, 
+            IGraphClassService graphClassService, 
+            IWebHostEnvironment webHostEnvironment,
+            ICustomGraphSetsService customGraphSetsService)
         {
             this.graphLibraryService = graphLibraryService;
             this.graphClassService = graphClassService;
             this.webHostEnvironment = webHostEnvironment;
+            this.customGraphSetsService = customGraphSetsService;
         }
 
         public async Task<IActionResult> Index(
@@ -36,8 +42,7 @@ namespace GraphAlgorithms.Web.Controllers
 
             if (actionID > 0)
                 additionalQueryParams.Add("actionID", actionID);
-
-            if(customGraphSetID > 0)
+            else if(customGraphSetID > 0)
                 additionalQueryParams.Add("customGraphSetID", customGraphSetID);
 
             GraphLibraryModel model = new GraphLibraryModel(viewType);
@@ -49,14 +54,11 @@ namespace GraphAlgorithms.Web.Controllers
 
             model.Graphs = graphs;
             model.AllowAddingToCustomGraphSets = true;
-            if (actionID > 0)
-            {
-                model.ForActionID = actionID;
-            }
             model.PaginationInfo = new PaginationModel(
                 pageNumber, pageSize, totalCount, actionName,
                 model.SearchModel.GetSearchParamsQueryString(),
                 additionalQueryParams);
+            await model.LoadAdditionalData(customGraphSetsService);
 
             return View("Index", model);
         }
