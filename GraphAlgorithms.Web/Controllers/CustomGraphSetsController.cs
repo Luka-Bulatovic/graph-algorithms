@@ -32,7 +32,7 @@ namespace GraphAlgorithms.Web.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> SaveToCustomSet(AddGraphsToCustomSetModel model)
+        public async Task<IActionResult> SaveToCustomSet(AddToCustomSetModel model)
         {
             CustomGraphSetDTO customGraphSet = null;
             if (model.CustomGraphClassSaveType == 1)

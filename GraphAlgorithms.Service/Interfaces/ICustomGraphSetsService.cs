@@ -14,5 +14,6 @@ namespace GraphAlgorithms.Service.Interfaces
         Task<CustomGraphSetDTO> AddGraphsToExistingCustomSet(int CustomGraphSetID, string GraphIDs);
         Task<CustomGraphSetDTO> SaveGraphsAsNewCustomSet(string CustomGraphSetName, string GraphIDs);
         Task<CustomGraphSetDTO> GetCustomGraphSetByIdAsync(int id);
+        Task<List<CustomGraphSetDTO>> GetAllCustomSetsAsync();
     }
 }

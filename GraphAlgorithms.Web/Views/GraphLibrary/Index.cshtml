@@ -21,39 +21,7 @@
 
     @if (Model.AllowAddingToCustomGraphSets)
     {
-        <div class="w-full mb-2 custom-graph-set-buttons-container hidden">
-            <button type="button" class="btn-add-to-custom-set">
-                <i class="fas fa-add"></i> Add to Custom Set
-            </button>
-            <button type="button" class="btn-save-as-custom-set">
-                <i class="fas fa-save"></i> Save as new Custom Set
-            </button>
-        </div>
-
-        <!-- Modal for Custom Graph Set -->
-        <div id="custom-set-modal" class="hidden modal z-100">
-            <div class="modal-content">
-                <div class="modal-title">Modal Title</div>
-                <form action="@Url.Action("SaveToCustomSet", "CustomGraphSets")" method="post">
-                    <div class="modal-body">
-                        <input type="hidden" asp-for="CustomSetModel.CustomGraphClassSaveType" id="CustomGraphClassSaveType" name="CustomGraphClassSaveType" />
-                        <input type="hidden" asp-for="CustomSetModel.SelectedGraphIDs" id="SelectedGraphIDs" name="SelectedGraphIDs" />
-
-                        <label asp-for="CustomSetModel.NewCustomSetName" class="hidden form-label new-custom-set-fields"></label>
-                        <input type="text" asp-for="CustomSetModel.NewCustomSetName" name="NewCustomSetName" class="hidden form-input-field new-custom-set-fields" />
-
-                        <label asp-for="CustomSetModel.ExistingCustomSet" class="hidden form-label existing-custom-set-fields"></label>
-                        <select asp-for="CustomSetModel.ExistingCustomSetID" name="ExistingCustomSetID" asp-items="Model.CustomSetModel.ExistingCustomSet" class="hidden existing-custom-set-fields sl-searchby mr-2 form-input-field">
-                            <option value="-1">- Please select -</option>
-                        </select>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="submit" class="btn-confirm-modal">Accept</button>
-                        <button type="button" class="btn-close-modal">Close</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+        @Html.Partial("_AddToCustomSet", Model.CustomSetModel)
     }
 
     <div class="flex flex-row justify-end mb-2">
@@ -75,7 +43,11 @@
                     if (i * itemsPerRow + j < Model.Graphs.Count)
                     {
                         <div class="library-item w-1/3 mr-2 mb-2 h-192 relative">
-                            <input type="checkbox" class="graph-selector absolute top-1 right-1 z-40" value="@Model.Graphs[i * itemsPerRow + j].id" />
+
+                            @if (Model.AllowAddingToCustomGraphSets)
+                            {
+                                <input type="checkbox" class="graph-selector absolute top-1 right-1 z-40" value="@Model.Graphs[i * itemsPerRow + j].id" />
+                            }
                             @{
                                 var model = new GraphCanvasModel(
                                 Model.Graphs[i * itemsPerRow + j],
@@ -165,56 +137,14 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
-            var ObjectData = {
-                SelectedGraphIDs: []
-            };
-
             $('.graph-selector').on('change', function () {
                 let isChecked = $(this).is(':checked');
                 let value = $(this).val();
 
                 if (isChecked)
-                    ObjectData.SelectedGraphIDs.push(value);
-                else {
-                    let index = ObjectData.SelectedGraphIDs.indexOf(value);
-
-                    if (index > -1)
-                        ObjectData.SelectedGraphIDs.splice(index, 1);
-                }
-
-                if (ObjectData.SelectedGraphIDs.length > 0) {
-                    $(".custom-graph-set-buttons-container").removeClass("hidden");
-                }
-                else {
-                    $(".custom-graph-set-buttons-container").addClass("hidden");
-                }
-
-                console.log(ObjectData.SelectedGraphIDs.join());
-                $("#SelectedGraphIDs").val(ObjectData.SelectedGraphIDs.join());
-            });
-
-            $(".btn-add-to-custom-set").on('click', (e) => {
-                $(".modal-title").html("Add to Existing Custom Graph Set");
-                $("#CustomGraphClassSaveType").val(1);
-
-                $(".existing-custom-set-fields").removeClass("hidden");
-                $(".new-custom-set-fields").addClass("hidden");
-
-                $("#custom-set-modal").removeClass("hidden");
-            });
-
-            $(".btn-save-as-custom-set").on('click', (e) => {
-                $(".modal-title").html("Save as New Custom Graph Set");
-                $("#CustomGraphClassSaveType").val(2);
-
-                $(".new-custom-set-fields").removeClass("hidden");
-                $(".existing-custom-set-fields").addClass("hidden");
-
-                $("#custom-set-modal").removeClass("hidden");
-            });
-
-            $(".btn-close-modal").on('click', (e) => {
-                $("#custom-set-modal").addClass("hidden");
+                    EventBus.emit('customSetGraphAdd', { id: value });
+                else
+                    EventBus.emit('customSetGraphDelete', { id: value });
             });
 
             $(".btn-grid-view-type").on('click', (e) => {
@@ -250,7 +180,5 @@
                     EventBus.emit('hideCanvas', { id: id });
                 });
         });
-
-
     </script>
 </div>

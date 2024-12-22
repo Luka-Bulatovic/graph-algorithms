@@ -11,9 +11,11 @@ namespace GraphAlgorithms.Web.Controllers
     public class GraphDrawingController : Controller
     {
         private readonly IGraphDrawingService graphDrawingService;
-        public GraphDrawingController(IGraphDrawingService mainService)
+        private readonly ICustomGraphSetsService customGraphSetsService;
+        public GraphDrawingController(IGraphDrawingService mainService, ICustomGraphSetsService customGraphSetsService)
         {
             this.graphDrawingService = mainService;
+            this.customGraphSetsService = customGraphSetsService;
         }
 
         public async Task<ViewResult> Index()
@@ -39,6 +41,7 @@ namespace GraphAlgorithms.Web.Controllers
             GraphDTO graph = await graphDrawingService.GetGraphDTOByIDAsync(id);
 
             GraphDrawingModel model = new GraphDrawingModel(graph, isViewOnly: true);
+            await model.CustomSetModel.Load(customGraphSetsService);
 
             return View("Index", model);
         }

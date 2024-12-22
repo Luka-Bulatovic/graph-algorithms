@@ -12,6 +12,12 @@
         </ul>
     </div>
 }
+
+@if(Model.IsViewOnly)
+{
+    @Html.Partial("_AddToCustomSet", Model.CustomSetModel)
+}
+
 <form action="@Url.Action("Store", "GraphDrawing")" method="post">
     <div class="container w-full h-192 flex flex-row">
         <div class="@(Model.IsEditing ? "w-1/2" : "w-full")">
@@ -51,5 +57,14 @@
                     break;
             }
         });
+
+        @if (Model.IsViewOnly && Model.CreateGraphCanvasModel.Graph.id > 0)
+            {
+            <text>
+            setTimeout(() => {
+                EventBus.emit('customSetGraphAdd', { id: graphID });
+            }, 500);
+            </text>
+        }
     });
 </script>

@@ -55,14 +55,13 @@
     <div class="flex h-screen">
         <div class="w-64 bg-gray-200 p-4 fixed h-screen">
             <ul class="space-y-2 h-full relative">
-                <li><a class="block p-2 hover:bg-gray-300 border-b-2 border-slate-400" href="@Url.Action("Index", "GraphActionsHistory")">Recent Actions</a></li>
-                <li><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Index", "GraphDrawing")">Draw Graph</a></li>
+                <li><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Index", "GraphActionsHistory")">Recent Actions</a></li>
                 <li><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Index", "GraphLibrary")">Graph Library</a></li>
+                <li><a class="block p-2 hover:bg-gray-300 border-b-2 border-slate-400" href="@Url.Action("Index", "CustomGraphSets")">Custom Graph Sets</a></li>
+                <li><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Index", "GraphDrawing")">Draw Graph</a></li>
                 <li><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Index", "RandomGraphs")">Generate Random Graph</a></li>
                 <li><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Index", "GraphImport")">Import Graph</a></li>
                 <li class="absolute bottom-0 left-0 right-0"><a class="block p-2 hover:bg-gray-300" href="@Url.Action("Logout", "Login")">Logout</a></li>
-@*                 <li><a href="@Url.Action("ImportGraph", "Home")">Import Graph</a></li>
-                <li><a href="@Url.Action("GraphLibrary", "Home")">Graph Library</a></li> *@
                 <!-- Add other menu items here -->
             </ul>
         </div>

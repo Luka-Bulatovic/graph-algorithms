@@ -63,5 +63,13 @@ namespace GraphAlgorithms.Service.Services
             CustomGraphSetEntity customGraphSet = await customGraphSetRepository.GetByIdAsync(id);
             return customGraphSetConverter.GetCustomGraphSetDTOFromEntity(customGraphSet);
         }
+
+        public async Task<List<CustomGraphSetDTO>> GetAllCustomSetsAsync()
+        {
+            List<CustomGraphSetEntity> allSets =
+                await customGraphSetRepository.GetAllCustomSetsForUserAsync(userContext.GetUserID());
+
+            return allSets.Select(set => customGraphSetConverter.GetCustomGraphSetDTOFromEntity(set)).ToList();
+        }
     }
 }

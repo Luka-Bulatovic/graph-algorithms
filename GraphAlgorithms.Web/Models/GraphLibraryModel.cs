@@ -23,7 +23,7 @@ namespace GraphAlgorithms.Web.Models
 
         public bool AllowAddingToCustomGraphSets { get; set; }
 
-        public AddGraphsToCustomSetModel CustomSetModel { get; set; }
+        public AddToCustomSetModel CustomSetModel { get; set; }
         public GraphLibraryViewType ViewType { get; set; } = GraphLibraryViewType.Grid;
 
         public GraphLibraryModel(GraphLibraryViewType viewType)
@@ -33,7 +33,7 @@ namespace GraphAlgorithms.Web.Models
             AllowAddingToCustomGraphSets = false;
             Heading = "Graph Library";
 
-            CustomSetModel = new AddGraphsToCustomSetModel();
+            CustomSetModel = new AddToCustomSetModel();
         }
 
         public async Task InitializeSearchModel(string actionName, IGraphClassService graphClassService, List<SearchParameter> selectedSearchParams, string sortBy, Dictionary<string, object> additionalQueryParams = null)

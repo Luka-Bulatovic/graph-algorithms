@@ -50,6 +50,15 @@ namespace GraphAlgorithms.Repository.Repositories
             return customGraphSet;
         }
 
+        public Task<List<CustomGraphSetEntity>> GetAllCustomSetsForUserAsync(string userID)
+        {
+            return _context.CustomGraphSets
+                            .Where(cgs => cgs.CreatedByID == userID)
+                            .Include(g => g.CreatedBy)
+                            .OrderByDescending(a => a.ID)
+                            .ToListAsync();
+        }
+
         public async Task<CustomGraphSetEntity> GetByIdAsync(int id)
         {
             var customGraphSet = await _context.CustomGraphSets

@@ -53,11 +53,15 @@ namespace GraphAlgorithms.Web.Controllers
             (List<GraphDTO> graphs, int totalCount) = await graphLibraryService.GetGraphsPaginated(pageNumber, pageSize, actionID, customGraphSetID, model.SearchModel.SelectedSearchParams, model.SearchModel.SortByID);
 
             model.Graphs = graphs;
-            model.AllowAddingToCustomGraphSets = true;
+            model.AllowAddingToCustomGraphSets = customGraphSetID > 0 ? false : true;
             model.PaginationInfo = new PaginationModel(
                 pageNumber, pageSize, totalCount, actionName,
                 model.SearchModel.GetSearchParamsQueryString(),
                 additionalQueryParams);
+            
+            if(model.AllowAddingToCustomGraphSets)
+                await model.CustomSetModel.Load(customGraphSetsService);
+            
             await model.LoadAdditionalData(customGraphSetsService);
 
             return View("Index", model);

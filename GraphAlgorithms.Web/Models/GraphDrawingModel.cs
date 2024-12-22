@@ -8,6 +8,7 @@ namespace GraphAlgorithms.Web.Models
         public int ID { get; set; }
         public GraphCanvasModel CreateGraphCanvasModel { get; set; }
         public GraphCanvasModel EditGraphCanvasModel { get; set; }
+        public AddToCustomSetModel CustomSetModel { get; set; }
         public bool IsViewOnly { get; set; }
         public bool IsEditing => ID > 0 && !IsViewOnly;
 
@@ -18,6 +19,7 @@ namespace GraphAlgorithms.Web.Models
             IsViewOnly = isViewOnly;
 
             InitializeCanvasModels(graph);
+            CustomSetModel = new AddToCustomSetModel();
         }
 
         private void InitializeCanvasModels(GraphDTO graph)
