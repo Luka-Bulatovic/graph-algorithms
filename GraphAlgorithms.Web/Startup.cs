@@ -80,6 +80,14 @@ namespace GraphAlgorithms.Web
 
             // Setup Temp folder for static files download
             var tempFolderPath = Path.Combine(env.ContentRootPath, "Temp");
+            var uploadsFolderPath = Path.Combine(env.ContentRootPath, "Uploads");
+
+            if(!Directory.Exists(tempFolderPath))
+                Directory.CreateDirectory(tempFolderPath);
+            
+            if(!Directory.Exists(uploadsFolderPath))
+                Directory.CreateDirectory(uploadsFolderPath);
+
 
             // MIME type for .graphml
             FileExtensionContentTypeProvider graphMLContentTypeProvider = new FileExtensionContentTypeProvider();
