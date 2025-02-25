@@ -50,6 +50,27 @@ namespace GraphAlgorithms.Core.Classifiers
             return (firstPartition, secondPartition);
         }
 
+        public void ApplyBipartiteColoring(Graph graph)
+        {
+            if (!BelongsToClass(graph))
+                return;
+
+            BreadthFirstSearchAlgorithm bfsAlgorithm =
+                graphAlgorithmManager.RunAlgorithm(graph, graph.Nodes[0], (g, n) => new BreadthFirstSearchAlgorithm(g, n));
+
+            bfsAlgorithm.BipartiteColoring.ToList();
+
+            foreach(var node in graph.Nodes)
+            {
+                node.NodeProperties.BipartitionComponent = 
+                    bfsAlgorithm.BipartiteColoring[node] == GraphAlgorithm.BipartiteColors.First ? 0 : 1;
+
+                node.NodeProperties.Color = bfsAlgorithm.BipartiteColoring[node] == GraphAlgorithm.BipartiteColors.First
+                    ? BipartiteGraphColors.FirstColor
+                    : BipartiteGraphColors.SecondColor;
+            }
+        }
+
         public GraphClassEnum GetGraphClass()
         {
             return GraphClassEnum.Bipartite;

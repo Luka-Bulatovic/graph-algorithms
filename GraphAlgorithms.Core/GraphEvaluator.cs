@@ -99,6 +99,10 @@ namespace GraphAlgorithms.Core
             
             if (graph.GraphProperties.MaxNodeDegree == null)
                 graph.GraphProperties.MaxNodeDegree = dfsAlgorithm.MaxNodeDegree;
+
+            // Apply BFS coloring
+            if (bipartiteClassifier.BelongsToClass(graph))
+                bipartiteClassifier.ApplyBipartiteColoring(graph);
         }
 
         private void CalculateGraphClasses(Graph graph)
