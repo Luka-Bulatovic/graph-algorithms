@@ -38,7 +38,7 @@ namespace GraphAlgorithms.Core.Factories
 
         public Graph CreateGraph()
         {
-            if (d <= 2 || n < d+1)
+            if (d < 2 || n < d+1)
                 throw new InvalidDataException(string.Format("Invalid values n and d: n={0}, d={1}", n, d));
 
             // Graph

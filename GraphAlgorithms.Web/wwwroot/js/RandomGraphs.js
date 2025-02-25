@@ -4,6 +4,21 @@ var RandomGraphs = new function () {
         viewDataObj.graphClassList.on('change', (e) => {
             this.onGraphClassChanged(viewDataObj, e);
         });
+
+        viewDataObj.form.on('submit', function (e) {
+            if (!$(this).valid()) {
+                // Validation failed
+                e.preventDefault();
+                return false;
+            }
+
+            // Validation passed, proceed with submission
+            // Show spinner and disable button
+            viewDataObj.btnGenerate.children(".spinner-icon").css("display", "");
+            viewDataObj.btnGenerate.attr('disabled', 'disabled');
+
+            return true;
+        });
     }
 
     this.onGraphClassChanged = function (viewDataObj, e) {

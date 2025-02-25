@@ -5,6 +5,7 @@ namespace GraphAlgorithms.Web
     public class FieldMetadata
     {
         public string FieldName;
+        public string DisplayName;
         public Func<object> Getter;
         public Action<object> Setter;
         public Type Type;
@@ -34,6 +35,7 @@ namespace GraphAlgorithms.Web
         )
         {
             FieldName = fieldName;
+            DisplayName = fieldName;
             Getter = getter;
             Setter = setter;
             Type = type;

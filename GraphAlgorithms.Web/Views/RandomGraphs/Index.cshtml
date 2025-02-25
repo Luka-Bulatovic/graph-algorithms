@@ -31,7 +31,7 @@
 
 
 
-                <label class="form-label">@property.Key.ToString()</label>
+                <label class="form-label">@property.Value.DisplayName</label>
 
                 <input
                     type="@(fieldType)"
@@ -100,7 +100,10 @@
             </div>
         </div>
 
-        <button type="submit" class="btn btn-submit mt-4 @(Model.GraphClassID > 0 ? "" : "hidden")">Generate</button>
+        <button type="submit" class="btn btn-submit mt-4 @(Model.GraphClassID > 0 ? "" : "hidden")">
+            <span style="display: none;" class="spinner-icon">&nbsp;<i class="fa-solid fa-spinner fa-spin"></i></span>
+            Generate
+        </button>
     </form>
 </div>
 

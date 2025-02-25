@@ -124,9 +124,9 @@ namespace GraphAlgorithms.Web.Models
                         value => Data.Diameter = (int)value, 
                         typeof(int),
                         isRequired: true,
-                        minValue: 1,
+                        minValue: 2,
                         maxValue: 100
-                        ) 
+                        )
                 },
 
                 // TODO: Add more here as more are defined
@@ -141,7 +141,10 @@ namespace GraphAlgorithms.Web.Models
             foreach(var property in properties)
             {
                 if(allPropertiesMetadata.ContainsKey((GraphPropertyEnum)property.ID))
+                {
+                    allPropertiesMetadata[(GraphPropertyEnum)property.ID].DisplayName = property.Name;
                     this.PropertiesMetadata[(GraphPropertyEnum)property.ID] = allPropertiesMetadata[(GraphPropertyEnum)property.ID];
+                }
             }
         }
     }
