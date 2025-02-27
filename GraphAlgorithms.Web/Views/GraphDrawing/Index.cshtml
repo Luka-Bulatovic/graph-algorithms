@@ -1,17 +1,14 @@
 ﻿@model GraphDrawingModel
 
-@if(Model.IsEditing)
-{
-    <div class="mb-2">
-        <h3>Shortcuts:</h3>
-        <ul class="pl-8 list-disc">
-            <li>(A) to add new Node</li>
-            <li>(E) to add new Edge</li>
-            <li>(D) to delete selected elements</li>
-            <li>(ESC) to close edit mode</li>
-        </ul>
-    </div>
-}
+<div class="mb-2">
+    <h3>Shortcuts:</h3>
+    <ul class="pl-8 list-disc">
+        <li>(A) to add new Node</li>
+        <li>(E) to add new Edge</li>
+        <li>(D) to delete selected elements</li>
+        <li>(ESC) to close edit mode</li>
+    </ul>
+</div>
 
 @if(Model.IsViewOnly)
 {

@@ -34,7 +34,7 @@ namespace GraphAlgorithms.Service.Services
             string filePath = Path.Combine(rootFolder, virtualPath);
             await File.WriteAllTextAsync(filePath, graphML);
 
-            return virtualPath;
+            return "/" + virtualPath;
         }
 
         public async Task<List<GraphDTO>> GetGraphs()

@@ -57,7 +57,7 @@
 
             <div class="status-bar-buttons">
                 <a class="export-download" href="#" download></a>
-                <button class="btn-export">
+                <button type="button" class="btn-export">
                     <i class="fa-solid fa-download"></i>
                 </button>
                 <a class="btn-edit @(Model.ShowEditButton ? "" : "hidden")" href="@Url.Action("Edit", "GraphDrawing", new { id = Model.ID })">
